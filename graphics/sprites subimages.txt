@@ -11,10 +11,8 @@ spgreen:568:420:83:83
 sporange:880:304:84:84
 spbrown:652:436:83:83
 roundrect:0:420:144:74
-circle:968:368:36:36
 background:0:0:694:417
 rectangle:696:304:182:128
 arrow:696:0:300:300
 spdarkgreen:736:436:83:83
 spblack:820:476:83:83
-chordfinger:904:476:66:66
