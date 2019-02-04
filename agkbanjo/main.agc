@@ -17,8 +17,6 @@ SetSyncRate( 30, 0 ) // 30fps instead of 60 to save battery
 SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 UseNewDefaultFonts( 1 ) // since version 2.0.22 we can use nicer default fonts
 
-
-
 while not GetRawKeyState(27)
     Print( ScreenFPS() )
     Sync()
