@@ -16,7 +16,7 @@ SetWindowSize( SCWIDTH, SCHEIGHT, 0 )
 SetWindowAllowResize( 1 ) // allow the user to resize the window
 SetVirtualResolution( SCWIDTH, SCHEIGHT ) // doesn't have to match the window
 SetOrientationAllowed( 1, 1, 1, 1 ) // allow both portrait and landscape on mobile devices
-SetSyncRate( 30, 0 ) // 30fps instead of 60 to save battery
+SetSyncRate( 60, 0 ) // 30fps instead of 60 to save battery
 SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 UseNewDefaultFonts( 1 ) // since version 2.0.22 we can use nicer default fonts
 
@@ -27,7 +27,7 @@ SetSpriteDepth(background,9999)
 
 tune as Music
 Music_Initialise(tune)
-for i = 1 to 5
+for i = 1 to 15
 	Music_AddBar(tune)
 next i
 
@@ -35,9 +35,11 @@ Manager_Initialise(tune)
 Manager_SwitchRenderer(0)
 
 //FretRenderer_Command(CMD_DESTROY,demobar,dispInfo,p)
-
+pos# = 0
 while not GetRawKeyState(27)
-    Print( ScreenFPS() )
+	pos# = pos# + 0.0025
     print(debug)
+    print(pos#)
+    Manager_MoveRenderTo(pos#)
     Sync()
 endwhile

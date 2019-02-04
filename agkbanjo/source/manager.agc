@@ -57,7 +57,7 @@ endfunction
 //									Move all rendered objects
 // ***************************************************************************************************
 
-function Manager_MoveRenderTo(pos as integer)
+function Manager_MoveRenderTo(pos as float)
 	p as BarParameters
 	p.pos = pos
 	for i = 0 to mgr.music.barCount-1
