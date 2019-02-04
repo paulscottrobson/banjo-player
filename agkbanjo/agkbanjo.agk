@@ -53,12 +53,12 @@ FILE_4=source%2Frenderers%2Ffretrenderer.agc;-1
 FILE_5=source%2Fmanager.agc;-1
 
 [files]
-FILE_NAME_0=0;main.agc;1072;0
-FILE_NAME_1=0;source%2Fbar.agc;1832;1
+FILE_NAME_0=1;main.agc;1104;0
+FILE_NAME_1=0;source%2Fbar.agc;255;1
 FILE_NAME_2=0;source%2Fbardisplay.agc;358;2
 FILE_NAME_3=0;source%2Fmusic.agc;961;3
-FILE_NAME_4=1;source%2Frenderers%2Ffretrenderer.agc;5704;4
-FILE_NAME_5=0;source%2Fmanager.agc;2663;5
+FILE_NAME_4=0;source%2Frenderers%2Ffretrenderer.agc;7699;4
+FILE_NAME_5=0;source%2Fmanager.agc;1627;5
 
 [project]
 description=

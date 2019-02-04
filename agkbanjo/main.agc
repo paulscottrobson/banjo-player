@@ -1,7 +1,7 @@
 SetErrorMode(2)
-#constant SCWIDTH 1024
-#constant SCHEIGHT 768
-#constant DPHEIGHT 640
+#constant SCWIDTH 1440
+#constant SCHEIGHT 960
+#constant DPHEIGHT 840
 
 #include "source/bar.agc"
 #include "source/bardisplay.agc"
@@ -16,8 +16,8 @@ SetWindowSize( SCWIDTH, SCHEIGHT, 0 )
 SetWindowAllowResize( 1 ) // allow the user to resize the window
 SetVirtualResolution( SCWIDTH, SCHEIGHT ) // doesn't have to match the window
 SetOrientationAllowed( 1, 1, 1, 1 ) // allow both portrait and landscape on mobile devices
-SetSyncRate( 60, 0 ) // 30fps instead of 60 to save battery
-SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
+SetSyncRate( 30, 0 ) // 30fps instead of 60 to save battery
+//SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 UseNewDefaultFonts( 1 ) // since version 2.0.22 we can use nicer default fonts
 
 background = CreateSprite(LoadSubImage(LoadImage("sprites.png"),"background"))
@@ -32,12 +32,12 @@ for i = 1 to 15
 next i
 
 Manager_Initialise(tune)
-Manager_SwitchRenderer(0)
+Manager_SwitchRenderer(1)
+//Manager_SwitchRenderer(0)
 
-//FretRenderer_Command(CMD_DESTROY,demobar,dispInfo,p)
 pos# = 0
 while not GetRawKeyState(27)
-	pos# = pos# + 0.0025
+	pos# = pos# + 0.006
     print(debug)
     print(pos#)
     Manager_MoveRenderTo(pos#)

@@ -18,6 +18,7 @@ type FretRendererGlobals
 	stringAreaY as integer
 	barWidth as integer											// width of one bar
 	ballX as integer											// ball horizontal position.
+	sineHeight as integer 										// Height of sine curve
 endtype
 
 global frg as FretRendererGlobals
@@ -48,7 +49,7 @@ function FretRenderer_Command(cmd as integer,bar ref as Bar,diBar ref as BarDisp
 		case CMD_SHOW:
 			if diBar.isDrawn = 0 then FretRenderer_CreateBarGraphics(bar,diBar)
 			diBar.isDrawn = 1
-			FretRenderer_MoveBarGraphics(bar,diBar,x)
+			FretRenderer_MoveBarGraphics(bar,diBar,x,params.pos)
 		endcase
 		case CMD_HIDE:
 			if diBar.isDrawn <> 0 then FretRenderer_DestroyBarGraphics(bar,diBar)
@@ -66,8 +67,9 @@ function FretRenderer_Create()
 	frg.fretY = DPHEIGHT - frg.fretHeight
 	frg.stringAreaHeight = frg.fretHeight * 9 / 10
 	frg.stringAreaY = frg.fretY + frg.fretHeight/2 - frg.stringAreaHeight/2
-	frg.barWidth = SCWIDTH / 2.3
-	frg.ballX = SCWIDTH * 10 / 100
+	frg.barWidth = SCWIDTH / 2.0
+	frg.ballX = SCWIDTH * 14 / 100
+	frg.sineHeight = DPHEIGHT * 1.5 / 10
 																// Border to fretboard
 	CreateSprite(CMD_ID,LoadSubImage(frg.spriteImage,"rectangle"))
 	SetSpritePosition(CMD_ID,0,frg.fretY)
@@ -124,13 +126,17 @@ endfunction
 
 function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo)
 	diBar.x = -99999 											// Forces a redraw on movebargraphics
-	debug = debug + " C:"+str(bar.barNumber)
+	//debug = debug + " C:"+str(bar.barNumber)
 	id = diBar.baseID+199
 	CreateSprite(id,LoadSubImage(frg.spriteImage,"bar"))
 	SetSpriteSize(id,frg.barWidth/40,frg.stringAreaHeight)
 	SetSpriteOffset(id,GetSpriteWidth(id)/2.0,0)
 	SetSpriteDepth(id,9995)
 	for b = 0 to bar.beats*2-1
+		id = diBar.baseID + b * 20
+		CreateSprite(id,LoadSubImage(frg.spriteImage,"sinecurve"))
+		SetSpriteSize(id,frg.barWidth/2/bar.beats,frg.sineHeight)
+		SetSpriteOffset(id,GetSpriteWidth(id)/2,GetSpriteHeight(id))
 		for s = 1 to 5
 			id = diBar.baseID + b * 20 + s
 			fretting = bar.notes[b].fretting[s]
@@ -156,9 +162,10 @@ endfunction
 // ***************************************************************************************************
 
 function FretRenderer_DestroyBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo)
-	debug = debug + " D:"+str(bar.barNumber)
+	//debug = debug + " D:"+str(bar.barNumber)
 	DeleteSprite(diBar.baseID+199)
 	for b = 0 to bar.beats*2-1
+		DeleteSprite(diBar.baseID + b * 20)
 		for s = 1 to 5
 			id = diBar.baseID + b * 20 + s
 			fretting = bar.notes[b].fretting[s]
@@ -174,20 +181,28 @@ endfunction
 // 				Reposition and make position relevant adjustments to the graphics
 // ***************************************************************************************************
 
-function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo,x as integer)
+function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo,x as integer,pos as Float)
 	if diBar.x = x then return 
 	diBar.x = x
 	//debug = debug + " M:"+str(bar.barNumber)+">"+str(x)
 	SetSpritePositionByOffset(diBar.baseID+199,x,frg.stringAreaY)
 	for b = 0 to bar.beats*2-1
 		x1 = round((b+0.5)/8.0*frg.barWidth+x+0.5)
+		alpha = 255
+		if x1 < frg.ballX then alpha = 255 - (frg.ballX-x1)*3/2
+		if alpha < 0 then alpha = 0
+		SetSpritePositionByOffset(diBar.baseID+b*20,x1,frg.fretY)
 		for s = 1 to 5
 			id = diBar.baseID + b * 20 + s
 			fretting = bar.notes[b].fretting[s]
 			if fretting <> BAR_DONTPLAY
 				SetTextPosition(id,x1-GetTextTotalWidth(id)/2.0,FretRenderer_StringY(s)-GetTextTotalHeight(id)/2)
 				SetSpritePositionByOffset(id,x1,FretRenderer_StringY(s))
+				SetTextColorAlpha(id,alpha)
+				SetSpriteColorAlpha(id,alpha)
 			endif
 		next
 	next b
+	pos = mod((pos - Trunc(pos)) * 8 * 180,180)
+	SetSpritePositionByOffset(CMD_ID+2,frg.ballX,frg.fretY-sin(pos)*frg.sineHeight)
 endfunction

@@ -35,7 +35,7 @@ function Manager_SwitchRenderer(newID as integer)
 	if mgr.renderID >= 0 										// If already one being displayed
 		for i = 0 to mgr.music.barCount-1						// Hide any visible displays
 			if mgr.displayInfo[i].isDrawn <> 0 
-				Manager_Command(CMD_HIDE,mgr.music.bars[0],mgr.displayInfo[0],p)
+				Manager_Command(CMD_HIDE,mgr.music.bars[i],mgr.displayInfo[i],p)
 				mgr.displayInfo[i].isDrawn = 0
 			endif
 		next i
@@ -74,5 +74,10 @@ endfunction
 // ***************************************************************************************************
 
 function Manager_Command(command as integer,bar ref as Bar,displayInfo ref as BarDisplayInfo,params ref as BarParameters)
-	r = FretRenderer_Command(command,bar,displayInfo,params)
+	r = 0
+	select mgr.renderID
+		case 1
+			r = FretRenderer_Command(command,bar,displayInfo,params)
+		endcase
+	endselect
 endfunction r
