@@ -1,0 +1,23 @@
+File Format (.bnote)
+====================
+
+Bars seperated by |
+
+Notes seperated by :
+
+Notes are A-Z representing Fretting 0-25 or . (no pluck). 5 letters or dots, string 1 (bottom string)
+first.
+
+Assignments are lines containing
+
+def := constant
+
+Simplest (.banjo1)
+==================
+<chord> := 01223 is fretting for string 1-string 5
+<bars> are | seperated
+
+1-5 means strum 1-5 P plucks 1+5 [<chord>] switches chords. Defaults to G and keeps going unless otherwise
+All 8 beat bars
+
+
