@@ -40,7 +40,8 @@ function Bar_Initialise(this ref as Bar,barNumber as integer,beats as integer)
 	this.notes.length = beats * 2 - 1							// Assume 2 beats per note
 	for i = 0 to this.notes.length								// Clear all fretting
 		for s = 1 to 5
-			this.notes[i].fretting[s] = BAR_DONTPLAY 
+			this.notes[i].fretting[s] = BAR_DONTPLAY
+			if Random(1,4) > 1 then this.notes[i].fretting[s] = Random(0,5) 
 		next s
 		this.notes[i].isPlayed = 0 
 	next i

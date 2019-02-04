@@ -29,6 +29,7 @@ type BarParameters												// Structure used to pass information to messages.
 	x as integer
 	y as integer
 	count as integer
+	pos as float
 endtype
 
 // ***************************************************************************************************

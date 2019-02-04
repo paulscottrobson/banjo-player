@@ -6,8 +6,10 @@ SetErrorMode(2)
 #include "source/bar.agc"
 #include "source/bardisplay.agc"
 #include "source/music.agc"
+#include "source/manager.agc"
 #include "source/renderers/fretrenderer.agc"
 
+global debug as string = "DBG:"
 
 SetWindowTitle( "agkbanjo" )
 SetWindowSize( SCWIDTH, SCHEIGHT, 0 )
@@ -23,17 +25,19 @@ SetSpritePosition(background,0,0)
 SetSpriteSize(background,SCWIDTH,SCHEIGHT)
 SetSpriteDepth(background,9999)
 
-demobar as Bar 
-Bar_Initialise(demobar,0,4)
-dispInfo as BarDisplayInfo
-BarDisplayInfo_Initialise(dispInfo,demoBar.barNumber)
-p as BarParameters
-p.count = 12
-FretRenderer_Command(CMD_INITIALISE,demobar,dispInfo,p)
-FretRenderer_Command(CMD_CREATE,demobar,dispInfo,p)
+tune as Music
+Music_Initialise(tune)
+for i = 1 to 5
+	Music_AddBar(tune)
+next i
+
+Manager_Initialise(tune)
+Manager_SwitchRenderer(0)
+
 //FretRenderer_Command(CMD_DESTROY,demobar,dispInfo,p)
 
 while not GetRawKeyState(27)
     Print( ScreenFPS() )
+    print(debug)
     Sync()
 endwhile

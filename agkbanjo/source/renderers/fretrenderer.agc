@@ -27,6 +27,8 @@ global frg as FretRendererGlobals
 
 function FretRenderer_Command(cmd as integer,bar ref as Bar,diBar as BarDisplayInfo,params as BarParameters)
 	retval = 0
+	x as integer 
+	x = (bar.barNumber-params.pos) * frg.barWidth + frg.ballX
 	select cmd
 		case CMD_INITIALISE:
 			frg.spriteImage = LoadImage("sprites.png")
@@ -38,10 +40,16 @@ function FretRenderer_Command(cmd as integer,bar ref as Bar,diBar as BarDisplayI
 			FretRenderer_Destroy()
 		endcase
 		case CMD_VISIBLE:
+			retval = (x >= -frg.barWidth) and (x < SCWIDTH)
 		endcase
 		case CMD_SHOW:
+			if not diBar.isDrawn then FretRenderer_CreateBarGraphics(bar,diBar)
+			diBar.isDrawn = 1
+			FretRenderer_MoveBarGraphics(bar,diBar,x)
 		endcase
 		case CMD_HIDE:
+			if diBar.isDrawn then FretRenderer_DestroyBarGraphics(bar,diBar)
+			diBar.isDrawn = 0
 		endcase
 	endselect
 endfunction retval
@@ -55,7 +63,7 @@ function FretRenderer_Create()
 	frg.fretY = DPHEIGHT - frg.fretHeight
 	frg.stringAreaHeight = frg.fretHeight * 9 / 10
 	frg.stringAreaY = frg.fretY + frg.fretHeight/2 - frg.stringAreaHeight/2
-	frg.barWidth = SCWIDTH / 4
+	frg.barWidth = SCWIDTH / 3
 	frg.ballX = SCWIDTH * 10 / 100
 																// Border to fretboard
 	CreateSprite(CMD_ID,LoadSubImage(frg.spriteImage,"rectangle"))
@@ -105,4 +113,30 @@ function FretRenderer_Destroy()
 	for s = 1 to 5
 		DeleteSprite(CMD_ID+10+s)
 	next s
+endfunction
+
+// ***************************************************************************************************
+//								Create all the bar graphics
+// ***************************************************************************************************
+
+function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo)
+	diBar.x = -99999 											// Forces a redraw on movebargraphics
+	debug = debug + " C:"+str(bar.barNumber)
+endfunction
+
+// ***************************************************************************************************
+//								 Delete all the bar graphics
+// ***************************************************************************************************
+
+function FretRenderer_DestroyBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo)
+	debug = debug + " D:"+str(bar.barNumber)
+endfunction
+
+// ***************************************************************************************************
+// 				Reposition and make position relevant adjustments to the graphics
+// ***************************************************************************************************
+
+function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo,x as integer)
+	if diBar.x = x then return 
+	debug = debug + " M:"+str(bar.barNumber)+">"+str(x)
 endfunction

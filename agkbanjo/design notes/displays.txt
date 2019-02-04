@@ -20,13 +20,13 @@ Remove background
 
 Visible
 =========
-(bar,param 1 : position in music in quarterbeats float)
+(bar,param 1 : position in music in bars float)
 
 Returns non-zero if the given bar is partially displayed at that music position.
 
 Show
 ====
-(bar,param 1 : position in music in quarterbeats float)
+(bar,param 1 : position in music in bars float)
 
 Move the bar at a given position, creating if necessary, modifying if necessary.
 
