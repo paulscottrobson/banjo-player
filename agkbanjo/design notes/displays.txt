@@ -1,0 +1,49 @@
+Minimising the interface for different displays.
+
+float Interface(command as integer,bar ref as bar,dispInfo ref as dispInfo,params as IFParams)
+
+Initialise
+==========
+Load Resources for the display.
+
+Create 
+======
+(param 1 : bars in tune)
+
+Draw background, set up for specific tune (if full page tab display sizes for example)
+Create empty display information records for each bar which are all non-displayed
+
+Destroy
+=======
+Remove background
+(Hide all display resources is done by the caller)
+
+Visible
+=========
+(bar,param 1 : position in music in quarterbeats float)
+
+Returns non-zero if the given bar is partially displayed at that music position.
+
+Show
+====
+(bar,param 1 : position in music in quarterbeats float)
+
+Move the bar at a given position, creating if necessary, modifying if necessary.
+
+Hide
+====
+if drawn , Free up all the bars display resources.
+
+Bar knows:
+- which bar it is
+
+Shared BarDisplayInformation
+
+ID allocation (10000 onwards)
+=============
++0...+19	Note#1			0..4 note specific 5x3 for each displayed note.
++20..+39	Note#2
++40..+59	Note#3
++140..+159	Note#8
++160..+199	Reserved 		Allocated for general use.
+
