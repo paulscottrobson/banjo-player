@@ -18,6 +18,8 @@ SetErrorMode(2)
 
 #include "source/bar.agc"
 #include "source/bardisplay.agc"
+#include "source/ui/button.agc"
+#include "source/ui/rotator.agc"
 #include "source/music.agc"
 #include "source/player.agc"
 #include "source/manager.agc"
@@ -26,9 +28,6 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
-//		Beats per minute display
-//		Lit Button UI class (step up on/off off end)
-//		RotatorButton UI class (current speed/writeable)
 //		Scrollbar UI class
 //			Make it follow and update
 //			On loop back speed up (lit button)

@@ -15,6 +15,9 @@ type ProgramGlobals
 	info as Integer												// Copyright label
 	pos# as Float												// Position in music
 	beatsPerMinute# as Float									// Speed of playback BPM
+	speedRotator as Rotator 									// Rotator for base speed
+	speedupButton as Button 									// Toggle button for speed
+	bpmLabel as integer 										// BPM Display Sprite
 endtype
 
 global prg as ProgramGlobals
@@ -50,7 +53,6 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextSize(prg.info,SCWIDTH/60)
 	SetTextPosition(prg.info,SCWIDTH/2-GetTextTotalWidth(prg.info)/2,SCHEIGHT-GetTextTotalHeight(prg.info))
 
-	prg.beatsPerMinute# = 60.0
 	prg.pos# = 0.0
 
 	Music_Initialise(prg.tune)
@@ -58,6 +60,30 @@ function Program_CreateDisplay(musicFile as string)
 	Manager_Initialise(prg.tune)
 	Manager_SwitchRenderer(1)
 	Player_Initialise(prg.tune)
+	
+	
+	yc = (SCHEIGHT+DPHEIGHT)/2
+	prg.bpmLabel = CreateText("000")
+	sp = SCHEIGHT-DPHEIGHT
+	sz = sp * 0.7
+	SetTextSize(prg.bpmLabel,sp)
+	SetTextFont(prg.bpmLabel,LoadFont("digital.ttf"))
+	xc = SCWIDTH-GetTextTotalWidth(prg.bpmLabel)-10
+	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
+	SetTextColor(prg.bpmLabel,255,51,51,255)
+	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
+	Program_SetSpeed(100.0)
+	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Speed BPM","arrow")
+	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"spgreen","Speed up",0)
+endfunction
+
+// ***************************************************************************************************
+//											Update speed
+// ***************************************************************************************************
+
+function Program_SetSpeed(newSpeed as Float)
+	prg.beatsPerMinute# = newSpeed
+	SetTextString(prg.bpmLabel,right("000"+str(trunc(newSpeed)),3))
 endfunction
 
 // ***************************************************************************************************
@@ -89,9 +115,14 @@ function Program_MainLoop()
 			Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(hb2,beats*2)])
 		endif
 	    Manager_MoveRenderTo(prg.pos#)							// Update display position
-	
+		Button_Update(prg.speedupButton)						// Update UI objects
+		if Rotator_Update(prg.speedRotator)	<> 0
+			newSpeed = 50+Rotator_Get(prg.speedRotator)*100
+			Program_SetSpeed(newSpeed)
+		endif
 	    print(debug)
 	    print(prg.pos#)
+	    print(Rotator_Get(prg.speedRotator))
 	    Sync()
 	endwhile
 endfunction
