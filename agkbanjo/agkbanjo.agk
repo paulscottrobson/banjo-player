@@ -51,14 +51,20 @@ FILE_2=source%2Fbardisplay.agc;-1
 FILE_3=source%2Fmusic.agc;-1
 FILE_4=source%2Frenderers%2Ffretrenderer.agc;-1
 FILE_5=source%2Fmanager.agc;-1
+FILE_6=source%2Freadfile.agc;-1
+FILE_7=source%2Fplayer.agc;-1
+FILE_8=source%2Fprogram.agc;-1
 
 [files]
-FILE_NAME_0=0;main.agc;1076;0
-FILE_NAME_1=0;source%2Fbar.agc;2064;1
+FILE_NAME_0=0;main.agc;114;0
+FILE_NAME_1=0;source%2Fbar.agc;11;1
 FILE_NAME_2=0;source%2Fbardisplay.agc;358;2
-FILE_NAME_3=0;source%2Fmusic.agc;0;3
-FILE_NAME_4=0;source%2Frenderers%2Ffretrenderer.agc;4257;4
-FILE_NAME_5=1;source%2Fmanager.agc;0;5
+FILE_NAME_3=0;source%2Fmusic.agc;557;3
+FILE_NAME_4=0;source%2Frenderers%2Ffretrenderer.agc;7773;4
+FILE_NAME_5=0;source%2Fmanager.agc;580;5
+FILE_NAME_6=0;source%2Freadfile.agc;862;6
+FILE_NAME_7=0;source%2Fplayer.agc;785;7
+FILE_NAME_8=1;source%2Fprogram.agc;2980;8
 
 [project]
 description=

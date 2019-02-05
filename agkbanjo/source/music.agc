@@ -49,3 +49,17 @@ function Music_AddNewBar(this ref as Music,defn as string)
 	Bar_Initialise(this.bars[id],id,4)
 	Bar_Load(this.bars[id],defn)
 endfunction id
+
+// ***************************************************************************************************
+//									Load a .plux file in
+// ***************************************************************************************************
+
+function Music_AddFile(this ref as Music,sourceFile as string)
+	source$ = File_Read(sourceFile)
+	for i = 1 to CountStringTokens(source$,"~")
+		line$ = GetStringToken(source$,"~",i)
+		if left(line$,1) = "|" then Music_Add(this,mid(line$,2,-1))
+	next i
+endfunction
+
+

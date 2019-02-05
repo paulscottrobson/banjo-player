@@ -53,13 +53,16 @@ endfunction
 function Bar_Load(this ref as Bar,barDesc as string)
 	currentString = 0
 	currentNote = 0
+	barDesc = Upper(barDesc)
 	for c = 1 to len(barDesc)
 		d$ = mid(barDesc,c,1)
-		if d$ >= "1" and d$ <= "5" then currentString = Val(d$)
+		if d$ >= "1" and d$ <= "5"
+			currentString = Val(d$)
+		endif
 		if d$ >= "A" and d$ <= "Z"
 			this.notes[currentNote].fretting[currentString] = asc(d$) - asc("A")
 			this.notes[currentNote].isPlayed = 1
-			inc currentNote
 		endif
+		if d$ = "/" then inc currentNote
 	next c
 endfunction

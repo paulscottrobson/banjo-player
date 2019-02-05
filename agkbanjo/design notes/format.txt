@@ -5,7 +5,7 @@ Bars seperated by |
 
 Notes seperated by :
 
-Data is 1-5 A-Z representing strings 1..5 and fretting from 0 upwards.
+Data is 1-5 A-Z representing strings 1..5 and fretting from 0 upwards. Next note is a slash.
 
 Assignments are lines containing
 
