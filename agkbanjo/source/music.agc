@@ -26,14 +26,26 @@ function Music_Initialise(this ref as Music)
 endfunction
 
 // ***************************************************************************************************
+//											Add music
+// ***************************************************************************************************
+
+function Music_Add(this ref as Music,tune as string)
+	for i = 1 to CountStringTokens(tune,"|")
+		bar$ = TruncateString(GetStringToken(tune,"|",i)," "+chr(8))
+		if bar$ <> "" then Music_AddNewBar(this,bar$)
+	next i
+endfunction
+
+// ***************************************************************************************************
 //										Add an empty bar to the tune
 // ***************************************************************************************************
 
-function Music_AddBar(this ref as Music)
+function Music_AddNewBar(this ref as Music,defn as string)
 	id = this.barCount
 	inc this.barCount
 	if this.barCount > this.bars.length 
 		this.bars.length = this.bars.length + 20
 	endif
 	Bar_Initialise(this.bars[id],id,4)
+	Bar_Load(this.bars[id],defn)
 endfunction id

@@ -23,6 +23,7 @@ endtype
 
 global frg as FretRendererGlobals
 global colours as integer[8] = [0xFFFF00,0x00FF00,0x00FFFF,0xFF00FF,0xC0C0C0,0x808000,0xFF8000,0x008080]
+global stringScale as float[4] = [0.5,1.0,0.9,0.8,0.7]
 
 // ***************************************************************************************************
 //							Scrolling Fret Renderer - Command Dispatcher
@@ -67,7 +68,7 @@ function FretRenderer_Create()
 	frg.fretY = DPHEIGHT - frg.fretHeight
 	frg.stringAreaHeight = frg.fretHeight * 9 / 10
 	frg.stringAreaY = frg.fretY + frg.fretHeight/2 - frg.stringAreaHeight/2
-	frg.barWidth = SCWIDTH / 2.0
+	frg.barWidth = SCWIDTH / 3.0
 	frg.ballX = SCWIDTH * 14 / 100
 	frg.sineHeight = DPHEIGHT * 1.5 / 10
 																// Border to fretboard
@@ -75,7 +76,7 @@ function FretRenderer_Create()
 	SetSpritePosition(CMD_ID,0,frg.fretY)
 	SetSpriteSize(CMD_ID,SCWIDTH,frg.fretHeight)
 	SetSpriteDepth(CMD_ID,9998)
-	SetSpriteColor(CMD_ID,255,215,0,255)
+	SetSpriteColor(CMD_ID,102,51,0,255)
 																// Fretboard
 	CreateSprite(CMD_ID+1,LoadSubImage(frg.spriteImage,"rectangle"))
 	SetSpritePosition(CMD_ID+1,0,frg.stringAreaY)
@@ -85,7 +86,7 @@ function FretRenderer_Create()
 	for s = 1 to 5:												// Strings
 		id = CMD_ID+10+s
 		CreateSprite(id,LoadSubImage(frg.spriteImage,"string"))
-		SetSpriteSize(id,SCWIDTH,DPHEIGHT/150+1)
+		SetSpriteSize(id,SCWIDTH,DPHEIGHT/150*stringScale[s-1]+1)
 		SetSpriteOffset(id,0,GetSpriteHeight(id)/2)
 		SetSpritePositionByOffset(id,0,FretRenderer_StringY(s))
 		SetSpriteDepth(id,9996)
@@ -97,6 +98,11 @@ function FretRenderer_Create()
 	SetSpriteOffset(CMD_ID+2,sz/2,sz)
 	SetSpritePositionByOffset(CMD_ID+2,frg.ballX,frg.fretY)
 	SetSpriteDepth(CMD_ID+2,1)
+	
+	CreateSprite(CMD_ID+3,LoadSubImage(frg.spriteImage,"bar"))
+	SetSpriteSize(CMD_ID+3,sz/8,frg.stringAreaHeight)
+	SetSpritePosition(CMD_ID+3,frg.ballX,frg.stringAreaY)
+	SetSpriteDepth(CMD_ID+3,1)
 endfunction
 
 // ***************************************************************************************************
@@ -115,6 +121,7 @@ function FretRenderer_Destroy()
 	DeleteSprite(CMD_ID)
 	DeleteSprite(CMD_ID+1)
 	DeleteSprite(CMD_ID+2)
+	DeleteSprite(CMD_ID+3)
 	for s = 1 to 5
 		DeleteSprite(CMD_ID+10+s)
 	next s
@@ -127,11 +134,14 @@ endfunction
 function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo)
 	diBar.x = -99999 											// Forces a redraw on movebargraphics
 	//debug = debug + " C:"+str(bar.barNumber)
-	id = diBar.baseID+199
-	CreateSprite(id,LoadSubImage(frg.spriteImage,"bar"))
-	SetSpriteSize(id,frg.barWidth/40,frg.stringAreaHeight)
-	SetSpriteOffset(id,GetSpriteWidth(id)/2.0,0)
-	SetSpriteDepth(id,9995)
+	for i = 0 to 1
+		id = diBar.baseID+198+i
+		CreateSprite(id,LoadSubImage(frg.spriteImage,"rectangle"))
+		SetSpriteSize(id,frg.barWidth/150+1,frg.stringAreaHeight)
+		SetSpriteOffset(id,GetSpriteWidth(id)/2.0,0)
+		SetSpriteColor(id,0,0,0,255)
+		SetSpriteDepth(id,9995)
+	next i
 	for b = 0 to bar.beats*2-1
 		id = diBar.baseID + b * 20
 		CreateSprite(id,LoadSubImage(frg.spriteImage,"sinecurve"))
@@ -141,14 +151,13 @@ function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayIn
 			id = diBar.baseID + b * 20 + s
 			fretting = bar.notes[b].fretting[s]
 			if fretting <> BAR_DONTPLAY
-				s1 = frg.barWidth/2/bar.beats:s2 = frg.stringAreaHeight/5:if s2<s1 then s1=s2
 				CreateText(id,str(fretting))
 				SetTextFont(id,frg.font)
-				SetTextSize(id,s1*0.75)
+				SetTextSize(id,frg.stringAreaHeight/5.0*0.75)
 				SetTextColor(id,0,0,0,255)
 				CreateSprite(id,LoadSubImage(frg.spriteImage,"notebutton"))
-				SetSpriteSize(id,s1,s1)
-				SetSpriteOffset(id,s1*0.5,s1*0.45)
+				SetSpriteSize(id,frg.barWidth/2/bar.beats,frg.stringAreaHeight/5.0)
+				SetSpriteOffset(id,GetSpriteHeight(id)*0.5,GetSpriteWidth(id)*0.45)
 				SetSpriteDepth(id,99)
 				col = colours[mod(fretting,colours.length)]
 				SetSpriteColor(id,col/65536,mod(col/256,256),mod(col,256),255)
@@ -163,6 +172,7 @@ endfunction
 
 function FretRenderer_DestroyBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo)
 	//debug = debug + " D:"+str(bar.barNumber)
+	DeleteSprite(diBar.baseID+198)
 	DeleteSprite(diBar.baseID+199)
 	for b = 0 to bar.beats*2-1
 		DeleteSprite(diBar.baseID + b * 20)
@@ -185,6 +195,7 @@ function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo
 	if diBar.x = x then return 
 	diBar.x = x
 	//debug = debug + " M:"+str(bar.barNumber)+">"+str(x)
+	SetSpritePositionByOffset(diBar.baseID+198,x+frg.barWidth,frg.stringAreaY)
 	SetSpritePositionByOffset(diBar.baseID+199,x,frg.stringAreaY)
 	for b = 0 to bar.beats*2-1
 		x1 = round((b+0.5)/8.0*frg.barWidth+x+0.5)

@@ -60,7 +60,7 @@ endfunction
 function Manager_MoveRenderTo(pos as float)
 	p as BarParameters
 	p.pos = pos
-	for i = 0 to mgr.music.barCount-1
+	for i = mgr.music.barCount-1 to 0 step -1
 		if Manager_Command(CMD_VISIBLE,mgr.music.bars[i],mgr.displayInfo[i],p) <> 0
 			Manager_Command(CMD_SHOW,mgr.music.bars[i],mgr.displayInfo[i],p)
 		else

@@ -42,8 +42,24 @@ function Bar_Initialise(this ref as Bar,barNumber as integer,beats as integer)
 		this.notes[i].isPlayed = 0 
 		for s = 1 to 5
 			this.notes[i].fretting[s] = BAR_DONTPLAY
-			if Random(1,4) > 1 then this.notes[i].fretting[s] = Random(0,23) : this.notes[i].isPlayed = 1
 		next s
 	next i
 endfunction
 
+// ***************************************************************************************************
+//								Load a definition into the bar.
+// ***************************************************************************************************
+
+function Bar_Load(this ref as Bar,barDesc as string)
+	currentString = 0
+	currentNote = 0
+	for c = 1 to len(barDesc)
+		d$ = mid(barDesc,c,1)
+		if d$ >= "1" and d$ <= "5" then currentString = Val(d$)
+		if d$ >= "A" and d$ <= "Z"
+			this.notes[currentNote].fretting[currentString] = asc(d$) - asc("A")
+			this.notes[currentNote].isPlayed = 1
+			inc currentNote
+		endif
+	next c
+endfunction

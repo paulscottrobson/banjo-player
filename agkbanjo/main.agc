@@ -27,9 +27,7 @@ SetSpriteDepth(background,9999)
 
 tune as Music
 Music_Initialise(tune)
-for i = 1 to 15
-	Music_AddBar(tune)
-next i
+Music_Add(tune,"|5A3A1A5A3A1A5A|5A3A1A5A3A1A5A|5A3A1A5A3A1A5A|5A3A1A5A3A1A5A|5A3A1A5A3A1A5A|5A3A1A5A3A1A5A|5A3A1A5A3A1A5A")
 
 Manager_Initialise(tune)
 Manager_SwitchRenderer(1)
