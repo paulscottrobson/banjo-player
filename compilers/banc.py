@@ -62,7 +62,7 @@ class BanjoCompiler(object):
 	def compile(self,sourceFile,targetFile):
 		sourceFile = sourceFile.replace("/",os.sep)									# Handle slashes.
 		targetFile = targetFile.replace("/",os.sep)
-		print("Compiling {0} to {1}".format(sourceFile,targetFile))
+		#print("Compiling {0} to {1}".format(sourceFile,targetFile))
 
 		if not os.path.isfile(sourceFile):											# check file exists
 			return "File "+sourceFile+" cannot be found"
@@ -83,7 +83,7 @@ class BanjoCompiler(object):
 			trans = Level1Compiler(equates)
 		else:
 			raise BanjoException("Bad source format "+equates["format"])
-		print("\tUsing format {0}.".format(equates["format"]))
+		#print("\tUsing format {0}.".format(equates["format"]))
 
 		try:
 			hOut = open(targetFile,"w")												# open target file.
@@ -102,7 +102,7 @@ class BanjoCompiler(object):
 				except AssertionError as e:											# if translator fails.
 					return "Error '{0}' at {1}".format(e.args[0],i+1)
 				barCount += 1
-		print("\tCompiled {0} bars.".format(barCount))
+		#print("\tCompiled {0} bars.".format(barCount))
 		hOut.close()
 		return None
 
