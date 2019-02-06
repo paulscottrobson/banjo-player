@@ -53,13 +53,31 @@ class MusicBuilder(object):
 			newIndexFile = "idx"+str(self.xUniqueID)+".index"
 			self.xUniqueID += 1
 			self.compileIndex(subdir,newIndexFile)
+			hIndex.write(newIndexFile+"\n")
+			hIndex.write(self.convertName(subdir)+"\n")
 		for tuneFile in [x for x in elements if x[-6:] == ".banjo"]:			# do all source files next.
 			targetFile = "tune"+str(self.uniqueID)+".plux"
+			hIndex.write(targetFile+"\n")
+			hIndex.write(self.convertName(tuneFile)+"\n")
 			print(tuneFile,targetFile)
 			self.uniqueID += 1
 			bc = banc.BanjoCompiler()
 			bc.compile(tuneFile,self.targetDir+os.sep+targetFile)
 		hIndex.close()
+	#
+	#		Convert a filename to a descripive name
+	#
+	def convertName(self,fName):
+		fName = fName.split(os.sep)[-1]											# get last bit
+		fName = fName if fName[-6:] != ".banjo" else fName[:-6]					# strip .banjo
+		fName = fName.replace("_"," ").split(" ")								# _ to spaces
+		fName = " ".join([self.reCase(x) for x in fName])						# case nicely
+		return fName
+	#
+	#		Case a word
+	#
+	def reCase(self,s):
+		return s[0].upper()+s[1:].lower()
 	#
 	#		Locate and compile most recently modified file as test.plux
 	#
