@@ -26,7 +26,7 @@ function Button_Initialise(this ref as Button,x as integer,y as integer,size as 
 										colour as string,label as string,autoReturn as integer)
 	this.autoReturn = autoReturn
 	img = LoadImage("sprites.png")
-	this.frameSprite = CreateSprite(LoadSubImage(img,"spgrey"))
+	this.frameSprite = CreateSprite(LoadSubImage(img,"rotary"))
 	SetSpriteSize(this.frameSprite,size,size)
 	SetSpriteOffset(this.frameSprite,size/2,size/2)
 	SetSpritePositionByOffset(this.frameSprite,x,y)

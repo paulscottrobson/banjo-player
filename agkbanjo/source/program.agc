@@ -17,7 +17,9 @@ type ProgramGlobals
 	beatsPerMinute# as Float									// Speed of playback BPM
 	speedRotator as Rotator 									// Rotator for base speed
 	speedupButton as Button 									// Toggle button for speed
+	posCtrl as Slider 											// Slider for pos/repeat control
 	bpmLabel as integer 										// BPM Display Sprite
+	rendererID as integer 										// Current renderer
 endtype
 
 global prg as ProgramGlobals
@@ -54,14 +56,13 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextPosition(prg.info,SCWIDTH/2-GetTextTotalWidth(prg.info)/2,SCHEIGHT-GetTextTotalHeight(prg.info))
 
 	prg.pos# = 0.0
-
+	prg.rendererID = 1
 	Music_Initialise(prg.tune)
 	Music_AddFile(prg.tune,musicFile)
 	Manager_Initialise(prg.tune)
-	Manager_SwitchRenderer(1)
+	Manager_SwitchRenderer(prg.rendererID)
 	Player_Initialise(prg.tune)
-	
-	
+		
 	yc = (SCHEIGHT+DPHEIGHT)/2
 	prg.bpmLabel = CreateText("000")
 	sp = SCHEIGHT-DPHEIGHT
@@ -72,9 +73,10 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
 	SetTextColor(prg.bpmLabel,255,51,51,255)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
-	Program_SetSpeed(100.0)
-	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Speed BPM","arrow")
+	Program_SetSpeed(80.0)
+	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Speed BPM","rotary")
 	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"spgreen","Speed up",0)
+	Slider_Initialise(prg.posCtrl,10,xc-sp*2,yc,sz*0.8)
 endfunction
 
 // ***************************************************************************************************
@@ -102,9 +104,14 @@ function Program_MainLoop()
 		barsPerSec# = beatsPerSec# / beatsPerBar#				// Bars per second
 		
 		lastpos# = prg.pos#										// Last position
-		prg.pos# = prg.pos# + barsPerSec# * elapsed#			// New position
-		if prg.pos# >= prg.tune.barCount 						// Off right hand end ?
-			prg.pos# = 0:lastpos# = 0							// Reset to start
+		prg.pos# = prg.pos# + barsPerSec# * elapsed#  * 2.0		// New position, allowing banjo BPM Scalar
+		endPos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_END)
+		if prg.pos# >= endPos# 									// Off right hand end ?
+			prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_START)
+			lastPos# = prg.pos#
+			if Button_GetState(prg.speedupButton) <> 0 
+				Program_SetSpeed(prg.beatsPerMinute# + 2)
+			endif
 		endif
 		
 		beats = prg.tune.bars[trunc(prg.pos#)].beats 			// How many beats in bar
@@ -115,11 +122,21 @@ function Program_MainLoop()
 			Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(hb2,beats*2)])
 		endif
 	    Manager_MoveRenderTo(prg.pos#)							// Update display position
+		Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
+		if Slider_Update(prg.posCtrl) <> 0
+			prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_POSITION)
+		endif
 		Button_Update(prg.speedupButton)						// Update UI objects
 		if Rotator_Update(prg.speedRotator)	<> 0
-			newSpeed = 50+Rotator_Get(prg.speedRotator)*100
+			newSpeed = 80+(Rotator_Get(prg.speedRotator)-0.5)*2*60
 			Program_SetSpeed(newSpeed)
 		endif
+		
+		if GetPointerPressed() and GetPointerY() < DPHEIGHT		// Switch renderer
+			prg.rendererID = 1-prg.rendererID
+			Manager_SwitchRenderer(prg.rendererID)
+		endif
+		
 	    print(debug)
 	    print(prg.pos#)
 	    print(Rotator_Get(prg.speedRotator))

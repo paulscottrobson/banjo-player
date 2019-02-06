@@ -20,6 +20,7 @@ SetErrorMode(2)
 #include "source/bardisplay.agc"
 #include "source/ui/button.agc"
 #include "source/ui/rotator.agc"
+#include "source/ui/slider.agc"
 #include "source/music.agc"
 #include "source/player.agc"
 #include "source/manager.agc"
@@ -28,6 +29,3 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
-//		Scrollbar UI class
-//			Make it follow and update
-//			On loop back speed up (lit button)
