@@ -21,6 +21,7 @@ SetErrorMode(2)
 #include "source/ui/button.agc"
 #include "source/ui/rotator.agc"
 #include "source/ui/slider.agc"
+#include "source/ui/menu.agc"
 #include "source/music.agc"
 #include "source/player.agc"
 #include "source/manager.agc"

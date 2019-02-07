@@ -38,13 +38,7 @@ function Program_SetupDisplay()
 	SetSyncRate( 60, 0 ) // 30fps instead of 60 to save battery
 	//SetScissor( 0,0,0,0 ) // use the maximum available screen space, no black borders
 	UseNewDefaultFonts( 1 ) // since version 2.0.22 we can use nicer default fonts
-endfunction
 
-// ***************************************************************************************************
-//									Set up the display
-// ***************************************************************************************************
-
-function Program_CreateDisplay(musicFile as string)
 	prg.background = CreateSprite(LoadSubImage(LoadImage("sprites.png"),"background"))
 	SetSpritePosition(prg.background,0,0)
 	SetSpriteSize(prg.background,SCWIDTH,SCHEIGHT)
@@ -54,6 +48,13 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextFont(prg.info,LoadFont("rocko.ttf"))
 	SetTextSize(prg.info,SCWIDTH/60)
 	SetTextPosition(prg.info,SCWIDTH/2-GetTextTotalWidth(prg.info)/2,SCHEIGHT-GetTextTotalHeight(prg.info))
+endfunction
+
+// ***************************************************************************************************
+//									Set up the display
+// ***************************************************************************************************
+
+function Program_CreateDisplay(musicFile as string)
 
 	prg.pos# = 0.0
 	prg.rendererID = 1
@@ -145,5 +146,9 @@ function Program_MainLoop()
 endfunction
 
 Program_SetupDisplay()
+m as Menu
+Menu_Initialise(m)
+Menu_Load(m,"home.index")
+Menu_Select(m)
 Program_CreateDisplay("cripple.plux")
 Program_MainLoop()
