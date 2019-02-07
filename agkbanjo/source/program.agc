@@ -95,7 +95,7 @@ endfunction
 
 function Program_MainLoop()
 	lastTime = GetMilliseconds()
-	while not GetRawKeyState(27)
+	while not GetRawKeyState(27) and GetPla
 		elapsed = GetMilliseconds() - lastTime					// Track time between frames.
 		lastTime = GetMilliseconds()
 																// Convert to a time in bars.
@@ -145,10 +145,26 @@ function Program_MainLoop()
 	endwhile
 endfunction
 
+// ***************************************************************************************************
+//											Select from menu
+// ***************************************************************************************************
+
+function Program_SelectFromMenu(menuFile as string,canReturn as integer)
+	menu as Menu
+	Menu_Initialise(menu)										// Set up menu, add 'return' if not top
+	if canReturn <> 0 then Menu_Add(menu,"Previous Menu","<back>")
+	Menu_Load(menu,menuFile)									// Load in menu data
+	selected as string = ""
+	while selected = ""											// Until something is selected
+		selected = Menu_Select(menu)							// Pick menu option
+		if right(selected,5) <> ".plux" and selected <> "<back>"// If not tune and not back
+			selected = Program_SelectFromMenu(selected,1)		// Do sub menu
+		endif
+	endwhile
+	if selected = "<back>" then selected = ""					// Previous option, return "" to make caller loop
+endfunction selected
+
 Program_SetupDisplay()
-m as Menu
-Menu_Initialise(m)
-Menu_Load(m,"home.index")
-Menu_Select(m)
-Program_CreateDisplay("cripple.plux")
+file$ = Program_SelectFromMenu("home.index",0)
+Program_CreateDisplay(file$)
 Program_MainLoop()

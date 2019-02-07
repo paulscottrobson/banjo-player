@@ -21,10 +21,18 @@ type Menu
 	entries as _MenuEntry[1]
 endtype
 
+// ***************************************************************************************************
+//										Initialise a menu
+// ***************************************************************************************************
+
 function Menu_Initialise(this ref as Menu)
 	this.count = 0
 	this.entries.length = 5
 endfunction
+
+// ***************************************************************************************************
+//									Add a label/value pair
+// ***************************************************************************************************
 
 function Menu_Add(this ref as Menu,label as String,value as String)
 	if this.count = this.entries.length then this.entries.length = this.entries.length + 5
@@ -35,6 +43,10 @@ function Menu_Add(this ref as Menu,label as String,value as String)
 	inc this.count
 endfunction
 
+// ***************************************************************************************************
+//								Load in a menu from an index file
+// ***************************************************************************************************
+
 function Menu_Load(this ref as Menu,indexfile as String)
 	elements$ = File_Read(indexFile)
 	for i = 1 to CountStringTokens(elements$,"~")-1 step 2
@@ -42,17 +54,21 @@ function Menu_Load(this ref as Menu,indexfile as String)
 	next i
 endfunction
 
+// ***************************************************************************************************
+//										Select a menu option
+// ***************************************************************************************************
+
 function Menu_Select(this ref as Menu)
 	c = this.count + 2.0:if c < 7 then c = 7
 	menuHeight = SCHEIGHT / c
-	frame = LoadSubImage(LoadImage("sprites.png"),"rectangle")
+	frame = LoadSubImage(LoadImage("sprites.png"),"menurectangle")
 	for e = 0 to this.count - 1
 		y = SCHEIGHT / 2 - menuHeight * (this.count-1) / 2 + e * menuHeight
 		id = CreateSprite(frame):this.entries[e].background = id
 		SetSpriteSize(id,SCWIDTH * 0.75,menuHeight * 0.9)
 		SetSpriteOffset(id,GetSpriteWidth(id)/2,GetSpriteHeight(id)/2)
 		SetSpritePositionByOffset(id,SCWIDTH/2,y)
-		SetSpriteColor(id,0,0,255,255)
+		//SetSpriteColor(id,0,0,255,255)
 		id = CreateText(chr(e+65)+". "+this.entries[e].label):this.entries[e].text = id
 		SetTextFont(id,LoadFont("rocko.ttf"))
 		SetTextSize(id,menuHeight * 0.5)
