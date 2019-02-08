@@ -26,6 +26,7 @@ type Note
 	modifer as integer 											// Normal or hammer on/pull off etc.
 	modifierString as integer 									// String to which this applies.
 	newFretting as integer 										// New fretting for hammer on or slide.
+	chordLabel as string 										// Chord Label, if any.
 endtype
 
 // ***************************************************************************************************
@@ -51,6 +52,7 @@ function Bar_Initialise(this ref as Bar,barNumber as integer,beats as integer)
 		this.notes[i].modifer = NOTE_NORMAL						// Normal type of note
 		this.notes[i].modifierString = 0	
 		this.notes[i].newFretting = 0
+		this.notes[i].chordLabel = ""
 		for s = 1 to 5											// Not playing any strings, yet.
 			this.notes[i].fretting[s] = BAR_DONTPLAY
 		next s
@@ -72,12 +74,19 @@ function Bar_Load(this ref as Bar,barDesc as string)
 		endif
 		if d$ >= "A" and d$ <= "Z"
 			this.notes[currentNote].fretting[currentString] = asc(d$) - asc("A")
+			this.notes[currentNote].newFretting = this.notes[currentNote].fretting[currentString]
+			this.notes[currentNote].modifer = NOTE_NORMAL
 			this.notes[currentNote].isPlayed = 1
-			this.notes[currentNote].modifer = NOTE_SLIDE
-			this.notes[currentNote].modifierString = currentString
-			this.notes[currentNote].newFretting = asc(d$) - ASC("A") + 2
 		endif
 		if d$ = "/" then inc currentNote
+		if d$ = "+" or d$ = "-" or d$ = ">"
+			this.notes[currentNote].modifierString = currentString
+			if d$ = "+" or d$ = ">" then inc this.notes[currentNote].newFretting
+			if d$ = "-" then dec this.notes[currentNote].newFretting
+			if d$ = "+" then this.notes[currentNote].modifer = NOTE_HAMMERON
+			if d$ = "-" then this.notes[currentNote].modifer = NOTE_PULLOFF
+			if d$ = ">" then this.notes[currentNote].modifer = NOTE_SLIDE
+		endif
 	next c
 endfunction
 
@@ -90,7 +99,7 @@ function Bar_GetNoteText(this ref as bar,note as integer,strn as integer)
 	if strn = this.notes[note].modifierString
 		select this.notes[note].modifer
 			case NOTE_PULLOFF:
-				note$ = note$+"-0"
+				note$ = note$+"-"+str(this.notes[note].newFretting)
 			endcase
 			case NOTE_SLIDE:
 				note$ = note$+"/"+str(this.notes[note].newFretting)
@@ -102,3 +111,14 @@ function Bar_GetNoteText(this ref as bar,note as integer,strn as integer)
 	endif
 endfunction note$
 
+// ***************************************************************************************************
+//										Use double width note
+// ***************************************************************************************************
+
+function Bar_IsNoteDoubleWidth(this ref as bar,note as integer,strn as integer)
+	isWide = 0
+	if strn = this.notes[note].modifierString
+		m = this.notes[note].modifer
+		isWide = m = NOTE_PULLOFF or m = NOTE_SLIDE or m = NOTE_HAMMERON
+	endif
+endfunction isWide

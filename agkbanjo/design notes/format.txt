@@ -1,11 +1,16 @@
 File Format (.plux)
-====================
-
+===================
 Bars seperated by |
 
 Notes seperated by :
 
-Data is 1-5 A-Z representing strings 1..5 and fretting from 0 upwards. Next note is a slash.
+Data is 
+1-5 select string
+A-Z set fretting and pluck that string this note
++   add hammer on 1 (multiple)
+-   sub pull off 1 (multiple)
+>   slide 1 (multiple)
+/ 	go to next note.
 
 Assignments are lines containing
 

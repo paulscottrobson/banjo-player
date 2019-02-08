@@ -1,5 +1,6 @@
 spyellow:180:496:83:83
 rotary:696:304:282:287
+notebutton2:684:592:110:62
 menurectangle:0:420:344:74
 arrow:696:0:300:300
 sinecurve:0:496:90:100
@@ -16,6 +17,6 @@ spgreen:180:580:83:83
 spmagenta:264:580:83:83
 spbrown:516:580:83:83
 background:0:0:694:417
-string:684:592:249:19
+string:684:656:249:19
 spblue:600:580:83:83
 spcyan:92:584:83:83
