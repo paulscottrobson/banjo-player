@@ -41,7 +41,7 @@ firebase_config_path=
 [html5_settings]
 commands_used=0
 dynamic_memory=0
-output_path=C:\\Users\\PaulRobson\\Projects\\banjo-player\\agkbanjo\\HTML5
+output_path=/home/paulr/Projects/banjo-player/agkbanjo/HTML5
 
 [projectfiles]
 FILE_0=main.agc;-1
@@ -59,9 +59,12 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=0;main.agc;832;0
-FILE_NAME_1=1;source%2Fprogram.agc;3074;1
-FILE_NAME_2=0;source%2Fui%2Fmenu.agc;2858;2
+FILE_NAME_0=1;main.agc;1144;0
+FILE_NAME_1=0;source%2Fbar.agc;3416;4
+FILE_NAME_2=0;source%2Fmusic.agc;2199;3
+FILE_NAME_3=0;source%2Frenderers%2Ffretrenderer.agc;6402;5
+FILE_NAME_4=0;source%2Fprogram.agc;1117;1
+FILE_NAME_5=0;source%2Fui%2Fmenu.agc;2858;2
 
 [project]
 description=

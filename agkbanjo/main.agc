@@ -30,3 +30,11 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
+// 		Play hammer on, pull off and slide (?)
+//		Extend width of hammer/pull/slide and fix font sizes.
+//		Add chord display
+//		Rethink format for Clawhammer (back pling a la Erbsen)
+//		Put source and object in same file, deep search compile 
+//		Seperate index builder.
+//		Make download rather than embedded
+

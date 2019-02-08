@@ -95,7 +95,7 @@ endfunction
 
 function Program_MainLoop()
 	lastTime = GetMilliseconds()
-	while not GetRawKeyState(27) and GetPla
+	while not GetRawKeyState(27)
 		elapsed = GetMilliseconds() - lastTime					// Track time between frames.
 		lastTime = GetMilliseconds()
 																// Convert to a time in bars.
@@ -134,8 +134,8 @@ function Program_MainLoop()
 		endif
 		
 		if GetPointerPressed() and GetPointerY() < DPHEIGHT		// Switch renderer
-			prg.rendererID = 1-prg.rendererID
-			Manager_SwitchRenderer(prg.rendererID)
+			//prg.rendererID = 1-prg.rendererID
+			//Manager_SwitchRenderer(prg.rendererID)
 		endif
 		
 	    print(debug)
@@ -165,6 +165,7 @@ function Program_SelectFromMenu(menuFile as string,canReturn as integer)
 endfunction selected
 
 Program_SetupDisplay()
-file$ = Program_SelectFromMenu("home.index",0)
+file$ = "cripple.plux"
+//file$ = Program_SelectFromMenu("home.index",0)
 Program_CreateDisplay(file$)
 Program_MainLoop()

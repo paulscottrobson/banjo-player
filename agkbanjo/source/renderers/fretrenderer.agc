@@ -154,9 +154,12 @@ function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayIn
 			id = diBar.baseID + b * 20 + s
 			fretting = bar.notes[b].fretting[s]
 			if fretting <> BAR_DONTPLAY
-				CreateText(id,str(fretting))
+				CreateText(id,Bar_GetNoteText(bar,b,s))
 				SetTextFont(id,frg.font)
-				SetTextSize(id,frg.stringAreaHeight/5.0*0.75)
+				SetTextSize(id,frg.stringAreaHeight/5.0*0.6)
+				if GetTextTotalWidth(id) > frg.barWidth/bar.beats/2.0
+					SetTextSize(id,frg.stringAreaHeight/5.0*0.4)
+				endif
 				SetTextColor(id,0,0,0,255)
 				CreateSprite(id,LoadSubImage(frg.spriteImage,"notebutton"))
 				SetSpriteSize(id,frg.barWidth/2/bar.beats,frg.stringAreaHeight/5.0)
