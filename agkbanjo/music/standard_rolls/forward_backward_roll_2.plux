@@ -1,0 +1,14 @@
+.format:=1
+.name:=forward backward roll 2
+.g5:=55000
+.c:=21000
+.g:=00000
+.d:=00020
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
+|3a/2a/1a/5a/1a/2a/3a/1a
