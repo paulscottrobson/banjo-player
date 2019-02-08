@@ -1,9 +1,10 @@
 # ***************************************************************************************************
 # ***************************************************************************************************
 #
-#		Name:		banc.py
-#		Purpose:	Banjo compiler, Python 
-#		Date:		5th February 2019
+#		Name:		buildtree.py
+#		Purpose:	Build all music entries in music tree and compiles most recently 
+#					changed to test.plux
+#		Date:		8th February 2019
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # ***************************************************************************************************
@@ -13,85 +14,26 @@ import os,sys,banc
 
 class MusicBuilder(object):
 
-	def buildTree(self,sourceDir,targetDir):
-		self.targetDir = targetDir.replace("/",os.sep)
-		self.scanIndexes(sourceDir)
-		self.compileAllSources()
-		self.mostRecent()
-	#
-	#		Analyse the tree structure to produce a dictionary of indexes with files/directories.
-	#
-	def scanIndexes(self,sourceDir):
-		self.indexes = {}														# indexes with list of files/dirs
-		sourceDir = sourceDir.replace("/",os.sep)								# make valid directory
-		for root,dirs,files in os.walk(sourceDir):								# scan it
-			banjoFiles = [x for x in files if x[-6:] == ".banjo"]				# get banjo files
-			for d in dirs:														# add any subdirectories
-				banjoFiles.append(d)
-			banjoFiles = [root+os.sep+x for x in banjoFiles]					# make full path name
-			dirName = root if root != sourceDir else "root"						# get directory name or root.
-			assert dirName not in self.indexes,"Duplicate directory "+dirName 	# check directory name unique
-			banjoFiles.sort()													# sort list of files/dirs
-			self.indexes[dirName] = banjoFiles									# save it.
-		print("Found {0} indexes.".format(len([x for x in self.indexes.keys()])))
-	#
-	#		Compile all sources and give them names
-	#
-	def compileAllSources(self):
-		self.uniqueID = 1														# unique ID counter.
-		self.xUniqueID = 1														# same for indices
-		self.compileIndex("root","home.index")									# compile the index called root.
-	#
-	#		Compile the index with the given name
-	#
-	def compileIndex(self,name,indexFile):
-		print(name,indexFile)
-		assert name in self.indexes 											# check it exists - it should !
-		elements = self.indexes[name]
-		hIndex = open(self.targetDir+os.sep+indexFile,"w")						# create index file
-		for subdir in [x for x in elements if x[-6:] != ".banjo"]:				# do all subindexes first.
-			newIndexFile = "idx"+str(self.xUniqueID)+".index"
-			self.xUniqueID += 1
-			self.compileIndex(subdir,newIndexFile)
-			hIndex.write(newIndexFile+"\n")
-			hIndex.write(self.convertName(subdir)+"\n")
-		for tuneFile in [x for x in elements if x[-6:] == ".banjo"]:			# do all source files next.
-			targetFile = "tune"+str(self.uniqueID)+".plux"
-			hIndex.write(targetFile+"\n")
-			hIndex.write(self.convertName(tuneFile)+"\n")
-			print(tuneFile,targetFile)
-			self.uniqueID += 1
-			bc = banc.BanjoCompiler()
-			bc.compile(tuneFile,self.targetDir+os.sep+targetFile)
-		hIndex.close()
-	#
-	#		Convert a filename to a descripive name
-	#
-	def convertName(self,fName):
-		fName = fName.split(os.sep)[-1]											# get last bit
-		fName = fName if fName[-6:] != ".banjo" else fName[:-6]					# strip .banjo
-		fName = fName.replace("_"," ").split(" ")								# _ to spaces
-		fName = " ".join([self.reCase(x) for x in fName])						# case nicely
-		return fName
-	#
-	#		Case a word
-	#
-	def reCase(self,s):
-		return s[0].upper()+s[1:].lower()
-	#
-	#		Locate and compile most recently modified file as test.plux
-	#
-	def mostRecent(self):
+	def buildTree(self,treeDir):
+		self.tree = treeDir.replace("/",os.sep)
+		self.compiler = banc.BanjoCompiler()
+		self.latestTime = 0
 		self.latestFile = None
-		latestFileTime = 0
-		for key in self.indexes.keys():											# scan all indexes
-			for fName in [x for x in self.indexes[key] if x[-6:] == ".banjo"]:	# scan all files
-				fTime = os.stat(fName).st_mtime									# get modification time
-				if fTime > latestFileTime:										# update latest found
-					latestFileTime = fTime
-					self.latestFile = fName
-		print("Most recent file "+self.latestFile+" compiled to test.plux")		# print and compile it.
-		banc.BanjoCompiler().compile(self.latestFile,self.targetDir+os.sep+"test.plux")
+		for root,dirs,files in os.walk(self.tree):
+			for f in [x for x in files if x[-6:] == ".banjo"]:
+				self.buildFile(root+os.sep+f)
+		print()
+		print("Compiling most recently changed file \"{0}\" to \"test.plux\"".format(self.latestFile))
+		self.compiler.compile(self.latestFile,self.tree+os.sep+"test.plux")
+
+	def buildFile(self,sourceFile):
+		targetFile = sourceFile[:-6]+".plux"
+		self.compiler.compile(sourceFile,targetFile)
+		print("Now compiling \"{0}\".".format(sourceFile))
+		fTime = os.stat(sourceFile).st_mtime
+		if fTime > self.latestTime:
+			self.latestTime = fTime
+			self.latestFile = sourceFile
 
 if __name__ == "__main__":
-	MusicBuilder().buildTree("../music","../agkbanjo/media/music")
+	MusicBuilder().buildTree("../agkbanjo/music")

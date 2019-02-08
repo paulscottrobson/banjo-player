@@ -30,9 +30,7 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
-// 		Play hammer on, pull off and slide (?)
-//		Rethink format for Clawhammer (back pling a la Erbsen)
-//		Put source and object in same file, deep search compile 
-//		Seperate index builder.
-//		Make download rather than embedded
+//		Rewrite compiler and check it plays
+// 		Play hammer on, pull off and slide as far as possible (not very :))
+//		Seperate index builder, rewrite menu selector.
 

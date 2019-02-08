@@ -14,12 +14,15 @@
 // ***************************************************************************************************
 
 function File_Read(sourceFile as string)
-	source$ = "music\"+sourceFile
+	SetFolder("")												// root folder
+	SetFolder("music")											// music folder
 	contents$ = ""
-	OpenToRead(1,source$)
+	OpenToRead(1,sourceFile)
 	while not FileEOF(1)
 		line$ = ReadLine(1)
 		if left(line$,2) <> "//" then contents$ = contents$ + line$ +"~"
 	endwhile
 	CloseFile(1)
+	SetFolder("")
+	SetFolder("media")
 endfunction contents$

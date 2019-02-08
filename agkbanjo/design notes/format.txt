@@ -5,24 +5,23 @@ Bars seperated by |
 Notes seperated by :
 
 Data is 
-1-5 select string
-A-Z set fretting and pluck that string this note
-+   add hammer on 1 (multiple)
--   sub pull off 1 (multiple)
->   slide 1 (multiple)
-/ 	go to next note.
+1-5 	select string
+A-Z 	set fretting and pluck that string this note
++   	add hammer on 1 (multiple)
+-   	sub pull off 1 (multiple)
+>   	slide 1 (multiple)
+/ 		go to next note.
+(Chord)	set display chord
 
 Assignments are lines containing
 
 def := constant
 
-Simples .banjo (format = 1)
-===========================
+Format # 1
+==========
+<chord> := 000.. 					Defines a chord which is partly played
 
-<chord> := 01223 is fretting for string 1-string 5
-<bars> are | seperated
-
-1-5 means strum 1-5 P plucks 1+5 [<chord>] switches chords. Defaults to G and keeps going unless otherwise
-All 8 beat bars
-
-
+1-5									Changes the melody string
+A-Z 								Plays a note on Fretting 0-25
+[Chord]								Plays a clawhammer / adds note marker if changed.
++++ --- >>> 						Bumps last note hammer on/pull off/slider.

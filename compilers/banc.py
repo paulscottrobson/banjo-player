@@ -107,6 +107,6 @@ class BanjoCompiler(object):
 		return None
 
 if __name__ == "__main__":
-	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/media/music/cripple.plux")
+	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/music/cripple.plux")
 	if err is not None:
 		print(err)

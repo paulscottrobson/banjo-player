@@ -166,6 +166,7 @@ endfunction selected
 
 Program_SetupDisplay()
 file$ = "cripple.plux"
+//file$ = "standard_rolls/forward_roll.plux"
 //file$ = Program_SelectFromMenu("home.index",0)
 Program_CreateDisplay(file$)
 Program_MainLoop()

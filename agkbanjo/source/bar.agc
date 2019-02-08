@@ -67,8 +67,9 @@ function Bar_Load(this ref as Bar,barDesc as string)
 	currentString = 0
 	currentNote = 0
 	barDesc = Upper(barDesc)
-	for c = 1 to len(barDesc)
-		d$ = mid(barDesc,c,1)
+	while barDesc <> ""
+		d$ = left(barDesc,1)
+		barDesc = mid(barDesc,2,-1)
 		if d$ >= "1" and d$ <= "5"
 			currentString = Val(d$)
 		endif
@@ -87,7 +88,13 @@ function Bar_Load(this ref as Bar,barDesc as string)
 			if d$ = "-" then this.notes[currentNote].modifer = NOTE_PULLOFF
 			if d$ = ">" then this.notes[currentNote].modifer = NOTE_SLIDE
 		endif
-	next c
+		if d$ = "("
+			p = FindString(barDesc,")")
+			chord$ = left(barDesc,p-1)
+			this.notes[currentNote].chordLabel = upper(left(chord$,1))+lower(mid(chord$,2,-1))
+			barDesc = mid(barDesc,p+1,-1)
+		endif
+	endwhile
 endfunction
 
 // ***************************************************************************************************
