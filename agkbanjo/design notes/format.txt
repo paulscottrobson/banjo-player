@@ -25,6 +25,6 @@ v^									Changes the melody string up down
 0-9 								Plays a note on Fretting 0-9 advance
 (Chord)								Change chord add note marker.
 !									Add clawhammer in current chord
-&									Add just chord
+%									Add just chord
 &									Add a one beat rest
 +++ --- >>> 						Bumps *next* note hammer on/pull off/slider.

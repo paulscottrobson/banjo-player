@@ -165,8 +165,8 @@ function Program_SelectFromMenu(menuFile as string,canReturn as integer)
 endfunction selected
 
 Program_SetupDisplay()
-file$ = "cripple.plux"
-//file$ = "standard_rolls/forward_roll.plux"
+file$ = "__test.plux"
+file$ = "lessons/strum.plux"
 //file$ = Program_SelectFromMenu("home.index",0)
 Program_CreateDisplay(file$)
 Program_MainLoop()

@@ -31,4 +31,5 @@ SetErrorMode(2)
 
 // TODO: 	
 //		Seperate index builder, rewrite menu selector.
-
+// 		Pause/Continue button ?
+//		Pause/Continue and Speed up/down option
