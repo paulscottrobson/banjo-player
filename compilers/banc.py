@@ -28,7 +28,8 @@ class Level1Compiler(object):
 		self.currentString = 1
 		self.currentBeat = 0
 		self.currentChord = None
-		self.fretting = "0123456789"
+		self.fretting = "0123456789tewhofx"
+		self.pending = ""
 
 	def translate(self,barDef):
 		parts = [x for x in barDef.replace(" ","").split("(") if x != ""]
@@ -58,6 +59,8 @@ class Level1Compiler(object):
 			assert self.currentString >= 1,"Current string off top"
 		elif ch == "$":
 			self.currentString = 1
+		elif ch == "+" or ch == "-" or ch == ">":
+			self.pending += ch
 		elif ch == "!":
 			for i in range(0,5):
 				ch = self.currentChord[i]
@@ -65,7 +68,8 @@ class Level1Compiler(object):
 					encode = encode + str(i+1)+chr(self.fretting.find(ch)+65)
 			encode = encode + "/5A/"
 		elif self.fretting.find(ch) >= 0:
-			encode = str(self.currentString)+chr(self.fretting.find(ch)+65)+"//"
+			encode = str(self.currentString)+chr(self.fretting.find(ch)+65)+self.pending+"//"
+			self.pending = ""
 		else:
 			assert False,"Unknown command "+ch
 		return encode
@@ -109,6 +113,8 @@ class BanjoCompiler(object):
 		except FileNotFoundError as e:
 			return "Cannot open "+targetFile+" to write."
 
+		#hOut = sys.stdout
+
 		barCount = 0
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
@@ -116,6 +122,7 @@ class BanjoCompiler(object):
 			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars
 				try:
 					cvt = trans.translate(bar).lower()								# translate it
+					cvt = cvt if cvt != "" else "/"
 					#print(bar,cvt)
 					assert cvt.count("/") <= 8,"Too many beats"
 					hOut.write("|"+cvt+"\n")										# write out

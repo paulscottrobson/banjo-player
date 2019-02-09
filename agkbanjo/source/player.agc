@@ -13,6 +13,7 @@ type PlayerGlobals
 	tuning as integer[6]
 	baseID as integer
 	metronome as integer
+	pendingNote as integer
 endtype
 
 global plg as PlayerGlobals
@@ -39,12 +40,19 @@ function Player_Initialise(music ref as Music)
 				if GetSoundExists(noteid + plg.baseID) = 0 
 					LoadSoundOGG(noteid + plg.baseID,str(noteid)+".ogg")
 				endif
+				ntype = music.bars[bar].notes[note].modifier
+				if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
+					noteid = plg.tuning[strn]+music.bars[bar].notes[note].newFretting
+					if GetSoundExists(noteid + plg.baseID) = 0 
+						LoadSoundOGG(noteid + plg.baseID,str(noteid)+".ogg")
+					endif
+				endif
 			next strn
 		next note
 	next bar
 
 	plg.metronome = LoadSoundOGG("metronome.ogg")
-	
+	plg.pendingNote = -1
 endfunction
 
 // ***************************************************************************************************
@@ -60,6 +68,10 @@ endfunction
 // ***************************************************************************************************
 
 function Player_PlayNote(note ref as Note)
+	if plg.pendingNote >= 0
+		PlaySound(plg.pendingNote+plg.baseID)
+		plg.pendingNote = -1
+	endif
 	if note.isPlayed <> 0
 		for s = 1 to 5
 			if note.fretting[s] <> BAR_DONTPLAY
@@ -67,5 +79,9 @@ function Player_PlayNote(note ref as Note)
 				PlaySound(plg.tuning[s] + note.fretting[s] + plg.baseID)
 			endif
 		next s
+	endif
+	ntype = note.modifier
+	if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
+		plg.pendingNote = plg.tuning[note.modifierstring]+note.newFretting
 	endif
 endfunction
