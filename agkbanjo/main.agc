@@ -30,6 +30,5 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
-//		Seperate index builder, rewrite menu selector.
 // 		Pause/Continue button ?
 //		Pause/Continue and Speed up/down option

@@ -149,16 +149,20 @@ endfunction
 //											Select from menu
 // ***************************************************************************************************
 
-function Program_SelectFromMenu(menuFile as string,canReturn as integer)
+function Program_SelectFromMenu(menuDirectory as string,canReturn as integer)
 	menu as Menu
 	Menu_Initialise(menu)										// Set up menu, add 'return' if not top
 	if canReturn <> 0 then Menu_Add(menu,"Previous Menu","<back>")
-	Menu_Load(menu,menuFile)									// Load in menu data
+	Menu_Load(menu,menuDirectory+"index.txt")					// Load in menu data
 	selected as string = ""
 	while selected = ""											// Until something is selected
 		selected = Menu_Select(menu)							// Pick menu option
 		if right(selected,5) <> ".plux" and selected <> "<back>"// If not tune and not back
-			selected = Program_SelectFromMenu(selected,1)		// Do sub menu
+			subdir$ = menuDirectory+selected+"/"
+			selected = Program_SelectFromMenu(subdir$,1)		// Do sub menu
+		endif
+		if right(selected,5) = ".plux"
+			selected = menuDirectory+selected
 		endif
 	endwhile
 	if selected = "<back>" then selected = ""					// Previous option, return "" to make caller loop
@@ -166,7 +170,6 @@ endfunction selected
 
 Program_SetupDisplay()
 file$ = "__test.plux"
-file$ = "lessons/strum.plux"
-//file$ = Program_SelectFromMenu("home.index",0)
+file$ = Program_SelectFromMenu("",0)
 Program_CreateDisplay(file$)
 Program_MainLoop()
