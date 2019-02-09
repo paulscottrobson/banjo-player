@@ -30,7 +30,7 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
-//		Rewrite compiler and check it plays
+//		Fix compiler for hammer on, pull off and slide.
 // 		Play hammer on, pull off and slide as far as possible (not very :))
 //		Seperate index builder, rewrite menu selector.
 

@@ -24,32 +24,51 @@ class BanjoException(Exception):
 
 class Level1Compiler(object):
 	def __init__(self,equates):
-		self.fretting = "00000"
 		self.equates = equates
+		self.currentString = 1
+		self.currentBeat = 0
+		self.currentChord = None
+		self.fretting = "0123456789"
 
 	def translate(self,barDef):
-		barDef = [x for x in barDef.split("[") if x.strip() != ""]					# split up into chord changes
-		return "/".join([self.convert(x) for x in barDef])
+		parts = [x for x in barDef.replace(" ","").split("(") if x != ""]
+		return "".join([self.translatePart(x) for x in parts])
+		return barDef
 
-	def convert(self,section):
-		p = section.find("]")														# chord change
-		if p >= 0:																	# if so
-			chord = section[:p].strip()												# get and validate chord
+	def translatePart(self,part):
+		p = part.find(")")
+		translate = ""
+		if p >= 0:
+			chord = part[:p]
 			assert chord in self.equates,"Unknown chord "+chord
-			self.fretting = self.equates[chord]										# set fretting
-			section = section[p+1:].strip()											# rest is chord.
-		return "/".join([self.oneNote(x) for x in section])							# convert the rest
+			self.currentChord = self.equates[chord]
+			assert len(self.currentChord) == 5,"Bad chord definition "+chord
+			chord = chord if chord.find(".") < 0 else chord[:chord.find(".")]
+			translate = "("+chord+")"
+		part = part[p+1:]
+		return translate+"".join([self.encode(x) for x in part])
 
-	def oneNote(self,c):
-		assert ".p12345".find(c) >= 0,"Unknown string/pair "+c
-		if c == ".":
-			return ""
-		if c == "p":
-			return self.encode(1)+self.encode(5)
-		return self.encode(int(c))
-
-	def encode(self,stringNo):
-		return str(stringNo)+chr(65+int(self.fretting[stringNo-1]))
+	def encode(self,ch):
+		encode = ""
+		if ch == "v":
+			self.currentString += 1
+			assert self.currentString <= 5,"Current string off bottom"
+		elif ch == "^":
+			self.currentString -= 1
+			assert self.currentString >= 1,"Current string off top"
+		elif ch == "$":
+			self.currentString = 1
+		elif ch == "!":
+			for i in range(0,5):
+				ch = self.currentChord[i]
+				if ch != ".":
+					encode = encode + str(i+1)+chr(self.fretting.find(ch)+65)
+			encode = encode + "/5A/"
+		elif self.fretting.find(ch) >= 0:
+			encode = str(self.currentString)+chr(self.fretting.find(ch)+65)+"//"
+		else:
+			assert False,"Unknown command "+ch
+		return encode
 
 # ***************************************************************************************************
 #									Compiler class
@@ -97,7 +116,8 @@ class BanjoCompiler(object):
 			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars
 				try:
 					cvt = trans.translate(bar).lower()								# translate it
-					assert cvt.count("/") < 8,"Too many beats"
+					#print(bar,cvt)
+					assert cvt.count("/") <= 8,"Too many beats"
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
 					return "Error '{0}' at {1}".format(e.args[0],i+1)

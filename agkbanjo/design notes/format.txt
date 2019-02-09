@@ -20,8 +20,9 @@ def := constant
 Format # 1
 ==========
 <chord> := 000.. 					Defines a chord which is partly played
-1-5									Changes the melody string
-A-Z 								Plays a note on Fretting 0-25, advance
-[Chord]								Plays a chord / adds note marker if changed, advance
-^									Add offbeat strum to previous note.
-+++ --- >>> 						Bumps last note hammer on/pull off/slider.
+$ 									Set melody string to 1.
+v^									Changes the melody string up down
+0-9 								Plays a note on Fretting 0-9 advance
+(Chord)								Change chord add note marker.
+!									Add clawhammer in current chord
++++ --- >>> 						Bumps *next* note hammer on/pull off/slider.
