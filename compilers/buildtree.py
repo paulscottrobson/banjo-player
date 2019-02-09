@@ -23,8 +23,8 @@ class MusicBuilder(object):
 			for f in [x for x in files if x[-6:] == ".banjo"]:
 				self.buildFile(root+os.sep+f)
 		print()
-		print("Compiling most recently changed file \"{0}\" to \"test.plux\"".format(self.latestFile))
-		self.compiler.compile(self.latestFile,self.tree+os.sep+"test.plux")
+		print("Compiling most recently changed file \"{0}\" to \"__test.plux\"".format(self.latestFile))
+		self.compiler.compile(self.latestFile,self.tree+os.sep+"__test.plux")
 
 	def buildFile(self,sourceFile):
 		targetFile = sourceFile[:-6]+".plux"

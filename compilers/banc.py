@@ -59,14 +59,16 @@ class Level1Compiler(object):
 			assert self.currentString >= 1,"Current string off top"
 		elif ch == "$":
 			self.currentString = 1
+		elif ch == "&":
+			encode = "//"
 		elif ch == "+" or ch == "-" or ch == ">":
 			self.pending += ch
-		elif ch == "!":
+		elif ch == "!" or ch == "%":
 			for i in range(0,5):
-				ch = self.currentChord[i]
-				if ch != ".":
-					encode = encode + str(i+1)+chr(self.fretting.find(ch)+65)
-			encode = encode + "/5A/"
+				c2 = self.currentChord[i]
+				if c2 != ".":
+					encode = encode + str(i+1)+chr(self.fretting.find(c2)+65)
+			encode = encode + ("/5A/" if ch == "!" else "//")
 		elif self.fretting.find(ch) >= 0:
 			encode = str(self.currentString)+chr(self.fretting.find(ch)+65)+self.pending+"//"
 			self.pending = ""
