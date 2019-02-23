@@ -13,18 +13,36 @@ A-Z 	set fretting and pluck that string this note
 / 		go to next note.
 (Chord)	set display chord
 
-Assignments are lines containing
+Assignments are lines containing def := constant and are parsed out.
 
-def := constant
+Simple Scruggs and Up-Picking/Lead Finger quasi Clawhammer style (Format#1)
+===========================================================================
 
-Format # 1
-==========
-<chord> := 000.. 					Defines a chord which is partly played
-$ 									Set melody string to 1.
-v^									Changes the melody string up down
-0-9 								Plays a note on Fretting 0-9 advance
-(Chord)								Change chord add note marker.
-!									Add clawhammer in current chord
-%									Add just chord
-&									Add a one beat rest
-+++ --- >>> 						Bumps *next* note hammer on/pull off/slider.
+Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 v:15 x:16 v:17 g:18 n:19
+
+(<name>)		Set the display chord to <name>
+
+[fffff]			Set the current fretting. Can be '.' for don't play this string.
+
+{ssssssss}		Plucking pattern, strings 1-5. Can be '.' for don't pluck this half beat
+				(One character per half beat)
+
+* 				Play one half beat, extracting the note from the current fretting and current 
+				string (unless overridden). So once you've set fretting and strings your bar can
+				just be ********
+
+&				Advance one half beat but generates no music, a half rest.
+
++ - > 			Apply pull on, hammer off or slide of 1 semitone to the previous defined note
+				in the bar.
+
+f 				Overrides the next '*' only setting the fretting to f and using the current string
+				rather than getting it from the plucking pattern.
+
+@n 				Set the current string for overrides.
+
+^				Play the clawhammer over one beat, e.g. the current chord for 1/2 beat and open
+				string 5 for half a beat
+
+%<name>%		Macro expansion. Replace <name> with defined value.
+

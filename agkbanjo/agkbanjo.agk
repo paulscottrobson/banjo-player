@@ -60,8 +60,8 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=1;main.agc;1075;0
-FILE_NAME_1=0;source%2Fbar.agc;3282;4
+FILE_NAME_0=0;main.agc;1176;0
+FILE_NAME_1=1;source%2Fbar.agc;1130;4
 FILE_NAME_2=0;source%2Fmusic.agc;2199;3
 FILE_NAME_3=0;source%2Frenderers%2Ffretrenderer.agc;6319;5
 FILE_NAME_4=0;source%2Freadfile.agc;984;6

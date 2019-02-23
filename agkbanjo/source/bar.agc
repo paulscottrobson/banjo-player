@@ -23,7 +23,7 @@
 type Note
 	isPlayed as integer 										// Non zero if actually plucked this time.
 	fretting as integer[5]										// Fretting for strings 1..5
-	modifier as integer 											// Normal or hammer on/pull off etc.
+	modifier as integer 										// Normal or hammer on/pull off etc.
 	modifierString as integer 									// String to which this applies.
 	newFretting as integer 										// New fretting for hammer on or slide.
 	chordLabel as string 										// Chord Label, if any.
