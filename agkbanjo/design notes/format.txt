@@ -21,28 +21,34 @@ Simple Scruggs and Up-Picking/Lead Finger quasi Clawhammer style (Format#1)
 Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 v:15 x:16 v:17 g:18 n:19
 
 (<name>)		Set the display chord to <name>
+				(default value is empty string)
 
 [fffff]			Set the current fretting. Can be '.' for don't play this string.
+				(default value is .....)
 
 {ssssssss}		Plucking pattern, strings 1-5. Can be '.' for don't pluck this half beat
-				(One character per half beat)
+				(One character per half beat, (default value is .. x beats)
 
 * 				Play one half beat, extracting the note from the current fretting and current 
-				string (unless overridden). So once you've set fretting and strings your bar can
+				string above. So once you've set fretting and strings your bar can
 				just be ********
 
 &				Advance one half beat but generates no music, a half rest.
 
-+ - > 			Apply pull on, hammer off or slide of 1 semitone to the previous defined note
-				in the bar.
++ - > 			Apply pull on, hammer off or slide of 1 semitone to the last defined note
+				in the current bar - error if none is defined.
 
-f 				Overrides the next '*' only setting the fretting to f and using the current string
-				rather than getting it from the plucking pattern.
+f 				As * but uses this fretting and the string selected using @n (below), generates
+				a single half beat note.
 
-@n 				Set the current string for overrides.
+@n 				Set the current string for overrides. The default is the 5th string.
 
 ^				Play the clawhammer over one beat, e.g. the current chord for 1/2 beat and open
 				string 5 for half a beat
 
 %<name>%		Macro expansion. Replace <name> with defined value.
+
+Note values set for [] {} and @ persist over bars, being set to the default value for the first bar.
+
+
 
