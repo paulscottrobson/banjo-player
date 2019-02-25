@@ -43,9 +43,6 @@ f 				As * but uses this fretting and the string selected using @n (below), gene
 
 @n 				Set the current string for overrides. The default is the 5th string.
 
-^				Play the clawhammer over one beat, e.g. the current chord for 1/2 beat and open
-				string 5 for half a beat
-
 %<name>%		Macro expansion. Replace <name> with defined value.
 
 Note values set for [] {} and @ persist over bars, being set to the default value for the first bar.
