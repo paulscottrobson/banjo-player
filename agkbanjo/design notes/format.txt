@@ -18,7 +18,7 @@ Assignments are lines containing def := constant and are parsed out.
 Simple Scruggs and Up-Picking/Lead Finger quasi Clawhammer style (Format#1)
 ===========================================================================
 
-Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 v:15 x:16 v:17 g:18 n:19
+Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 f:15 x:16 v:17 g:18 n:19
 
 (<name>)		Set the display chord to <name>
 				(default value is empty string)
@@ -43,9 +43,11 @@ f 				As * but uses this fretting and the string selected using @n (below), gene
 
 @n 				Set the current string for overrides. The default is the 5th string.
 
-%<name>%		Macro expansion. Replace <name> with defined value.
-
 Note values set for [] {} and @ persist over bars, being set to the default value for the first bar.
 
 
 
+To implement
+
+macros [general]
+generation

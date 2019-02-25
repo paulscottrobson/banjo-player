@@ -9,7 +9,7 @@
 # ***************************************************************************************************
 # ***************************************************************************************************
 
-import os,sys,re
+import os,sys
 
 # ***************************************************************************************************
 #									Exception Class
@@ -25,82 +25,56 @@ class BanjoException(Exception):
 class Level1Compiler(object):
 	def __init__(self,equates):
 		self.equates = equates
-		self.frettingCode = equates["fretting"]
-		self.beats = int(equates["beats"])
-		self.fretting = "....."
-		self.plucking = ".." * self.beats
-		self.currentString = 5
+		self.currentString = 1
+		self.currentBeat = 0
+		self.currentChord = None
+		self.fretting = "0123456789tewhofx"
+		self.pending = ""
 
 	def translate(self,barDef):
-		self.bar = [ None ] * (self.beats * 2)
-		self.pos = 0
-		self.lastNote = None
+		parts = [x for x in barDef.replace(" ","").split("(") if x != ""]
+		return "".join([self.translatePart(x) for x in parts])
+		return barDef
 
-		barDef = barDef.lstrip()
-		while barDef != "":
-			barDef = self.processOne(barDef).lstrip()
-		print(self.bar)
-		return ".."
+	def translatePart(self,part):
+		p = part.find(")")
+		translate = ""
+		if p >= 0:
+			chord = part[:p]
+			assert chord in self.equates,"Unknown chord "+chord
+			self.currentChord = self.equates[chord]
+			assert len(self.currentChord) == 5,"Bad chord definition "+chord
+			chord = chord if chord.find(".") < 0 else chord[:chord.find(".")]
+			translate = "("+chord+")"
+		part = part[p+1:]
+		return translate+"".join([self.encode(x) for x in part])
 
-	def processOne(self,df):
-
-		if df[0] == "&":															# single rest.
-			self.pos += 1
-			return df[1:]
-
-		if df[0] == '*':															# note from pluck/fret
-			if self.plucking[self.pos] != '.':
-				string = int(self.plucking[self.pos])								# identify string.
-				fret = self.fretting[string-1]										# fretting on that string
-				if fret != '.':														# if that string is played.
-					self.default()
-					self.lastNote = self.pos
-					self.bar[self.pos]["play"][string-1] = self.frettingCode.find(fret)
-			self.pos += 1
-			return df[1:]
-
-		if df[0] == "+" or df[0] == "-" or df[0] == ">":							# modifier.
-			assert self.lastNote is not None,"No note to modify"
-			self.bar[self.lastNote]["modifier"] = df[0]
-			self.bar[self.lastNote]["modcount"] += 1
-			return df[1:]
-
-		fret = self.frettingCode.find(df[0])										# standalone fret
-		if fret >= 0:
-			self.default()
-			self.bar[self.pos]["play"][self.currentString-1] = fret
-			self.lastNote = self.pos
-			self.pos += 1
-			return df[1:]
-
-		m = re.match("^\@([1-5])(.*)$",df)											# check for @n
-		if m is not None:
-			self.currentString = int(m.group(1))
-			return m.group(2)
-
-		m = re.match("^\{([12345\.]+)\}(.*)$",df)									# check for {plucks}
-		if m is not None:
-			self.plucking = m.group(1)
-			assert len(self.plucking) == self.beats*2,"Bad plucking "+df
-			return m.group(2)
-
-		m = re.match("^\[(["+self.frettingCode+"\.]*)\](.*)$",df)					# check for [frets]
-		if m is not None:
-			self.fretting = m.group(1)
-			assert len(self.fretting) == 5,"Bad fretting "+df
-			return m.group(2)
-
-		m = re.match("^\((.*?)\)(.*)$",df)											# check for (<chord>)
-		if m is not None:
-			self.default()
-			self.bar[self.pos]["chord"] = m.group(1)
-			return m.group(2)
-
-		assert False,"Cannot process '"+df+"'"										# give up.
-
-	def default(self):
-		if self.bar[self.pos] is None:
-			self.bar[self.pos] = { "play":[None]*5,"chord":None,"modifier":None,"modcount":0 }
+	def encode(self,ch):
+		encode = ""
+		if ch == "v":
+			self.currentString += 1
+			assert self.currentString <= 5,"Current string off bottom"
+		elif ch == "^":
+			self.currentString -= 1
+			assert self.currentString >= 1,"Current string off top"
+		elif ch == "$":
+			self.currentString = 1
+		elif ch == "&":
+			encode = "//"
+		elif ch == "+" or ch == "-" or ch == ">":
+			self.pending += ch
+		elif ch == "!" or ch == "%":
+			for i in range(0,5):
+				c2 = self.currentChord[i]
+				if c2 != ".":
+					encode = encode + str(i+1)+chr(self.fretting.find(c2)+65)
+			encode = encode + ("/5A/" if ch == "!" else "//")
+		elif self.fretting.find(ch) >= 0:
+			encode = str(self.currentString)+chr(self.fretting.find(ch)+65)+self.pending+"//"
+			self.pending = ""
+		else:
+			assert False,"Unknown command "+ch
+		return encode
 
 # ***************************************************************************************************
 #									Compiler class
@@ -122,9 +96,6 @@ class BanjoCompiler(object):
 		src = [x.lower() for x in src]												# make everything LC
 
 		equates = { "format":"0" }													# work out equates.
-		equates["beats"] = "4" 														# standard beats/bar
-		equates["fretting"] = "0123456789tewhufxvgn"								# standard fretting
-
 		equates["name"] = sourceFile.split(os.sep)[-1][:-6].replace("_"," ")		# default name
 		for equate in [x for x in src if x.find(":=") >= 0]:						# search for them
 			parts = [x.strip() for x in equate.split(":=")]							# split around :=
@@ -144,7 +115,7 @@ class BanjoCompiler(object):
 		except FileNotFoundError as e:
 			return "Cannot open "+targetFile+" to write."
 
-		hOut = sys.stdout
+		#hOut = sys.stdout
 
 		barCount = 0
 		for k in equates.keys():													# output the defined equates
@@ -153,7 +124,7 @@ class BanjoCompiler(object):
 			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars
 				try:
 					cvt = trans.translate(bar).lower()								# translate it
-					cvt = cvt if cvt != "" else "/"									# non empty if empty
+					cvt = cvt if cvt != "" else "/"
 					#print(bar,cvt)
 					assert cvt.count("/") <= 8,"Too many beats"
 					hOut.write("|"+cvt+"\n")										# write out
