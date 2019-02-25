@@ -32,4 +32,6 @@ SetErrorMode(2)
 // TODO: 	
 // 		Pause/Continue button ?
 //		Pause/Continue and Speed up/down option
-// 		Variable beats in bar
+//		TAB Display
+//		BUG: Empty music error.
+

@@ -74,7 +74,7 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
 	SetTextColor(prg.bpmLabel,255,51,51,255)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
-	Program_SetSpeed(80.0)
+	Program_SetSpeed(prg.tune.defaultBPM)
 	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Speed BPM","rotary")
 	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"spgreen","Speed up",0)
 	Slider_Initialise(prg.posCtrl,10,xc-sp*2,yc,sz*0.8)
@@ -111,7 +111,7 @@ function Program_MainLoop()
 			prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_START)
 			lastPos# = prg.pos#
 			if Button_GetState(prg.speedupButton) <> 0 
-				Program_SetSpeed(prg.beatsPerMinute# + 2)
+				Program_SetSpeed(prg.beatsPerMinute# + prg.tune.stepBPM)
 			endif
 		endif
 		
@@ -129,7 +129,7 @@ function Program_MainLoop()
 		endif
 		Button_Update(prg.speedupButton)						// Update UI objects
 		if Rotator_Update(prg.speedRotator)	<> 0
-			newSpeed = 80+(Rotator_Get(prg.speedRotator)-0.5)*2*60
+			newSpeed = prg.tune.defaultBPM+(Rotator_Get(prg.speedRotator)-0.5)*2*(prg.tune.defaultBPM*0.8)
 			Program_SetSpeed(newSpeed)
 		endif
 		
@@ -170,6 +170,6 @@ endfunction selected
 
 Program_SetupDisplay()
 file$ = "__test.plux"
-file$ = Program_SelectFromMenu("",0)
+rem file$ = Program_SelectFromMenu("",0)
 Program_CreateDisplay(file$)
 Program_MainLoop()

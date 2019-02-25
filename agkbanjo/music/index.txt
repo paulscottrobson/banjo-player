@@ -1,7 +1,0 @@
-//
-// ../agkbanjo/music
-//
-lessons
-Lessons (folder)
-cripple.plux
-Cripple

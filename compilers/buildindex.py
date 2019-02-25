@@ -45,5 +45,5 @@ class BuildIndex(object):
 		return " ".join(s)
 
 if __name__ == "__main__":
-	BuildIndex().build("../agkbanjo/music")
+	BuildIndex().build("../agkbanjo/media/music")
 	

@@ -11,6 +11,8 @@
 
 type Music
 	defaultBPM as integer 										// Standard play rate
+	defaultBeats as integer 									// Default beats per bar
+	stepBPM as integer 											// Speed increase when step on.
 	barCount as integer 										// Number of bars
 	bars as Bar[1]												// Bars
 endtype
@@ -20,7 +22,9 @@ endtype
 // ***************************************************************************************************
 
 function Music_Initialise(this ref as Music)
-	this.defaultBPM = 40 										// Playing speed
+	this.defaultBPM = 80 										// Playing speed
+	this.stepBPM = 2 											// Increase for each time round
+	this.defaultBeats = 4										// Beats per bar
 	this.barCount = 0 											// Number of bars in tune
 	this.bars.length = 20 										// Bar array is added in chunks
 endfunction
@@ -46,7 +50,7 @@ function Music_AddNewBar(this ref as Music,defn as string)
 	if this.barCount > this.bars.length 
 		this.bars.length = this.bars.length + 20
 	endif
-	Bar_Initialise(this.bars[id],id,4)
+	Bar_Initialise(this.bars[id],id,this.defaultBeats)
 	Bar_Load(this.bars[id],defn)
 endfunction id
 
@@ -58,6 +62,21 @@ function Music_AddFile(this ref as Music,sourceFile as string)
 	source$ = File_Read(sourceFile)
 	for i = 1 to CountStringTokens(source$,"~")
 		line$ = GetStringToken(source$,"~",i)
+		if left(line$,1) = "."
+			key$ = GetStringToken(mid(line$,2,-1),":=",1)
+			value$ = GetStringToken(mid(line$,2,-1),":=",2)
+			select key$
+				case "beats"
+					this.defaultBeats = val(value$)
+				endcase				
+				case "tempo"
+					this.defaultBPM = val(value$)
+				endcase
+				case "step"
+					this.stepBPM = val(value$)
+				endcase
+			endselect
+		endif
 		if left(line$,1) = "|" then Music_Add(this,mid(line$,2,-1))
 	next i
 endfunction

@@ -39,8 +39,7 @@ class Level1Compiler(object):
 		barDef = barDef.lstrip()
 		while barDef != "":
 			barDef = self.processOne(barDef).lstrip()
-		print(self.bar)
-		return ".."
+		return "/".join([self.render(x) for x in self.bar])
 
 	def processOne(self,df):
 
@@ -102,6 +101,19 @@ class Level1Compiler(object):
 		if self.bar[self.pos] is None:
 			self.bar[self.pos] = { "play":[None]*5,"chord":None,"modifier":None,"modcount":0 }
 
+	def render(self,bar):
+		r = ""
+		if bar is not None:
+			if bar["chord"] is not None:
+				r = r + "("+bar["chord"]+")"
+			if bar["play"] is not None:
+				for s in range(0,5):
+					if bar["play"][s] is not None:
+						r = r + chr(s+49)+chr(bar["play"][s]+65)
+						if bar["modifier"] is not None:
+							r = r + bar["modifier"] * bar["modcount"]
+		return r
+
 # ***************************************************************************************************
 #									Compiler class
 # ***************************************************************************************************
@@ -144,7 +156,7 @@ class BanjoCompiler(object):
 		except FileNotFoundError as e:
 			return "Cannot open "+targetFile+" to write."
 
-		hOut = sys.stdout
+		#hOut = sys.stdout
 
 		barCount = 0
 		for k in equates.keys():													# output the defined equates
@@ -165,6 +177,6 @@ class BanjoCompiler(object):
 		return None
 
 if __name__ == "__main__":
-	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/music/cripple.plux")
+	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/music/__test.plux")
 	if err is not None:
 		print(err)

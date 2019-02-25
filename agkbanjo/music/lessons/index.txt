@@ -1,9 +1,0 @@
-//
-// ../agkbanjo/music/lessons
-//
-alternate_string_5_and_strum.plux
-Alternate String 5 And Strum
-string_5.plux
-String 5
-strum.plux
-Strum

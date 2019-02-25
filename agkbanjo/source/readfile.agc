@@ -15,6 +15,7 @@
 
 function File_Read(sourceFile as string)
 	SetFolder("")												// root folder
+	SetFolder("media")
 	SetFolder("music")											// music folder
 	contents$ = ""
 	OpenToRead(1,sourceFile)

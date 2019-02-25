@@ -36,4 +36,4 @@ class MusicBuilder(object):
 			self.latestFile = sourceFile
 
 if __name__ == "__main__":
-	MusicBuilder().buildTree("../agkbanjo/music")
+	MusicBuilder().buildTree("../agkbanjo/media/music")

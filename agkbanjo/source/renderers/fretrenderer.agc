@@ -148,7 +148,7 @@ function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayIn
 			id = diBar.baseID + b * 20
 			CreateSprite(id,LoadSubImage(frg.spriteImage,"sinecurve"))
 			SetSpriteSize(id,frg.barWidth/bar.beats,frg.sineHeight)
-			SetSpriteOffset(id,GetSpriteWidth(id)/4,GetSpriteHeight(id))
+			SetSpriteOffset(id,GetSpriteWidth(id),GetSpriteHeight(id))
 		endif
 
 		if bar.notes[b].chordLabel <> ""
