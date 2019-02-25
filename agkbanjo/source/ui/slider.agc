@@ -37,7 +37,8 @@ function Slider_Initialise(this ref as slider,x1 as integer,x2 as integer,y as i
 	SetSpritePosition(this.bar,this.x,y-GetSpriteHeight(this.bar)/2)
 	SetSpriteColor(this.bar,0,64,192,255)
 	for i = 0 to 2
-		col$ = "red":sz = size
+		col$ = "green":sz = size
+		if i = SLIDER_END then col$ = "cyan"
 		if i = SLIDER_POSITION 
 			sz = sz * 0.8:col$ = "yellow"
 		endif

@@ -17,6 +17,7 @@ type ProgramGlobals
 	beatsPerMinute# as Float									// Speed of playback BPM
 	speedRotator as Rotator 									// Rotator for base speed
 	speedupButton as Button 									// Toggle button for speed
+	pauseButton as Button 										// Toggle button for pause
 	posCtrl as Slider 											// Slider for pos/repeat control
 	bpmLabel as integer 										// BPM Display Sprite
 	rendererID as integer 										// Current renderer
@@ -44,7 +45,7 @@ function Program_SetupDisplay()
 	SetSpriteSize(prg.background,SCWIDTH,SCHEIGHT)
 	SetSpriteDepth(prg.background,9999)
 	
-	prg.info = CreateText("Written by Paul Robson (paul@robsons.org.uk) 2019 v"+VERSION)
+	prg.info = CreateText("Written by Paul Robson (paul@robsons.org.uk) v"+VERSION)
 	SetTextFont(prg.info,LoadFont("rocko.ttf"))
 	SetTextSize(prg.info,SCWIDTH/60)
 	SetTextPosition(prg.info,SCWIDTH/2-GetTextTotalWidth(prg.info)/2,SCHEIGHT-GetTextTotalHeight(prg.info))
@@ -75,9 +76,10 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextColor(prg.bpmLabel,255,51,51,255)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
 	Program_SetSpeed(prg.tune.defaultBPM)
-	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Speed BPM","rotary")
-	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"spgreen","Speed up",0)
-	Slider_Initialise(prg.posCtrl,10,xc-sp*2,yc,sz*0.8)
+	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Tempo BPM","rotary")
+	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"sporange","Speed up",0)
+	Button_Initialise(prg.pauseButton,10+sp/2,yc,sz,"spred","Pause",0)
+	Slider_Initialise(prg.posCtrl,sp+10,xc-sp*2,yc,sz*0.8)
 endfunction
 
 // ***************************************************************************************************
@@ -98,36 +100,42 @@ function Program_MainLoop()
 	while not GetRawKeyState(27)
 		elapsed = GetMilliseconds() - lastTime					// Track time between frames.
 		lastTime = GetMilliseconds()
-																// Convert to a time in bars.
-		elapsed# = elapsed / 1000.0 							// Actual elapsed time in seconds.
-		beatsPerSec# = prg.beatsPerMinute# / 60.0 				// Beats per second
-		beatsPerBar# = prg.tune.bars[trunc(prg.pos#)].beats 	// Beats per bar
-		barsPerSec# = beatsPerSec# / beatsPerBar#				// Bars per second
 		
-		lastpos# = prg.pos#										// Last position
-		prg.pos# = prg.pos# + barsPerSec# * elapsed#  * 2.0		// New position, allowing banjo BPM Scalar
-		endPos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_END)
-		if prg.pos# >= endPos# 									// Off right hand end ?
-			prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_START)
-			lastPos# = prg.pos#
-			if Button_GetState(prg.speedupButton) <> 0 
-				Program_SetSpeed(prg.beatsPerMinute# + prg.tune.stepBPM)
+		if Button_GetState(prg.pauseButton) = 0
+																// Convert to a time in bars
+			elapsed# = elapsed / 1000.0 						// Actual elapsed time in seconds.
+			beatsPerSec# = prg.beatsPerMinute# / 60.0 			// Beats per second
+			beatsPerBar# = prg.tune.bars[trunc(prg.pos#)].beats // Beats per bar
+			barsPerSec# = beatsPerSec# / beatsPerBar#			// Bars per second
+			
+			lastpos# = prg.pos#									// Last position
+			prg.pos# = prg.pos# + barsPerSec# * elapsed#  * 2.0	// New position, allowing banjo BPM Scalar
+			if GetRawKeyPressed(32) <> 0 then prg.pos# = 0		// Space resets
+			
+			endPos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_END)
+			if prg.pos# >= endPos# 								// Off right hand end ?
+				prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_START)
+				lastPos# = prg.pos#
+				if Button_GetState(prg.speedupButton) <> 0 
+					Program_SetSpeed(prg.beatsPerMinute# + prg.tune.stepBPM)
+				endif
+			endif
+			
+			beats = prg.tune.bars[trunc(prg.pos#)].beats 		// How many beats in bar
+			hb1 = trunc(lastpos# * beats * 2)					// Work out halfbeat position
+			hb2 = trunc(prg.pos# * beats * 2)
+			if hb1 <> hb2 or lastpos# = 0  						// Time for a note ?
+				if mod(hb2,2) = 0 then Player_PlayMetronome()	// Play metronome
+				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(hb2,beats*2)])
+			endif
+		    Manager_MoveRenderTo(prg.pos#)							// Update display position
+			Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
+			if Slider_Update(prg.posCtrl) <> 0
+				prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_POSITION)
 			endif
 		endif
-		
-		beats = prg.tune.bars[trunc(prg.pos#)].beats 			// How many beats in bar
-		hb1 = trunc(lastpos# * beats * 2)						// Work out halfbeat position
-		hb2 = trunc(prg.pos# * beats * 2)
-		if hb1 <> hb2 or lastpos# = 0  							// Time for a note ?
-			if mod(hb2,2) = 0 then Player_PlayMetronome()		// Play metronome
-			Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(hb2,beats*2)])
-		endif
-	    Manager_MoveRenderTo(prg.pos#)							// Update display position
-		Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
-		if Slider_Update(prg.posCtrl) <> 0
-			prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_POSITION)
-		endif
 		Button_Update(prg.speedupButton)						// Update UI objects
+		Button_Update(prg.pauseButton)
 		if Rotator_Update(prg.speedRotator)	<> 0
 			newSpeed = prg.tune.defaultBPM+(Rotator_Get(prg.speedRotator)-0.5)*2*(prg.tune.defaultBPM*0.8)
 			Program_SetSpeed(newSpeed)

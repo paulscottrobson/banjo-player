@@ -14,7 +14,7 @@ SetErrorMode(2)
 #constant SCWIDTH 1440
 #constant SCHEIGHT 960
 #constant DPHEIGHT 840
-#constant VERSION "0.1"
+#constant VERSION "0.11 (25-02-19)"
 
 #include "source/bar.agc"
 #include "source/bardisplay.agc"
@@ -31,7 +31,6 @@ SetErrorMode(2)
 
 // TODO: 	
 // 		Pause/Continue button ?
-//		Pause/Continue and Speed up/down option
 //		TAB Display
-//		BUG: Empty music error.
+// 		Keys (P)ause (T)empo (S)peed up 
 

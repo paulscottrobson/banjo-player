@@ -14,7 +14,7 @@ type Music
 	defaultBeats as integer 									// Default beats per bar
 	stepBPM as integer 											// Speed increase when step on.
 	barCount as integer 										// Number of bars
-	bars as Bar[1]												// Bars
+	bars as Bar[4]												// Bars
 endtype
 
 // ***************************************************************************************************
@@ -60,6 +60,7 @@ endfunction id
 
 function Music_AddFile(this ref as Music,sourceFile as string)
 	source$ = File_Read(sourceFile)
+	barLoaded = 0
 	for i = 1 to CountStringTokens(source$,"~")
 		line$ = GetStringToken(source$,"~",i)
 		if left(line$,1) = "."
@@ -77,8 +78,14 @@ function Music_AddFile(this ref as Music,sourceFile as string)
 				endcase
 			endselect
 		endif
-		if left(line$,1) = "|" then Music_Add(this,mid(line$,2,-1))
+		if left(line$,1) = "|" 
+			Music_Add(this,mid(line$,2,-1))
+			barLoaded = 1
+		endif
 	next i
+	if barLoaded = 0
+		 Music_Add(this,"/")
+	endif
 endfunction
 
 
