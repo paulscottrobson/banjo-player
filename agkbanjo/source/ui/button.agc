@@ -47,7 +47,8 @@ endfunction
 
 function Button_SetState(this ref as Button,isOn as integer)
 	this.state = isOn
-	if isOn = 0 
+	if this.autoReturn <> 0 then isOn = isOn = 0
+	if isOn = 0
 		SetSpriteColor(this.lightSprite,64,64,64,255)
 	else
 		SetSpriteColor(this.lightSprite,255,255,255,255)

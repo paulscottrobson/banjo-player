@@ -17,6 +17,7 @@ type ProgramGlobals
 	beatsPerMinute# as Float									// Speed of playback BPM
 	speedRotator as Rotator 									// Rotator for base speed
 	speedupButton as Button 									// Toggle button for speed
+	backButton as Button 										// Back button
 	pauseButton as Button 										// Toggle button for pause
 	posCtrl as Slider 											// Slider for pos/repeat control
 	bpmLabel as integer 										// BPM Display Sprite
@@ -55,16 +56,8 @@ endfunction
 //									Set up the display
 // ***************************************************************************************************
 
-function Program_CreateDisplay(musicFile as string)
-
-	prg.pos# = 0.0
-	prg.rendererID = 1
-	Music_Initialise(prg.tune)
-	Music_AddFile(prg.tune,musicFile)
-	Manager_Initialise(prg.tune)
-	Manager_SwitchRenderer(prg.rendererID)
-	Player_Initialise(prg.tune)
-		
+function Program_CreateDisplay()
+	
 	yc = (SCHEIGHT+DPHEIGHT)/2
 	prg.bpmLabel = CreateText("000")
 	sp = SCHEIGHT-DPHEIGHT
@@ -75,11 +68,34 @@ function Program_CreateDisplay(musicFile as string)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
 	SetTextColor(prg.bpmLabel,255,51,51,255)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
-	Program_SetSpeed(prg.tune.defaultBPM)
 	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Tempo BPM","rotary")
 	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"sporange","Speed up",0)
-	Button_Initialise(prg.pauseButton,10+sp/2,yc,sz,"spred","Pause",0)
-	Slider_Initialise(prg.posCtrl,sp+10,xc-sp*2,yc,sz*0.8)
+	Button_Initialise(prg.pauseButton,10+sp*3/2,yc,sz,"spred","Pause",0)
+	Button_Initialise(prg.backButton,10+sp/2,yc,sz,"back","Select",1)
+	Slider_Initialise(prg.posCtrl,sp+10+sp,xc-sp*2,yc,sz*0.8)
+endfunction
+
+// ***************************************************************************************************
+//								Initialise new tunr
+// ***************************************************************************************************
+
+function Program_OpenTune(musicFile as string)
+	prg.pos# = 0.0
+	prg.rendererID = 1
+	Music_Initialise(prg.tune)
+	Music_AddFile(prg.tune,musicFile)
+	Manager_Initialise(prg.tune)
+	Manager_SwitchRenderer(prg.rendererID)
+	Player_Initialise(prg.tune)
+	Program_SetSpeed(prg.tune.defaultBPM)
+endfunction
+
+// ***************************************************************************************************
+//									  Tidy up 
+// ***************************************************************************************************
+
+function Program_CloseTune()
+	Manager_SwitchRenderer(-2)
 endfunction
 
 // ***************************************************************************************************
@@ -97,7 +113,10 @@ endfunction
 
 function Program_MainLoop()
 	lastTime = GetMilliseconds()
-	while not GetRawKeyState(27)
+	exitPlay = 0
+	while exitPlay = 0
+		if GetRawKeyPressed(27) <> 0 then end
+		if GetRawKeyPressed(asc("Q")) <> 0 then exitPlay = 1
 		elapsed = GetMilliseconds() - lastTime					// Track time between frames.
 		lastTime = GetMilliseconds()
 		
@@ -136,6 +155,8 @@ function Program_MainLoop()
 		endif
 		Button_Update(prg.speedupButton)						// Update UI objects
 		Button_Update(prg.pauseButton)
+		Button_Update(prg.backButton)
+		if Button_GetState(prg.backButton) <> 0 then exitPlay = 1
 		if Rotator_Update(prg.speedRotator)	<> 0
 			newSpeed = prg.tune.defaultBPM+(Rotator_Get(prg.speedRotator)-0.5)*2*(prg.tune.defaultBPM*0.8)
 			Program_SetSpeed(newSpeed)
@@ -151,6 +172,7 @@ function Program_MainLoop()
 	    print(Rotator_Get(prg.speedRotator))
 	    Sync()
 	endwhile
+	Sync()
 endfunction
 
 // ***************************************************************************************************
@@ -177,7 +199,11 @@ function Program_SelectFromMenu(menuDirectory as string,canReturn as integer)
 endfunction selected
 
 Program_SetupDisplay()
-file$ = "__test.plux"
-file$ = Program_SelectFromMenu("",0)
-Program_CreateDisplay(file$)
-Program_MainLoop()
+Program_CreateDisplay()
+repeat
+	file$ = "__test.plux"
+	file$ = Program_SelectFromMenu("",0)
+	Program_OpenTune(file$)
+	Program_MainLoop()
+	Program_CloseTune()
+until 0
