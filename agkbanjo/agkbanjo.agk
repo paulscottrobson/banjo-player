@@ -1,4 +1,3 @@
-
 [apk_settings]
 alias=
 app_icon_path=
@@ -60,16 +59,16 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=1;main.agc;677;0
+FILE_NAME_0=0;main.agc;1043;0
 FILE_NAME_1=0;source%2Fbar.agc;1259;4
 FILE_NAME_2=0;source%2Fmusic.agc;3339;3
 FILE_NAME_3=0;source%2Frenderers%2Ffretrenderer.agc;6203;5
 FILE_NAME_4=0;source%2Freadfile.agc;958;6
-FILE_NAME_5=0;source%2Fplayer.agc;3096;7
-FILE_NAME_6=0;source%2Fprogram.agc;3699;1
+FILE_NAME_5=0;source%2Fplayer.agc;3035;7
+FILE_NAME_6=1;source%2Fprogram.agc;7885;1
 FILE_NAME_7=0;source%2Fui%2Fbutton.agc;0;8
 FILE_NAME_8=0;source%2Fui%2Fslider.agc;1351;9
-FILE_NAME_9=0;source%2Fui%2Fmenu.agc;3718;2
+FILE_NAME_9=0;source%2Fui%2Fmenu.agc;3627;2
 
 [project]
 description=

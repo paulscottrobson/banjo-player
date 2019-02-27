@@ -1,23 +1,15 @@
 .format:=1
 .beats:=4
 .fretting:=0123456789tewhufxvgn
-.name:=Ode to Joy Preamble 1
+.name:=Alternating Thumb Roll 2 
 .tempo:=40
 .step:=4
-|3a//3c//3e//3c/
-|3a//3c//3e//3c/
-|3a//3c//3e//3f/
-|3a//3c//3e//3f/
-|3a//3c//3e//3f/
-|3e//3c//3a///
-|3a//3c//3e//3f/
-|3e//3c//3a///
-|3e//3f//3h///
-|3e//3f//3h///
-|3a//3c//3e//3a/
-|3a//3c//3e//3a/
-|3e//3f//3h///
-|3e//3f//3h///
-|3a//3c//3e//3f/
-|3h//3f//3e//3c/
-|3a///////
+|///////
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a
+|3a/2a/5a/1a/3a/2a/5a/1a

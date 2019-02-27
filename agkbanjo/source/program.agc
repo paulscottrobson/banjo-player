@@ -178,6 +178,6 @@ endfunction selected
 
 Program_SetupDisplay()
 file$ = "__test.plux"
-rem file$ = Program_SelectFromMenu("",0)
+file$ = Program_SelectFromMenu("",0)
 Program_CreateDisplay(file$)
 Program_MainLoop()
