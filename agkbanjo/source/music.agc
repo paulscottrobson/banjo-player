@@ -12,7 +12,7 @@
 type Music
 	defaultBPM as integer 										// Standard play rate
 	defaultBeats as integer 									// Default beats per bar
-	stepBPM as integer 										// Speed increase when step on
+	stepBPM as integer 											// Speed increase when step on
 	barCount as integer 										// Number of bars
 	bars as Bar[4]												// Bars
 endtype

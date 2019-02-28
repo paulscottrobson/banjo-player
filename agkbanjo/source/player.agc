@@ -33,7 +33,7 @@ function Player_Initialise(music ref as Music)
 	plg.tuning[1] =	15					// D4
 	
 	for bar = 0 to music.barCount
-		for note = 0 to music.bars[bar].beats * 2 - 1
+		for note = 0 to music.bars[bar].beats * 4 - 1
 			for strn = 1 to 5
 				fret = music.bars[bar].notes[note].fretting[strn]
 				noteid = plg.tuning[strn] + fret

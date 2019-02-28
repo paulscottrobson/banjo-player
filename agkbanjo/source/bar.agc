@@ -36,7 +36,7 @@ endtype
 type Bar
 	barNumber as integer 										// Bar number (from 0)
 	beats as integer 											// Beats in a bar
-	notes as Note[1]											// Notes in the bar (from 0)
+	notes as Note[1]											// Notes in the bar (from 0), 4 per beat.
 endtype
 
 // ***************************************************************************************************
@@ -46,7 +46,7 @@ endtype
 function Bar_Initialise(this ref as Bar,barNumber as integer,beats as integer)
 	this.barNumber = barNumber									// Copy information in.
 	this.beats = beats
-	this.notes.length = beats * 2 - 1							// Assume 2 beats per note
+	this.notes.length = beats * 4 - 1							// Assume 2 beats per note
 	for i = 0 to this.notes.length								// Clear all fretting
 		this.notes[i].isPlayed = 0 								// Not played yet
 		this.notes[i].modifier = NOTE_NORMAL					// Normal type of note

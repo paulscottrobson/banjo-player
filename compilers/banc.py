@@ -30,7 +30,7 @@ class Level1Compiler(object):
 		self.fretting = "....."
 
 	def translate(self,barDef):
-		self.bar = [ None ] * (self.beats * 2)
+		self.bar = [ None ] * (self.beats * 4)
 		self.pos = 0
 		self.lastNote = None
 
@@ -157,7 +157,7 @@ class BanjoCompiler(object):
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
 					#print(bar,cvt)
-					assert cvt.count("/") <= 8,"Too many beats"
+					#assert cvt.count("/") <= 8,"Too many beats"
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
 					err = "Error '{0}' at {1}".format(e.args[0],i+1)

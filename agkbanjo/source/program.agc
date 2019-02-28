@@ -128,7 +128,7 @@ function Program_MainLoop()
 			barsPerSec# = beatsPerSec# / beatsPerBar#			// Bars per second
 			
 			lastpos# = prg.pos#									// Last position
-			prg.pos# = prg.pos# + barsPerSec# * elapsed#  * 2.0	// New position, allowing banjo BPM Scalar
+			prg.pos# = prg.pos# + barsPerSec# * elapsed# 		// New position
 			if GetRawKeyPressed(32) <> 0 then prg.pos# = 0		// Space resets
 			
 			endPos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_END)
@@ -141,11 +141,11 @@ function Program_MainLoop()
 			endif
 			
 			beats = prg.tune.bars[trunc(prg.pos#)].beats 		// How many beats in bar
-			hb1 = trunc(lastpos# * beats * 2)					// Work out halfbeat position
-			hb2 = trunc(prg.pos# * beats * 2)
-			if hb1 <> hb2 or lastpos# = 0  						// Time for a note ?
-				if mod(hb2,2) = 0 then Player_PlayMetronome()	// Play metronome
-				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(hb2,beats*2)])
+			qb1 = trunc(lastpos# * beats * 4)					// Work out quarterbeat position
+			qb2 = trunc(prg.pos# * beats * 4)
+			if qb1 <> qb2 or lastpos# = 0  						// Time for a note ?
+				if mod(qb2,4) = 0 then Player_PlayMetronome()	// Play metronome
+				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(qb2,beats*4)])
 			endif
 		    Manager_MoveRenderTo(prg.pos#)						// Update display position
 			Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
