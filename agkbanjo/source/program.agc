@@ -88,6 +88,7 @@ function Program_OpenTune(musicFile as string)
 	Manager_SwitchRenderer(prg.rendererID)
 	Player_Initialise(prg.tune)
 	Program_SetSpeed(prg.tune.defaultBPM)
+	Rotator_ResetRotation(prg.speedRotator)
 endfunction
 
 // ***************************************************************************************************
@@ -192,7 +193,9 @@ function Program_SelectFromMenu(menuDirectory as string,canReturn as integer)
 			selected = Program_SelectFromMenu(subdir$,1)		// Do sub menu
 		endif
 		if right(selected,5) = ".plux"
-			selected = menuDirectory+selected
+			if FindString(selected,"/") = 0 
+				selected = menuDirectory+selected
+			endif
 		endif
 	endwhile
 	if selected = "<back>" then selected = ""					// Previous option, return "" to make caller loop
@@ -202,7 +205,7 @@ Program_SetupDisplay()
 Program_CreateDisplay()
 repeat
 	file$ = "__test.plux"
-	file$ = Program_SelectFromMenu("",0)
+	rem file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

@@ -75,7 +75,7 @@ function Player_PlayNote(note ref as Note)
 	if note.isPlayed <> 0
 		for s = 1 to 5
 			if note.fretting[s] <> BAR_DONTPLAY
-				//debug = debug + "S"+str(s)+"."+str(note.fretting[s])+" "
+				debug = debug + "S"+str(plg.tuning[s])+"."+str(note.fretting[s])+" "
 				PlaySound(plg.tuning[s] + note.fretting[s] + plg.baseID)
 			endif
 		next s

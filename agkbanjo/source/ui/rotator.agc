@@ -62,3 +62,11 @@ endfunction isPressed
 function Rotator_Get(this ref as Rotator)
 	val# = (mod(GetSpriteAngle(this.rotateSprite)+180,360))/360.0
 endfunction val#
+
+// ***************************************************************************************************
+//									Reset the rotator
+// ***************************************************************************************************
+
+function Rotator_ResetRotation(this ref as Rotator)
+	SetSpriteAngle(this.rotateSprite,0.0)
+endfunction

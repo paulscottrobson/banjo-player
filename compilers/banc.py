@@ -53,12 +53,17 @@ class Level1Compiler(object):
 
 		if df[0] >= '1' and df[0] <= '5':
 			self.default()
-			f = self.fretting[int(df[0])-1]
+			cstr = int(df[0])-1
+			df = df[1:]
+			f = self.fretting[cstr]
 			f = f if f != '.' else "0"
-			self.bar[self.pos]["play"][int(df[0])-1] = self.frettingCode.find(f)
+			if len(df) >= 2 and df[0] == '.':
+				f = df[1]
+				df = df[2:]
+			self.bar[self.pos]["play"][cstr] = self.frettingCode.find(f)
 			self.lastNote = self.pos
 			self.pos += 1
-			return df[1:]
+			return df
 
 		if df[0] == '!':
 			self.default()

@@ -28,7 +28,7 @@ class BuildIndex(object):
 
 	def buildOneIndex(self,stem,root,files,dirs):		
 		root = root.replace("\\","/")
-		print(root,files,dirs)
+		#print(root,files,dirs)
 		h = open((root+os.sep+"index.txt").replace("/",os.sep),"w")
 		h.write("//\n// "+root+"\n//\n")
 		for f in dirs:
