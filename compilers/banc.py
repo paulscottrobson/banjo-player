@@ -28,8 +28,6 @@ class Level1Compiler(object):
 		self.frettingCode = equates["fretting"]
 		self.beats = int(equates["beats"])
 		self.fretting = "....."
-		self.plucking = ".." * self.beats
-		self.currentString = 5
 
 	def translate(self,barDef):
 		self.bar = [ None ] * (self.beats * 2)
@@ -47,41 +45,32 @@ class Level1Compiler(object):
 			self.pos += 1
 			return df[1:]
 
-		if df[0] == '*':															# note from pluck/fret
-			if self.plucking[self.pos] != '.':
-				string = int(self.plucking[self.pos])								# identify string.
-				fret = self.fretting[string-1]										# fretting on that string
-				if fret != '.':														# if that string is played.
-					self.default()
-					self.lastNote = self.pos
-					self.bar[self.pos]["play"][string-1] = self.frettingCode.find(fret)
-			self.pos += 1
-			return df[1:]
-
 		if df[0] == "+" or df[0] == "-" or df[0] == ">":							# modifier.
 			assert self.lastNote is not None,"No note to modify"
 			self.bar[self.lastNote]["modifier"] = df[0]
 			self.bar[self.lastNote]["modcount"] += 1
 			return df[1:]
 
-		fret = self.frettingCode.find(df[0])										# standalone fret
-		if fret >= 0:
+		if df[0] >= '1' and df[0] <= '5':
 			self.default()
-			self.bar[self.pos]["play"][self.currentString-1] = fret
+			f = self.fretting[int(df[0])-1]
+			f = f if f != '.' else "0"
+			self.bar[self.pos]["play"][int(df[0])-1] = self.frettingCode.find(f)
 			self.lastNote = self.pos
 			self.pos += 1
 			return df[1:]
 
-		m = re.match("^\@([1-5])(.*)$",df)											# check for @n
-		if m is not None:
-			self.currentString = int(m.group(1))
-			return m.group(2)
-
-		m = re.match("^\{([12345\.]+)\}(.*)$",df)									# check for {plucks}
-		if m is not None:
-			self.plucking = m.group(1)
-			assert len(self.plucking) == self.beats*2,"Bad plucking "+df
-			return m.group(2)
+		if df[0] == '!':
+			self.default()
+			if self.pos % 2 == 0:
+				for i in range(0,4):
+					f = self.frettingCode.find(self.fretting[i])
+					if f >= 0:
+						self.bar[self.pos]["play"][i] = f
+			else:
+				self.bar[self.pos]["play"][4] = 0
+			self.pos += 1
+			return df[1:]
 
 		m = re.match("^\[(["+self.frettingCode+"\.]*)\](.*)$",df)					# check for [frets]
 		if m is not None:
@@ -159,6 +148,7 @@ class BanjoCompiler(object):
 		#hOut = sys.stdout
 
 		barCount = 0
+		err = None
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
 		for i in range(0,len(src)):													# work through the source.
@@ -170,13 +160,15 @@ class BanjoCompiler(object):
 					assert cvt.count("/") <= 8,"Too many beats"
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
-					return "Error '{0}' at {1}".format(e.args[0],i+1)
+					err = "Error '{0}' at {1}".format(e.args[0],i+1)
+					return err
 				barCount += 1
 		#print("\tCompiled {0} bars.".format(barCount))
 		hOut.close()
-		return None
+		return err
 
 if __name__ == "__main__":
 	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/music/__test.plux")
+	print(err)
 	if err is not None:
 		print(err)

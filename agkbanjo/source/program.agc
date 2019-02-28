@@ -147,7 +147,7 @@ function Program_MainLoop()
 				if mod(hb2,2) = 0 then Player_PlayMetronome()	// Play metronome
 				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(hb2,beats*2)])
 			endif
-		    Manager_MoveRenderTo(prg.pos#)							// Update display position
+		    Manager_MoveRenderTo(prg.pos#)						// Update display position
 			Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
 			if Slider_Update(prg.posCtrl) <> 0
 				prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_POSITION)
@@ -202,7 +202,7 @@ Program_SetupDisplay()
 Program_CreateDisplay()
 repeat
 	file$ = "__test.plux"
-	file$ = Program_SelectFromMenu("",0)
+	rem file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

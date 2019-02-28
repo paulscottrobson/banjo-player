@@ -1,0 +1,9 @@
+//
+//			01.1 : Hit first strum
+//
+format := 1
+beats := 4
+tempo := 40
+step := 4
+
+[000..]|!|!|!|!|!|!|!|!

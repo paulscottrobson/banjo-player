@@ -24,7 +24,10 @@ class MusicBuilder(object):
 				self.buildFile(root+os.sep+f)
 		print()
 		print("Compiling most recently changed file \"{0}\" to \"__test.plux\"".format(self.latestFile))
-		self.compiler.compile(self.latestFile,self.tree+os.sep+"__test.plux")
+		result = self.compiler.compile(self.latestFile,self.tree+os.sep+"__test.plux")
+		if result is not None:
+			print(result)
+			sys.exit(-1)
 
 	def buildFile(self,sourceFile):
 		targetFile = sourceFile[:-6]+".plux"
