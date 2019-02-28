@@ -143,11 +143,11 @@ function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayIn
 		SetSpriteColor(id,0,0,0,255)
 		SetSpriteDepth(id,9995)
 	next i
-	for b = 0 to bar.beats*4-1
+	for b = 0 to bar.notesInBar-1
 		if mod(b,2) = 0
 			id = diBar.baseID + b * 20
 			CreateSprite(id,LoadSubImage(frg.spriteImage,"sinecurve"))
-			SetSpriteSize(id,frg.barWidth/bar.beats/2,frg.sineHeight)
+			SetSpriteSize(id,frg.barWidth/bar.notesInBar*2,frg.sineHeight)
 			SetSpriteOffset(id,0,GetSpriteHeight(id))
 		endif
 
@@ -170,10 +170,10 @@ function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayIn
 				
 				if Bar_IsNoteDoubleWidth(bar,b,s) <> 0 
 					CreateSprite(id,LoadSubImage(frg.spriteImage,"notebutton2"))
-					SetSpriteSize(id,frg.barWidth/bar.beats/2,frg.stringAreaHeight/5.0)
+					SetSpriteSize(id,frg.barWidth/bar.beatsInBar/2,frg.stringAreaHeight/5.0)
 				else
 					CreateSprite(id,LoadSubImage(frg.spriteImage,"notebutton"))
-					SetSpriteSize(id,frg.barWidth/4/bar.beats,frg.stringAreaHeight/5.0)
+					SetSpriteSize(id,frg.barWidth/4/bar.beatsInBar,frg.stringAreaHeight/5.0)
 				endif
 				SetSpriteOffset(id,0,GetSpriteHeight(id)*0.45)
 				SetSpriteDepth(id,99)
@@ -192,7 +192,7 @@ function FretRenderer_DestroyBarGraphics(bar ref as Bar,diBar ref as BarDisplayI
 	//debug = debug + " D:"+str(bar.barNumber)
 	DeleteSprite(diBar.baseID+198)
 	DeleteSprite(diBar.baseID+199)
-	for b = 0 to bar.beats*4-1
+	for b = 0 to bar.notesInBar-1
 		if mod(b,2) = 0 then DeleteSprite(diBar.baseID + b * 20)
 		if bar.notes[b].chordLabel <> ""
 			DeleteText(diBar.baseID + b * 20)
@@ -218,7 +218,7 @@ function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo
 	//debug = debug + " M:"+str(bar.barNumber)+">"+str(x)
 	SetSpritePositionByOffset(diBar.baseID+198,x+frg.barWidth,frg.stringAreaY)
 	SetSpritePositionByOffset(diBar.baseID+199,x,frg.stringAreaY)
-	for b = 0 to bar.beats*4-1
+	for b = 0 to bar.notesInBar-1
 		x1 = round((b+0)/8.0*frg.barWidth+x+0.5)
 		alpha = 255
 		if x1 < frg.ballX then alpha = 255 - (frg.ballX-x1)*3/2
@@ -226,7 +226,7 @@ function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo
 		if mod(b,2) = 0 then SetSpritePositionByOffset(diBar.baseID+b*20,x1,frg.fretY)
 		if bar.notes[b].chordLabel <> ""
 			id = diBar.baseID+b*20
-			SetTextPosition(id,x1+frg.barWidth/2/bar.beats/2-GetTextTotalWidth(id)/2,frg.fretY-GetTextTotalHeight(id)*1.1)
+			SetTextPosition(id,x1+frg.barWidth/2/bar.notesInBar/2-GetTextTotalWidth(id)/2,frg.fretY-GetTextTotalHeight(id)*1.1)
 		endif
 		for s = 1 to 5
 			id = diBar.baseID + b * 20 + s

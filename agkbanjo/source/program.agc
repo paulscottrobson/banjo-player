@@ -124,7 +124,7 @@ function Program_MainLoop()
 																// Convert to a time in bars
 			elapsed# = elapsed / 1000.0 						// Actual elapsed time in seconds.
 			beatsPerSec# = prg.beatsPerMinute# / 60.0 			// Beats per second
-			beatsPerBar# = prg.tune.bars[trunc(prg.pos#)].beats // Beats per bar
+			beatsPerBar# = prg.tune.bars[trunc(prg.pos#)].beatsInBar // Beats per bar
 			barsPerSec# = beatsPerSec# / beatsPerBar#			// Bars per second
 			
 			lastpos# = prg.pos#									// Last position
@@ -140,12 +140,12 @@ function Program_MainLoop()
 				endif
 			endif
 			
-			beats = prg.tune.bars[trunc(prg.pos#)].beats 		// How many beats in bar
-			qb1 = trunc(lastpos# * beats * 4)					// Work out quarterbeat position
-			qb2 = trunc(prg.pos# * beats * 4)
+			notes = prg.tune.bars[trunc(prg.pos#)].notesInBar 	// How many beats in bar
+			qb1 = trunc(lastpos# * notes)						// Work out quarterbeat position
+			qb2 = trunc(prg.pos# * notes)
 			if qb1 <> qb2 or lastpos# = 0  						// Time for a note ?
-				if mod(qb2,4) = 0 then Player_PlayMetronome()	// Play metronome
-				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(qb2,beats*4)])
+				if mod(qb2,2) = 0 then Player_PlayMetronome()	// Play metronome
+				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(qb2,notes)])
 			endif
 		    Manager_MoveRenderTo(prg.pos#)						// Update display position
 			Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
