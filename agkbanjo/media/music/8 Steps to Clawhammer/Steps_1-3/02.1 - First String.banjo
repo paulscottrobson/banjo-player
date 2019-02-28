@@ -2,8 +2,8 @@
 //			01.1 : Hit first string.
 //
 format := 1
-beats := 4
-tempo := 40
+beats := 2
+tempo := 80
 step := 4
 
 [00000] |1|1|1|1|1|1|1|1

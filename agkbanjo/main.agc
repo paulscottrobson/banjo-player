@@ -30,6 +30,7 @@ SetErrorMode(2)
 #include "source/program.agc"
 
 // TODO: 	
+// 		Fix nested menus bug
 //		TAB Display
 // 		Keys (P)ause (T)empo (S)peed up 
 //		(Q)uit to selector (ESC)terminate (Space)restart

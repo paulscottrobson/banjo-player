@@ -63,7 +63,7 @@ class Level1Compiler(object):
 		if df[0] == '!':
 			self.default()
 			if self.pos % 2 == 0:
-				for i in range(0,4):
+				for i in range(0,5):
 					f = self.frettingCode.find(self.fretting[i])
 					if f >= 0:
 						self.bar[self.pos]["play"][i] = f
@@ -114,7 +114,7 @@ class BanjoCompiler(object):
 	def compile(self,sourceFile,targetFile):
 		sourceFile = sourceFile.replace("/",os.sep)									# Handle slashes.
 		targetFile = targetFile.replace("/",os.sep)
-		#print("Compiling {0} to {1}".format(sourceFile,targetFile))
+		print("Compiling {0} to {1}".format(sourceFile,targetFile))
 
 		if not os.path.isfile(sourceFile):											# check file exists
 			return "File "+sourceFile+" cannot be found"

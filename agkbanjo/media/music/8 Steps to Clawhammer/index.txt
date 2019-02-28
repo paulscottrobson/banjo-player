@@ -1,27 +1,25 @@
 //
 // ../agkbanjo/media/music/8 Steps to Clawhammer
 //
-01.1 - First String.plux
-01.1 - First String
-01.2 - First Strum.plux
-01.2 - First Strum
-02.1 - First String.plux
-02.1 - First String
-02.2 - First Strum.plux
-02.2 - First Strum
-03.1 - Four times per string.plux
-03.1 - Four Times Per String
-03.2 - Once per string.plux
-03.2 - Once Per String
-03.3 - Alternate strums.plux
-03.3 - Alternate Strums
-03.4 - Alternate strums 2.plux
-03.4 - Alternate Strums 2
-04.1.1.Ringing 5th String 1.plux
-04.1.1.ringing 5th String 1
-04.1.2.Ringing 5th String 2.plux
-04.1.2.ringing 5th String 2
-04.1.3.Ringing 5th String 3.plux
-04.1.3.ringing 5th String 3
-04.1.4.Ringing 5th String 4.plux
-04.1.4.ringing 5th String 4
+Steps_1-3
+Steps 1-3 (folder)
+04.1.1 - Ringing 5th String 1.plux
+04.1.1 - Ringing 5th String 1
+04.1.2 - Ringing 5th String 2.plux
+04.1.2 - Ringing 5th String 2
+04.1.3 - Ringing 5th String 3.plux
+04.1.3 - Ringing 5th String 3
+04.1.4 - Ringing 5th String 4.plux
+04.1.4 - Ringing 5th String 4
+04.2.1 - Strumming String 1.plux
+04.2.1 - Strumming String 1
+04.2.2 - Strumming String 2.plux
+04.2.2 - Strumming String 2
+04.2.3 - Strumming String 3.plux
+04.2.3 - Strumming String 3
+04.2.4 - Strumming String 4.plux
+04.2.4 - Strumming String 4
+04.3 - String changes.plux
+04.3 - String Changes
+04.4 - Strum changes.plux
+04.4 - Strum Changes
