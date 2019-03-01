@@ -59,17 +59,17 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=0;main.agc;1080;0
+FILE_NAME_0=0;main.agc;1054;0
 FILE_NAME_1=0;source%2Fbar.agc;5615;9
 FILE_NAME_2=0;source%2Fmusic.agc;0;5
 FILE_NAME_3=0;source%2Frenderers%2Ffretrenderer.agc;5798;8
 FILE_NAME_4=0;source%2Fmanager.agc;1071;4
-FILE_NAME_5=1;source%2Fplayer.agc;1495;7
-FILE_NAME_6=0;source%2Fprogram.agc;8814;1
+FILE_NAME_5=0;source%2Fplayer.agc;2700;7
+FILE_NAME_6=0;source%2Fprogram.agc;5276;1
 FILE_NAME_7=0;source%2Fui%2Fbutton.agc;2253;2
 FILE_NAME_8=0;source%2Fui%2Frotator.agc;2397;10
 FILE_NAME_9=0;source%2Fui%2Fslider.agc;1351;3
-FILE_NAME_10=0;source%2Fui%2Fmenu.agc;2122;6
+FILE_NAME_10=1;source%2Fui%2Fmenu.agc;2122;6
 
 [project]
 description=

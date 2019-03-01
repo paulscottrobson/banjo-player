@@ -25,7 +25,7 @@ type ProgramGlobals
 endtype
 
 global prg as ProgramGlobals
-global debug as string = "DBG:"
+global debug as string = ""
 
 // ***************************************************************************************************
 //									Initialise the display
@@ -116,8 +116,8 @@ function Program_MainLoop()
 	lastTime = GetMilliseconds()
 	exitPlay = 0
 	while exitPlay = 0
-		if GetRawKeyPressed(27) <> 0 then end
-		if GetRawKeyPressed(asc("Q")) <> 0 then exitPlay = 1
+		if GetRawKeyPressed(27) <> 0 then end					// Crashes out
+		if debug <> "" then print("[DEBUG]"+debug)				// Output any debugging info
 		elapsed = GetMilliseconds() - lastTime					// Track time between frames.
 		lastTime = GetMilliseconds()
 		
@@ -167,11 +167,7 @@ function Program_MainLoop()
 			//prg.rendererID = 1-prg.rendererID
 			//Manager_SwitchRenderer(prg.rendererID)
 		endif
-		
-	    print(debug)
-	    print(prg.pos#)
-	    print(Rotator_Get(prg.speedRotator))
-	    Sync()
+		Sync()
 	endwhile
 	Sync()
 endfunction

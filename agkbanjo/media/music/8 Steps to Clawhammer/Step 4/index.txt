@@ -31,3 +31,9 @@
 04.5.4 - Hammer String 4
 05.0  Skip to my Lou (melody).plux
 05.0 Skip To My Lou (melody)
+05.1  Skip to my Lou (strumb).plux
+05.1 Skip To My Lou (strumb)
+05.2  Skip to my Lou (hammer thumb).plux
+05.2 Skip To My Lou (hammer Thumb)
+05.3  Skip to my Lou (ditty).plux
+05.3 Skip To My Lou (ditty)

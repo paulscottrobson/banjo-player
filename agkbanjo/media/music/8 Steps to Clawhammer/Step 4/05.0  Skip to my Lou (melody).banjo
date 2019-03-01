@@ -1,6 +1,6 @@
 format := 1
 beats := 2
-tempo := 80
+tempo := 50
 step := 4
 
 |

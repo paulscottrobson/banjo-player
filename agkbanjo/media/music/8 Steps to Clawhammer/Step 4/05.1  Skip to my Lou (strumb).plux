@@ -1,0 +1,14 @@
+.format:=1
+.beats:=2
+.fretting:=0123456789tewhufxvgn
+.name:=05.1  Skip to my Lou (strumb)
+.tempo:=50
+.step:=4
+|2a//1a2a3a/5a/3a//1a2a3a/5a
+|4a//1a2a3a/5a/3a//1a2a3a/5a
+|2a//1a2a3a/5a/3a//1a2a3a/5a
+|3c//4e//4a//1a2a3a/5a
+|2a//1a2a3a/5a/3a//1a2a3a/5a
+|2b//1c2b3a/5a/2b//1c2b3a/5a
+|3a//2b/5a/2b//3a/5a
+|3a//1a2a3a/5a/3a///
