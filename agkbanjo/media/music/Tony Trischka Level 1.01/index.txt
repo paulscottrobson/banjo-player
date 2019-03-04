@@ -1,0 +1,19 @@
+//
+// ../agkbanjo/media/music/Tony Trischka Level 1.01
+//
+alternating_thumb_roll_1.plux
+Alternating Thumb Roll 1
+alternating_thumb_roll_2.plux
+Alternating Thumb Roll 2
+alternating_thumb_roll_3.plux
+Alternating Thumb Roll 3
+ode_to_joy_part_1_finger_style.plux
+Ode To Joy Part 1 Finger Style
+ode_to_joy_part_1_simple.plux
+Ode To Joy Part 1 Simple
+ode_to_joy_part_2.plux
+Ode To Joy Part 2
+ode_to_joy_preamble_part_1.plux
+Ode To Joy Preamble Part 1
+ode_to_joy_preamble_part_2.plux
+Ode To Joy Preamble Part 2

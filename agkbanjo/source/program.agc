@@ -48,7 +48,7 @@ function Program_SetupDisplay()
 	
 	prg.info = CreateText("Written by Paul Robson (paul@robsons.org.uk) v"+VERSION)
 	SetTextFont(prg.info,LoadFont("rocko.ttf"))
-	SetTextSize(prg.info,SCWIDTH/60)
+	SetTextSize(prg.info,SCWIDTH/70)
 	SetTextPosition(prg.info,SCWIDTH/2-GetTextTotalWidth(prg.info)/2,SCHEIGHT-GetTextTotalHeight(prg.info))
 endfunction
 
@@ -159,7 +159,7 @@ function Program_MainLoop()
 		Button_Update(prg.backButton)
 		if Button_GetState(prg.backButton) <> 0 then exitPlay = 1
 		if Rotator_Update(prg.speedRotator)	<> 0
-			newSpeed = prg.tune.defaultBPM+(Rotator_Get(prg.speedRotator)-0.5)*2*(prg.tune.defaultBPM*0.8)
+			newSpeed = prg.tune.defaultBPM+(Rotator_Get(prg.speedRotator)-0.5)*2*(prg.tune.defaultBPM*0.95)
 			Program_SetSpeed(newSpeed)
 		endif
 		
@@ -201,7 +201,7 @@ Program_SetupDisplay()
 Program_CreateDisplay()
 repeat
 	file$ = "__test.plux"
-	rem file$ = Program_SelectFromMenu("",0)
+	//file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

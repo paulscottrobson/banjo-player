@@ -14,7 +14,7 @@ SetErrorMode(2)
 #constant SCWIDTH 1440
 #constant SCHEIGHT 960
 #constant DPHEIGHT 840
-#constant VERSION "0.12 (28-02-19)"
+#constant VERSION "0.13 (04-Mar-19)"
 
 #include "source/bar.agc"
 #include "source/bardisplay.agc"

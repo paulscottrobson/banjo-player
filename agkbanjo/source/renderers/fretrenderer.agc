@@ -170,10 +170,10 @@ function FretRenderer_CreateBarGraphics(bar ref as Bar,diBar ref as BarDisplayIn
 				
 				if Bar_IsNoteDoubleWidth(bar,b,s) <> 0 
 					CreateSprite(id,LoadSubImage(frg.spriteImage,"notebutton2"))
-					SetSpriteSize(id,frg.barWidth/bar.beatsInBar/2,frg.stringAreaHeight/5.0)
+					SetSpriteSize(id,frg.barWidth*2/bar.notesInBar,frg.stringAreaHeight/5.0)
 				else
 					CreateSprite(id,LoadSubImage(frg.spriteImage,"notebutton"))
-					SetSpriteSize(id,frg.barWidth/4/bar.beatsInBar,frg.stringAreaHeight/5.0)
+					SetSpriteSize(id,frg.barWidth/bar.notesInBar,frg.stringAreaHeight/5.0)
 				endif
 				SetSpriteOffset(id,0,GetSpriteHeight(id)*0.45)
 				SetSpriteDepth(id,99)

@@ -43,7 +43,7 @@ class Bar(object):
 		self.default()
 		self.bar[self.pos]["play"][string-1] = fretting
 		self.lastPos = self.pos
-		print(fretting,string)
+		#print(fretting,string)
 
 	def modify(self,modifier):
 		assert self.lastPos is not None,"Trying to modify note when none given"
@@ -149,7 +149,7 @@ class Level1Compiler(object):
 				self.bar.setPlay(fretting,string)									# play that note
 				self.fretting[string-1] = fretting 									# update current fretting
 				self.lastPlayedString = string 										# remember what was played
-				print("last",self.lastPlayedString)
+				#print("last",self.lastPlayedString)
 		self.bar.advance()
 
 
@@ -206,7 +206,7 @@ class BanjoCompiler(object):
 				try:
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
-					print('"'+bar+'"',cvt)
+					#print('"'+bar+'"',cvt)
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
 					err = "Error '{0}' at {1}".format(e.args[0],i+1)
