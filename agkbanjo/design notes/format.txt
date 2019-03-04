@@ -45,8 +45,4 @@ notes in a bar.
 .s 				Sets a string override. If set, this overrides the selected string for a 
 				* or a <fret>. The override is cleared afterwards. s can be 1-5.
 
-				
-
-
-
 macros [general]

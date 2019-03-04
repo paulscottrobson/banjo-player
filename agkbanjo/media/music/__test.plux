@@ -1,14 +1,5 @@
 .format:=1
-.beats:=2
+.beats:=4
 .fretting:=0123456789tewhufxvgn
-.name:=03.2 - Once per string
-.tempo:=80
-.step:=4
-|///////
-|1a///////
-|2a///////
-|3a///////
-|4a///////
-|3a///////
-|2a///////
-|1a///////
+.name:=cripple
+|(c)1h/2g++/3f/4e/5d/1h/2i/3f

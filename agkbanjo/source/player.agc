@@ -38,20 +38,20 @@ function Player_Initialise(music ref as Music)
 				fret = music.bars[bar].notes[note].fretting[strn]
 				noteid = plg.tuning[strn] + fret
 				if GetSoundExists(noteid + plg.baseID) = 0 
-					LoadSoundOGG(noteid + plg.baseID,str(noteid)+".ogg")
+					LoadSoundOGG(noteid + plg.baseID,"sounds/"+str(noteid)+".ogg")
 				endif
 				ntype = music.bars[bar].notes[note].modifier
 				if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
 					noteid = plg.tuning[strn]+music.bars[bar].notes[note].newFretting
 					if GetSoundExists(noteid + plg.baseID) = 0 
-						LoadSoundOGG(noteid + plg.baseID,str(noteid)+".ogg")
+						LoadSoundOGG(noteid + plg.baseID,"sounds/"+str(noteid)+".ogg")
 					endif
 				endif
 			next strn
 		next note
 	next bar
 
-	plg.metronome = LoadSoundOGG("metronome.ogg")
+	plg.metronome = LoadSoundOGG("sounds/metronome.ogg")
 	plg.pendingNote = -1
 endfunction
 

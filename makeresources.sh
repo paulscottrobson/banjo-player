@@ -2,7 +2,7 @@
 #		Builds resources where required and copies them into applications media directory.
 #
 cp fonts/*.ttf agkbanjo/media
-cp notes/sounds/*.ogg agkbanjo/media
+cp notes/sounds/*.ogg agkbanjo/media/sounds
 cd graphics
 python makeatlas.py
 cd ..
