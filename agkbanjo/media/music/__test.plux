@@ -1,14 +1,14 @@
 .format:=1
 .beats:=2
 .fretting:=0123456789tewhufxvgn
-.name:=05.3  Skip to my Lou (ditty)
-.tempo:=25
+.name:=03.2 - Once per string
+.tempo:=80
 .step:=4
-|2a/5a/2a/5a/3a/5a/3a/5a
-|4a/5a/4a/5a/3a/5a/3a/5a
-|2a/5a/2a/5a/3a//3a/5a
-|3c/5a/4e/5a/4a/5a/4a/5a
-|2a/5a/2a/5a/3a//3a/5a
-|2b/5a/2b/5a/2b/5a/2b/5a
-|3c/5a/2b/5a/2a//3c/5a
-|3a/5a/3a/5a/3a///
+|///////
+|1a///////
+|2a///////
+|3a///////
+|4a///////
+|3a///////
+|2a///////
+|1a///////
