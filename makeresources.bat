@@ -3,7 +3,7 @@ rem
 rem		Builds resources where required and copies them into applications media directory.
 rem
 copy fonts\*.ttf agkbanjo\media
-copy notes\sounds\*.ogg agkbanjo\media
+copy notes\sounds\*.ogg agkbanjo\media\sounds
 cd graphics
 python makeatlas.py
 cd ..
