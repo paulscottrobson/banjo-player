@@ -1,0 +1,24 @@
+.format:=1
+.beats:=2
+.fretting:=0123456789tewhufxv
+.notes:=8
+.name:=07 Little Birdie (melody)
+.tuning:=gcgcd
+.tempo:=60
+|(c)////3a//3c/
+|2a////1c///
+|1c////1a//2a/
+|3e////3a///
+|3a////3a//3e/
+|1a////1a//2a/
+|1c////1c//1a/
+|2a////2a///
+|2a////3a//3c/
+|2a////1c///
+|1c////1a//2a/
+|3e////3a///
+|3a////3a//3e/
+|1a////1a//2a/
+|1c////1c//1a/
+|2a////2a///
+|2a///////

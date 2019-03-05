@@ -15,6 +15,7 @@ type Music
 	stepBPM as integer 											// Speed increase when step on
 	barCount as integer 										// Number of bars
 	bars as Bar[4]												// Bars
+	tuning as string 											// Tuning
 endtype
 
 // ***************************************************************************************************
@@ -27,6 +28,7 @@ function Music_Initialise(this ref as Music)
 	this.defaultBeats = 4										// Beats per bar
 	this.barCount = 0 											// Number of bars in tune
 	this.bars.length = 20 										// Bar array is added in chunks
+	this.tuning = "dbgdg"										// tuning
 endfunction
 
 // ***************************************************************************************************
@@ -75,6 +77,9 @@ function Music_AddFile(this ref as Music,sourceFile as string)
 				endcase
 				case "step"
 					this.stepBPM = val(value$)
+				endcase
+				case "tuning"
+					this.tuning = lower(value$)
 				endcase
 			endselect
 		endif

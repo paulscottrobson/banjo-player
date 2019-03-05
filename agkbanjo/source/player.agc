@@ -32,19 +32,26 @@ function Player_Initialise(music ref as Music)
 	plg.tuning[2] = 12					// B3
 	plg.tuning[1] =	15					// D4
 	
+	if music.tuning = "gcgcd"
+		plg.tuning[4] = 1 				// C3
+		plg.tuning[2] = 13 				// C4
+	endif
+	
 	for bar = 0 to music.barCount
 		for note = 0 to music.bars[bar].notesInBar
 			for strn = 1 to 5
 				fret = music.bars[bar].notes[note].fretting[strn]
-				noteid = plg.tuning[strn] + fret
-				if GetSoundExists(noteid + plg.baseID) = 0 
-					LoadSoundOGG(noteid + plg.baseID,"sounds/"+str(noteid)+".ogg")
-				endif
-				ntype = music.bars[bar].notes[note].modifier
-				if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
-					noteid = plg.tuning[strn]+music.bars[bar].notes[note].newFretting
+				if fret <> BAR_DONTPLAY
+					noteid = plg.tuning[strn] + fret
 					if GetSoundExists(noteid + plg.baseID) = 0 
 						LoadSoundOGG(noteid + plg.baseID,"sounds/"+str(noteid)+".ogg")
+					endif
+					ntype = music.bars[bar].notes[note].modifier
+					if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
+						noteid = plg.tuning[strn]+music.bars[bar].notes[note].newFretting
+						if GetSoundExists(noteid + plg.baseID) = 0 
+							LoadSoundOGG(noteid + plg.baseID,"sounds/"+str(noteid)+".ogg")
+						endif
 					endif
 				endif
 			next strn
@@ -75,6 +82,7 @@ function Player_PlayNote(note ref as Note)
 	if note.isPlayed <> 0
 		for s = 1 to 5
 			if note.fretting[s] <> BAR_DONTPLAY
+				rem debug = debug + str(note.fretting[s]+plg.tuning[s])+"."+str(s)+" "
 				PlaySound(plg.tuning[s] + note.fretting[s] + plg.baseID)
 			endif
 		next s

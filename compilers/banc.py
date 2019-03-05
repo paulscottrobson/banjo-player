@@ -32,12 +32,16 @@ class Bar(object):
 		assert self.pos < len(self.bar),"Too many notes in bar"
 		self.pos += 1
 
+	def rewind(self):
+		assert self.pos > 0,"Can't rewind at the start"
+		self.pos -= 1
+
 	def getPos(self):
 		return self.pos
 
 	def setChord(self,chord):
 		self.default()
-		self.bar[self.pos]["chord"] = chord[0].upper()+chord[1:].lower()
+		self.bar[self.pos]["chord"] = chord[0].upper()+chord[1:].lower() if chord != "" else ""
 
 	def setPlay(self,fretting,string):
 		self.default()
@@ -79,10 +83,9 @@ class Level1Compiler(object):
 		self.equates = equates
 		self.frettingCode = equates["fretting"]
 		self.beats = int(equates["beats"])
-		self.noteCount = 6 if self.beats == 3 else 8
+		self.noteCount = int(equates["notes"])
 		self.fretting = [ None ] * 5
-		self.strings = [ None ] * self.noteCount
-		self.stringOverride = None
+		self.currentString = 1
 
 	def translate(self,barDef):
 		self.bar = Bar(self.noteCount)
@@ -92,41 +95,47 @@ class Level1Compiler(object):
 		return self.bar.render()
 
 	def process(self,df):
-		if df[0] == "*":															# one note from pattern
-			self.addNote(None)
+		if df[0] == "&":															# one note rest
+			self.advanceEven()
 			return df[1:]
 		#
-		if df[0] == "&":															# one note rest
+		if df[0] == "!":
+			for i in range(0,5):
+				if self.fretting[i] is not None:
+					self.bar.setPlay(self.fretting[i],i+1)
+			self.advanceEven()
+			return df[1:]
+		#
+		if df[0] == "v" or df[0] == "n" or df[0] == "^":
+			self.currentString += (1 if df[0] == 'v' else -1)
+			assert self.currentString >= 1 and self.currentString <= 5,"String out of range"
+			return df[1:]
+		#
+		if df[0] == ".":
+			assert self.bar.getPos() > 0,"Cannot added a pluck before first note."
+			self.bar.rewind()
+			self.bar.setPlay(0,5)
 			self.bar.advance()
 			return df[1:]
 		#
 		n = self.frettingCode.find(df[0])											# single fretting
 		if n >= 0:
-			self.addNote(n)
+			self.bar.setPlay(n,self.currentString)
+			self.advanceEven()
 			return df[1:]
 		#
 		if df[0] == ">" or df[0] == "+" or df[0] == "-":							# modifier
 			self.bar.modify(df[0])
-			self.fretting[self.lastPlayedString-1] += (-1 if df[0] == "-" else 1)
 			return df[1:]
 		#
-		m = re.match("^\\.([1-5])(.*)$",df)											# .string override
+		m = re.match("^\\#([1-5])(.*)$",df)											# .string override
 		if m is not None:
-			self.stringOverride = int(m.group(1))
-			return m.group(2)
-		#
-		m = re.match("^{([1-5\\.]+)}(.*)$",df)										# check for {strings}
-		if m is not None:
-			assert len(m.group(1)) == self.noteCount,"Wrong number of strings"
-			self.strings = [ None ] * self.noteCount
-			for i in range(0,self.noteCount):
-				if m.group(1)[i] != '.':
-					self.strings[i] = int(m.group(1)[i])
+			self.currentString = int(m.group(1))
 			return m.group(2)
 		#
 		m = re.match("^\[(["+self.frettingCode+"\\.]+)\](.*)$",df)					# check for [fretting]
 		if m is not None:
-			assert len(m.group(1)) == 5,"Should be 5 frets in fretting" 
+			assert len(m.group(1)) == 5,"Should be 5 frets in chord definition" 
 			self.fretting = [ None ] * 5
 			for i in range(0,5):
 				if m.group(1)[i] != '.':
@@ -139,19 +148,10 @@ class Level1Compiler(object):
 			return m.group(2)
 		assert False,"Cannot process '"+df+"'"										# give up.
 
-	def addNote(self,overrideFret):
-		string = self.strings[self.bar.getPos()]									# string we should play
-		string = self.stringOverride if self.stringOverride is not None else string # string override ?
-		self.stringOverride = None
-		if string is not None:														# playing something
-			fretting = self.fretting[string-1] if overrideFret is None else overrideFret # get fret can be overridden
-			if fretting is not None:												# fretting set
-				self.bar.setPlay(fretting,string)									# play that note
-				self.fretting[string-1] = fretting 									# update current fretting
-				self.lastPlayedString = string 										# remember what was played
-				#print("last",self.lastPlayedString)
+	def advanceEven(self):
 		self.bar.advance()
-
+		while self.bar.getPos() % 2 != 0:
+			self.bar.advance()
 
 # ***************************************************************************************************
 #									Compiler class
@@ -164,7 +164,7 @@ class BanjoCompiler(object):
 	def compile(self,sourceFile,targetFile):
 		sourceFile = sourceFile.replace("/",os.sep)									# Handle slashes.
 		targetFile = targetFile.replace("/",os.sep)
-		print("Compiling {0} to {1}".format(sourceFile,targetFile))
+		print("Compiling\n\t{0}\n\t{1}".format(sourceFile,targetFile))
 
 		if not os.path.isfile(sourceFile):											# check file exists
 			return "File "+sourceFile+" cannot be found"
@@ -174,8 +174,8 @@ class BanjoCompiler(object):
 
 		equates = { "format":"0" }													# work out equates.
 		equates["beats"] = "4" 														# standard beats/bar
-		equates["fretting"] = "0123456789tewhufxvgn"								# standard fretting
-
+		equates["fretting"] = "0123456789tewhufxv"									# standard fretting
+		equates["notes"] = "8"														# standard notes.
 		equates["name"] = sourceFile.split(os.sep)[-1][:-6].replace("_"," ")		# default name
 		for equate in [x for x in src if x.find(":=") >= 0]:						# search for them
 			parts = [x.strip() for x in equate.split(":=")]							# split around :=
@@ -202,11 +202,13 @@ class BanjoCompiler(object):
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
 		for i in range(0,len(src)):													# work through the source.
-			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars
+			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars			
 				try:
+					while bar.find("%") >= 0:
+						bar = self.macroExpand(bar,equates)
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
-					#print('"'+bar+'"',cvt)
+					print('"'+bar+'"',cvt)
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
 					err = "Error '{0}' at {1}".format(e.args[0],i+1)
@@ -215,6 +217,14 @@ class BanjoCompiler(object):
 		#print("\tCompiled {0} bars.".format(barCount))
 		hOut.close()
 		return err
+
+	def macroExpand(self,bar,equates):
+		s = re.split("(\\%.*?\\%)",bar)
+		for i in range(0,len(s)):
+			if s[i].startswith("%"):
+				assert s[i][1:-1].lower() in equates,"Unknown macro "+s[i][1:-1]
+				s[i] = equates[s[i][1:-1].lower()]
+		return "".join(s)
 
 if __name__ == "__main__":
 	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/media/music/__test.plux")

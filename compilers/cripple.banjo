@@ -2,5 +2,8 @@
 //			Test for compiler.
 //
 format := 1
+beats := 2
+tuning := gcgcd
+tempo := 60
 
-(c)[76543]{12345123}**++******|
+(c)[000..]|5!.7!.|3!.5!.|2!.32|0vv4^0!.
