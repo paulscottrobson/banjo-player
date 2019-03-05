@@ -202,7 +202,7 @@ Program_SetupDisplay()
 Program_CreateDisplay()
 repeat
 	file$ = "__test.plux"
-	file$ = Program_SelectFromMenu("",0)
+	rem file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

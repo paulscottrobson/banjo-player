@@ -59,7 +59,7 @@ class Bar(object):
 			self.bar[self.pos] = { "play":[None]*5,"chord":None,"modifier":None,"modcount":0 }
 
 	def render(self):
-		return "/".join([self.renderNote(x) for x in self.bar])
+		return ".".join([self.renderNote(x) for x in self.bar])
 
 	def renderNote(self,note):
 		r = ""
@@ -109,7 +109,7 @@ class Level1Compiler(object):
 			self.addNote(n)
 			return df[1:]
 		#
-		if df[0] == ">" or df[0] == "+" or df[0] == "-":							# modifier
+		if df[0] == "/" or df[0] == "+" or df[0] == "-":							# modifier
 			self.bar.modify(df[0])
 			self.fretting[self.lastPlayedString-1] += (-1 if df[0] == "-" else 1)
 			return df[1:]
@@ -172,7 +172,7 @@ class BanjoCompiler(object):
 		if not os.path.isfile(sourceFile):											# check file exists
 			return "File "+sourceFile+" cannot be found"
 		src = [x.strip().replace("\t"," ") for x in open(sourceFile).readlines()]	# read source in
-		src = [x if x.find("//") < 0 else x[:x.find("//")].strip() for x in src]	# remove comments
+		src = [x if x.find("#") < 0 else x[:x.find("#")].strip() for x in src]		# remove comments
 		src = [x.lower() for x in src]												# make everything LC
 
 		equates = { "format":"0" }													# work out equates.
@@ -207,7 +207,7 @@ class BanjoCompiler(object):
 		for i in range(0,len(src)):													# work through the source.
 			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars			
 				try:
-					while bar.find("%") >= 0:
+					while bar.find("<") >= 0:
 						bar = self.macroExpand(bar,equates)
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
@@ -222,9 +222,9 @@ class BanjoCompiler(object):
 		return err
 
 	def macroExpand(self,bar,equates):
-		s = re.split("(\\%.*?\\%)",bar)
+		s = re.split("(\\<.*?\\>)",bar)
 		for i in range(0,len(s)):
-			if s[i].startswith("%"):
+			if s[i].startswith("<"):
 				assert s[i][1:-1].lower() in equates,"Unknown macro "+s[i][1:-1]
 				s[i] = equates[s[i][1:-1].lower()]
 		return "".join(s)

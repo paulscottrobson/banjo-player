@@ -82,14 +82,14 @@ function Bar_Load(this ref as Bar,barDesc as string)
 			this.notes[currentNote].modifier = NOTE_NORMAL
 			this.notes[currentNote].isPlayed = 1
 		endif
-		if d$ = "/" then inc currentNote
-		if d$ = "+" or d$ = "-" or d$ = ">"
+		if d$ = "." then inc currentNote
+		if d$ = "+" or d$ = "-" or d$ = "/"
 			this.notes[currentNote].modifierString = currentString
-			if d$ = "+" or d$ = ">" then inc this.notes[currentNote].newFretting
+			if d$ = "+" or d$ = "/" then inc this.notes[currentNote].newFretting
 			if d$ = "-" then dec this.notes[currentNote].newFretting
 			if d$ = "+" then this.notes[currentNote].modifier = NOTE_HAMMERON
 			if d$ = "-" then this.notes[currentNote].modifier = NOTE_PULLOFF
-			if d$ = ">" then this.notes[currentNote].modifier = NOTE_SLIDE
+			if d$ = "/" then this.notes[currentNote].modifier = NOTE_SLIDE
 		endif
 		if d$ = "("
 			p = FindString(barDesc,")")

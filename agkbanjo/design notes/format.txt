@@ -1,7 +1,6 @@
 File Format (.plux)
 ===================
 Bars seperated by |
-
 Notes seperated by :
 
 Data is 
@@ -9,16 +8,17 @@ Data is
 A-Z 	set fretting and pluck that string this note
 +   	add hammer on 1 (multiple)
 -   	sub pull off 1 (multiple)
->   	slide 1 (multiple)
-/ 		go to next note.
+/   	slide 1 (multiple)
+. 		go to next note.
 (Chord)	set display chord
 
 Assignments are lines containing def := constant and are parsed out.
 
 Bluegrass/Scruggs Style Format (#1)
 ===================================
+Comments prefixed by #
 
-Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 f:15 x:16
+Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 f:15 x:16 v:17 g:18 n:19
 
 Positions can be quarter notes (2/4 time) or half notes (3/4 4/4 time) and there are 6 or 8
 notes in a bar.
@@ -26,22 +26,24 @@ notes in a bar.
 (<name>)		Set the display chord to <name>
 				(default value is empty string)
 
-[<fret>]		Set current chord, default is no chord.
+[fffff]			Set the current fretting. Can be '.' for don't play this string.
+				(default value is .....)
 
-#n 				Set current string to 1-5 (default position is 1)
-^ v n 			Shift string up or down.
+{ssssssss} 		Sets the string to play on each half or quarter beat, (eighth or sixth of a
+				bar). Can be 12345 or .
 
-<fret>			Play note on current string, advance to next even position. (so you can do 1-1)
+/+-				modifier to last defined note. Also adjusts the current fretting,
+				overriding the [fffff] setting.
 
-&				skip forward to next even position without playing anything, rest.
+&				skip forward one bar position without playing anything. clears "last note"
 
-- 				Go back one position.
+* 				Play the relevant string from {} then note from [] and step forward one bar
+				positions. Sets last note
 
+<fret>			As * but the fret overrides the choice from []. Also changes the current fretting
 
-!				Play chord and go forward to next even position.
+.s 				Sets a string override. If set, this overrides the selected string for a 
+				* or a <fret>. The override is cleared afterwards. s can be 1-5.
 
-. 				Put a 5/0 pluck in the previous position.
+<id>			Macro expansion.
 
-
-
-macros [general]
