@@ -100,6 +100,12 @@ class Level1Compiler(object):
 			self.addNote(None)
 			return df[1:]
 		#
+		if df[0] == "@":
+			self.bar.setPlay(0,1)
+			self.bar.setPlay(0,5)
+			self.bar.advance()
+			return df[1:]
+		#
 		if df[0] == "&":															# one note rest
 			self.bar.advance()
 			return df[1:]
@@ -123,9 +129,10 @@ class Level1Compiler(object):
 		if m is not None:
 			assert len(m.group(1)) == self.noteCount,"Wrong number of strings"
 			self.strings = [ None ] * self.noteCount
+			strs = m.group(1)
 			for i in range(0,self.noteCount):
-				if m.group(1)[i] != '.':
-					self.strings[i] = int(m.group(1)[i])
+				if strs[i] != '.':
+					self.strings[i] = int(strs[i]) 
 			return m.group(2)
 		#
 		m = re.match("^\[(["+self.frettingCode+"\\.]+)\](.*)$",df)					# check for [fretting]
@@ -225,6 +232,7 @@ class BanjoCompiler(object):
 		s = re.split("(\\<.*?\\>)",bar)
 		for i in range(0,len(s)):
 			if s[i].startswith("<"):
+				original = s[i]
 				assert s[i][1:-1].lower() in equates,"Unknown macro "+s[i][1:-1]
 				s[i] = equates[s[i][1:-1].lower()]
 		return "".join(s)

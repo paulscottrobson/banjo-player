@@ -40,7 +40,9 @@ notes in a bar.
 * 				Play the relevant string from {} then note from [] and step forward one bar
 				positions. Sets last note
 
-<fret>			As * but the fret overrides the choice from []. Also changes the current fretting
+@ 				Play 5/1 pinch, advance forward one.
+
+fret			As * but the fret overrides the choice from []. Also changes the current fretting
 
 .s 				Sets a string override. If set, this overrides the selected string for a 
 				* or a <fret>. The override is cleared afterwards. s can be 1-5.

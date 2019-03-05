@@ -1,0 +1,48 @@
+# ***********
+# Tune set up
+# ***********
+
+format := 1
+beats := 2
+tempo := 60
+step := 4
+
+# **********************
+# Set up various equates
+# **********************
+
+pad_melody := ***
+pad_pinch := *@*
+
+no_roll := [.....]
+play_roll := [00000]
+
+no_drone := &
+drone := .10
+
+2 := .2 {21512151} <roll>
+3 := .3 {31513151} <roll>
+4 := .4 {41514151} <roll>
+
+# ************************************************************
+# options are : melody, drone, drone and pinch, two thumb roll
+# ************************************************************
+
+# set this to pad_melody or pad_pinch to play the melody or the pinch.
+p := <pad_melody>						
+
+# set to play_roll  to play two thumb rolls. also p must be pad_melody
+roll := <no_roll>
+
+# to play drone notes set to <drone>. 
+
+d := <no_drone>
+
+# *************************************************************
+# Melody Information. Note repeated setting of strings with <n>
+# *************************************************************
+
+# (Tied notes must be done as <str1>n1<d> <str2>n2<d>, the string being respecified for rolls)
+
+<2> 0<p> 0<p> | <2> 1<p> 1<p> | <2> 0<p> 0<p> | <3> 2<p> 2<p>
+<2> 0<p> 0<p> | <2> 1<p> 1<p> | <2> 0<p> <3>2<p> | <3> 0<p> <3>0<d> <3>0<d>
