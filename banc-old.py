@@ -32,16 +32,12 @@ class Bar(object):
 		assert self.pos < len(self.bar),"Too many notes in bar"
 		self.pos += 1
 
-	def rewind(self):
-		assert self.pos > 0,"Can't rewind at the start"
-		self.pos -= 1
-
 	def getPos(self):
 		return self.pos
 
 	def setChord(self,chord):
 		self.default()
-		self.bar[self.pos]["chord"] = chord[0].upper()+chord[1:].lower() if chord != "" else ""
+		self.bar[self.pos]["chord"] = chord[0].upper()+chord[1:].lower()
 
 	def setPlay(self,fretting,string):
 		self.default()
@@ -156,6 +152,7 @@ class Level1Compiler(object):
 				#print("last",self.lastPlayedString)
 		self.bar.advance()
 
+
 # ***************************************************************************************************
 #									Compiler class
 # ***************************************************************************************************
@@ -167,7 +164,7 @@ class BanjoCompiler(object):
 	def compile(self,sourceFile,targetFile):
 		sourceFile = sourceFile.replace("/",os.sep)									# Handle slashes.
 		targetFile = targetFile.replace("/",os.sep)
-		print("Compiling\n\t{0}\n\t{1}".format(sourceFile,targetFile))
+		print("Compiling {0} to {1}".format(sourceFile,targetFile))
 
 		if not os.path.isfile(sourceFile):											# check file exists
 			return "File "+sourceFile+" cannot be found"
@@ -177,8 +174,8 @@ class BanjoCompiler(object):
 
 		equates = { "format":"0" }													# work out equates.
 		equates["beats"] = "4" 														# standard beats/bar
-		equates["fretting"] = "0123456789tewhufxv"									# standard fretting
-		equates["notes"] = "8"														# standard notes.
+		equates["fretting"] = "0123456789tewhufxvgn"								# standard fretting
+
 		equates["name"] = sourceFile.split(os.sep)[-1][:-6].replace("_"," ")		# default name
 		for equate in [x for x in src if x.find(":=") >= 0]:						# search for them
 			parts = [x.strip() for x in equate.split(":=")]							# split around :=
@@ -205,10 +202,8 @@ class BanjoCompiler(object):
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
 		for i in range(0,len(src)):													# work through the source.
-			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars			
+			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars
 				try:
-					while bar.find("%") >= 0:
-						bar = self.macroExpand(bar,equates)
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
 					#print('"'+bar+'"',cvt)
@@ -220,14 +215,6 @@ class BanjoCompiler(object):
 		#print("\tCompiled {0} bars.".format(barCount))
 		hOut.close()
 		return err
-
-	def macroExpand(self,bar,equates):
-		s = re.split("(\\%.*?\\%)",bar)
-		for i in range(0,len(s)):
-			if s[i].startswith("%"):
-				assert s[i][1:-1].lower() in equates,"Unknown macro "+s[i][1:-1]
-				s[i] = equates[s[i][1:-1].lower()]
-		return "".join(s)
 
 if __name__ == "__main__":
 	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/media/music/__test.plux")

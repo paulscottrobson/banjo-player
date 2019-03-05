@@ -31,6 +31,4 @@ SetErrorMode(2)
 
 // TODO: 	
 //		TAB Display
-// 		Keys (P)ause (T)empo (S)peed up 
-//		(Q)uit to selector (ESC)terminate (Space)restart
 

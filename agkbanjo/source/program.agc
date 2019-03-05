@@ -68,10 +68,10 @@ function Program_CreateDisplay()
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
 	SetTextColor(prg.bpmLabel,255,51,51,255)
 	SetTextPosition(prg.bpmLabel,xc,yc-GetTextTotalHeight(prg.bpmLabel)/2)
-	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Tempo BPM","rotary")
-	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"sporange","Speed up",0)
-	Button_Initialise(prg.pauseButton,10+sp*3/2,yc,sz,"spred","Pause",0)
-	Button_Initialise(prg.backButton,10+sp/2,yc,sz,"back","Select",1)
+	Rotator_Initialise(prg.speedRotator,xc-sp/2,yc,sz,"Tempo BPM","rotary",asc("T"))
+	Button_Initialise(prg.speedupButton,xc-sp*3/2,yc,sz,"sporange","Speed up",0,asc("S"))
+	Button_Initialise(prg.pauseButton,10+sp*3/2,yc,sz,"spred","Pause",0,asc("P"))
+	Button_Initialise(prg.backButton,10+sp/2,yc,sz,"back","Select",1,asc("Q"))
 	Slider_Initialise(prg.posCtrl,sp+10+sp,xc-sp*2,yc,sz*0.8)
 endfunction
 
@@ -131,6 +131,7 @@ function Program_MainLoop()
 			lastpos# = prg.pos#									// Last position
 			prg.pos# = prg.pos# + barsPerSec# * elapsed# 		// New position
 			if GetRawKeyPressed(32) <> 0 then prg.pos# = 0		// Space resets
+			if GetRawKeyPressed(asc("Q")) <> 0 then exitPlay=1	// Q back to selector
 			
 			endPos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_END)
 			if prg.pos# >= endPos# 								// Off right hand end ?
@@ -148,11 +149,11 @@ function Program_MainLoop()
 				if mod(qb2,2) = 0 then Player_PlayMetronome()	// Play metronome
 				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(qb2,notes)])
 			endif
-		    Manager_MoveRenderTo(prg.pos#)						// Update display position
-			Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
-			if Slider_Update(prg.posCtrl) <> 0
-				prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_POSITION)
-			endif
+		endif
+	    Manager_MoveRenderTo(prg.pos#)							// Update display position
+		Slider_SetPosition(prg.posCtrl,prg.pos#/(0.0+prg.tune.barCount))
+		if Slider_Update(prg.posCtrl) <> 0
+			prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_POSITION)
 		endif
 		Button_Update(prg.speedupButton)						// Update UI objects
 		Button_Update(prg.pauseButton)
@@ -201,7 +202,7 @@ Program_SetupDisplay()
 Program_CreateDisplay()
 repeat
 	file$ = "__test.plux"
-	//file$ = Program_SelectFromMenu("",0)
+	file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

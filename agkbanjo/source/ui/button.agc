@@ -16,6 +16,7 @@ type Button
 	label as integer 											// Text
 	autoReturn as integer 										// Autoreturn button.
 	returnTime as integer 										// Time of return.
+	rawKey as integer 											// Raw key control
 endtype
 
 // ***************************************************************************************************
@@ -23,7 +24,7 @@ endtype
 // ***************************************************************************************************
 
 function Button_Initialise(this ref as Button,x as integer,y as integer,size as integer,
-										colour as string,label as string,autoReturn as integer)
+										colour as string,label as string,autoReturn as integer,rawkey as integer)
 	this.autoReturn = autoReturn
 	img = LoadImage("sprites.png")
 	this.frameSprite = CreateSprite(LoadSubImage(img,"rotary"))
@@ -39,6 +40,7 @@ function Button_Initialise(this ref as Button,x as integer,y as integer,size as 
 	this.label = CreateText(label)
 	SetTextSize(this.label,size/4)
 	SetTextPosition(this.label,x-GetTextTotalWidth(this.label)/2,y+size/2)
+	this.rawKey = rawkey
 endfunction
 
 // ***************************************************************************************************
@@ -74,7 +76,7 @@ function Button_Update(this ref as Button)
 	if this.autoReturn <>0 and GetMilliseconds() > this.returnTime and this.state <> 0
 		Button_SetState(this,0)
 	endif
-	if GetPointerReleased() <> 0 and GetSpriteHitTest(this.frameSprite,GetPointerX(),GetPointerY()) <> 0
+	if (GetPointerReleased() <> 0 and GetSpriteHitTest(this.frameSprite,GetPointerX(),GetPointerY()) <> 0) or GetRawKeyPressed(this.rawKey) <> 0 
 		Button_SetState(this,1-this.state)
 		this.returnTime = GetMilliseconds() + 250
 		hasPressed = 1
