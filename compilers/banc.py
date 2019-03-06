@@ -120,6 +120,7 @@ class Level1Compiler(object):
 		n = self.frettingCode.find(df[0])											# single fretting
 		if n >= 0:
 			self.bar.setPlay(n,self.currentString)
+			self.fretting = [0,0,0,None,None]
 			self.fretting[self.currentString-1] = n
 			self.advanceEven()
 			return df[1:]
@@ -204,10 +205,11 @@ class BanjoCompiler(object):
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
 		for i in range(0,len(src)):													# work through the source.
-			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars			
+			line = src[i]
+			while line.find("<") >= 0:
+					line = self.macroExpand(line,equates)
+			for bar in [x.strip() for x in line.split("|") if x.strip() != ""]:		# split into bars			
 				try:
-					while bar.find("<") >= 0:
-						bar = self.macroExpand(bar,equates)
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
 					#print('"'+bar+'"',cvt,trans.fretting)

@@ -1,0 +1,13 @@
+.format:=1
+.beats:=4
+.fretting:=0123456789tewhufxv
+.notes:=8
+.name:=03 Moving Quarter Notes
+.tempo:=60
+.c:=(c)[200..]
+.g:=(g)[020..]
+|().......
+|1a..1a..1a..1a.
+|2a..2a..2a..2a.
+|1a..1a..1a..1a.
+|2a..2a..2a..2a.

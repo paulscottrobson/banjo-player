@@ -200,9 +200,12 @@ endfunction selected
 
 Program_SetupDisplay()
 Program_CreateDisplay()
+OpenToRead(1,"showmenu.txt")
+readTest$ = ReadLine(1)
+CloseFile(1)
 repeat
 	file$ = "__test.plux"
-	rem file$ = Program_SelectFromMenu("",0)
+	if left(readTest$,1) = "1" then file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

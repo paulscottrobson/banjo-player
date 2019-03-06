@@ -1,0 +1,11 @@
+.format:=1
+.beats:=4
+.fretting:=0123456789tewhufxv
+.notes:=8
+.name:=08 Basic Rhythm Brush Stroke
+.tempo:=60
+|().......
+|1a..1a2a3a.5a.1a..1a2a3a.5a
+|1a..1a2a3a.5a.1a..1a2a3a.5a
+|1a..1a2a3a.5a.1a..1a2a3a.5a
+|1a..1a2a3a.5a.1a..1a2a3a.5a

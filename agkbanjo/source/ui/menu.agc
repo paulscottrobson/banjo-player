@@ -71,7 +71,7 @@ function Menu_Select(this ref as Menu)
 		//SetSpriteColor(id,0,0,255,255)
 		id = CreateText(chr(e+65)+". "+this.entries[e].label):this.entries[e].text = id
 		SetTextFont(id,LoadFont("rocko.ttf"))
-		SetTextSize(id,menuHeight * 0.5)
+		SetTextSize(id,menuHeight * 0.4)
 		SetTextColor(id,255,255,0,255)
 		SetTextPosition(id,SCWIDTH/2-GetTextTotalWidth(id)/2,y-GetTextTotalHeight(id)/2)
 	next e

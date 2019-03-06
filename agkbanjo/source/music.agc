@@ -24,7 +24,7 @@ endtype
 
 function Music_Initialise(this ref as Music)
 	this.defaultBPM = 80 										// Playing speed
-	this.stepBPM = 3 											// Increase for each time round
+	this.stepBPM = 4 											// Increase for each time round
 	this.defaultBeats = 4										// Beats per bar
 	this.barCount = 0 											// Number of bars in tune
 	this.bars.length = 20 										// Bar array is added in chunks
