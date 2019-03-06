@@ -2,5 +2,7 @@
 #			Test for compiler.
 #
 format := 1
-upto := //
-(c)[76543]{12345123}**<upto>******|
+beats := 2
+tempo := 60
+
+(c)[234..]6&7++!.//|(d)1$32&^5.

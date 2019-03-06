@@ -1,5 +1,11 @@
 //
 // ../agkbanjo/media/music/Wayne Erbsen Complete Ignoramous
 //
-01.1 Bile Em Cabbage Down (melody).plux
-01.1 Bile Em Cabbage Down (melody)
+05 Old Molly Hare (melody).plux
+05 Old Molly Hare (melody)
+06 Old Molly Hare.plux
+06 Old Molly Hare
+07 Little Birdie (melody).plux
+07 Little Birdie (melody)
+08 Little Birdie.plux
+08 Little Birdie

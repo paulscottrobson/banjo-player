@@ -1,0 +1,26 @@
+.format:=1
+.beats:=2
+.fretting:=0123456789tewhufxv
+.notes:=8
+.name:=08 Little Birdie
+.tempo:=60
+.tuning:=gcgcd
+.c:=(c)[200..]
+.g:=(g)[020..]
+|....3a..3c.
+|2a..(c)1c2a3a.5a.1c..1c2a3a.5a
+|1c..1c2a3a.5a.1a..2a.
+|3e..(g)1a2c3a.5a.3a..1a2c3a.5a
+|3a..1a2c3a.5a.3a..3e.
+|1a..1a2c3e.5a.1a..2a.
+|1c..1c2a3e.5a.1c..1a.
+|2a..(c)1c2a3a.5a.2a..1c2a3a.5a
+|2a..1c2a3a.5a.3a..3c.
+|2a..(c)1c2a3a.5a.1c..1c2a3a.5a
+|1c..1c2a3a.5a.1a..2a.
+|3e..(g)1a2c3a.5a.3a..1a2c3a.5a
+|3a..1a2c3a.5a.3a..3e.
+|1a..1a2c3e.5a.1a..2a.
+|1c..1c2a3e.5a.1c..1a.
+|2a..(c)1c2a3a.5a.2a..1c2a3a.5a
+|2a..1c2a3a.5a....
