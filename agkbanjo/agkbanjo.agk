@@ -60,10 +60,10 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=0;main.agc;1105;0
+FILE_NAME_0=0;main.agc;1121;0
 FILE_NAME_1=0;source%2Fbar.agc;5233;9
-FILE_NAME_2=1;source%2Fmusic.agc;1251;5
-FILE_NAME_3=0;source%2Frenderers%2Ffretrenderer.agc;603;8
+FILE_NAME_2=0;source%2Fmusic.agc;1251;5
+FILE_NAME_3=1;source%2Frenderers%2Ffretrenderer.agc;3434;8
 FILE_NAME_4=0;source%2Fmanager.agc;1071;4
 FILE_NAME_5=0;source%2Fplayer.agc;3220;7
 FILE_NAME_6=0;source%2Fprogram.agc;9230;1
