@@ -18,7 +18,7 @@ Clawhammer Format (#1)
 ======================
 Comments prefixed by #
 
-Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 f:15 x:16 v:17
+Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 f:15 s:16
 
 Positions can be quarter notes (2/4 time) or half notes (3/4 4/4 time) and there are 6 or 8
 notes in a bar.
@@ -29,21 +29,19 @@ notes in a bar.
 [fffff]			Set the current fretting. Can be '.' for don't play this string.
 				(default value is 000..)
 
-f 				Play fretting on the current string. Also updates [fffff] setting.
-				Advance to even position
+xxxf 			Play fretting on the specified string, no x's is string 1,1 is 2 etc.
+				Advance to 2 positions (1 beat). Updates the [fffff] setting *completely*.
 
-/+-				modifier to last defined note. Also adjusts the current fretting,
-				overriding the [fffff] setting.
+/v^				modifier to last defined note. Also adjusts the current fretting,
+				overriding the [fffff] setting. v maps to '+' (hammer on) ^ to '-' (pull off)
 
-&				advance to even position, play nothing.
+- 				back one position (1/2 beat)
 
-$s 				Set the current string , s is 1-5 (default is 1)
+&				advance two positions (1 beat)
 
-v^n 			Adjust the current string
+!				Play current frets as a brush chord involving strings 1-3 at most, advance 2 positions.
 
-!				Play current frets as a brush chord
-
-.				Add a 5th string pull to the previous note
+.				Add a 5th string pull to the previous note (e.g. back 1), does *not* change position.
 
 <id>			Macro expansion.
 
