@@ -21,9 +21,10 @@ class MusicBuilder(object):
 		self.latestFile = None
 		for root,dirs,files in os.walk(self.tree):
 			for f in [x for x in files if x[-6:] == ".banjo"]:
+				print("Compiling : \"{0}\"".format(f.split(os.sep)[-1]))
 				self.buildFile(root+os.sep+f)
 		print()
-		print("Compiling most recently changed file\n\t\"{0}\"".format(self.latestFile))
+		print("Recent    : \"{0}\" to \"__test.plux\"".format(self.latestFile.split(os.sep)[-1]))
 		result = self.compiler.compile(self.latestFile,self.tree+os.sep+"__test.plux")
 		if result is not None:
 			print(result)

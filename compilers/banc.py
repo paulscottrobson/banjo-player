@@ -84,9 +84,8 @@ class Level1Compiler(object):
 		self.frettingCode = equates["fretting"]
 		self.beats = int(equates["beats"])
 		self.noteCount = 6 if self.beats == 3 else 8
-		self.fretting = [ None ] * 5
-		self.strings = [ None ] * self.noteCount
-		self.stringOverride = None
+		self.fretting = [ 0,0,0,None,None ]
+		self.currentString = 1
 
 	def translate(self,barDef):
 		self.bar = Bar(self.noteCount)
@@ -96,43 +95,44 @@ class Level1Compiler(object):
 		return self.bar.render()
 
 	def process(self,df):
-		if df[0] == "*":															# one note from pattern
-			self.addNote(None)
+		if df[0] == "&":															# one note rest
+			self.advanceEven()
 			return df[1:]
 		#
-		if df[0] == "@":
-			self.bar.setPlay(0,1)
+		if df[0] == '^' or df[0] == 'v' or df[0] == 'n':
+			self.currentString += (1 if df[0] == 'v' else -1)
+			assert self.currentString >= 1 and self.currentString <= 5,"Off fretboard on move"
+			return df[1:]
+		#
+		if df[0] == '.':
+			self.bar.rewind()
 			self.bar.setPlay(0,5)
 			self.bar.advance()
 			return df[1:]
 		#
-		if df[0] == "&":															# one note rest
-			self.bar.advance()
+		if df[0] == '!':
+			for i in range(1,5):
+				if self.fretting[i-1] is not None:
+					self.bar.setPlay(self.fretting[i-1],i)
+			self.advanceEven()
 			return df[1:]
 		#
 		n = self.frettingCode.find(df[0])											# single fretting
 		if n >= 0:
-			self.addNote(n)
+			self.bar.setPlay(n,self.currentString)
+			self.fretting = [0,0,0,None,None]
+			self.fretting[self.currentString-1] = n
+			self.advanceEven()
 			return df[1:]
 		#
 		if df[0] == "/" or df[0] == "+" or df[0] == "-":							# modifier
 			self.bar.modify(df[0])
-			self.fretting[self.lastPlayedString-1] += (-1 if df[0] == "-" else 1)
+			self.fretting[self.currentString-1] += (-1 if df[0] == "-" else 1)
 			return df[1:]
 		#
-		m = re.match("^\\.([1-5])(.*)$",df)											# .string override
+		m = re.match("^\\$([1-5])(.*)$",df)											# #string select
 		if m is not None:
-			self.stringOverride = int(m.group(1))
-			return m.group(2)
-		#
-		m = re.match("^{([1-5\\.]+)}(.*)$",df)										# check for {strings}
-		if m is not None:
-			assert len(m.group(1)) == self.noteCount,"Wrong number of strings"
-			self.strings = [ None ] * self.noteCount
-			strs = m.group(1)
-			for i in range(0,self.noteCount):
-				if strs[i] != '.':
-					self.strings[i] = int(strs[i]) 
+			self.currentString = int(m.group(1))
 			return m.group(2)
 		#
 		m = re.match("^\[(["+self.frettingCode+"\\.]+)\](.*)$",df)					# check for [fretting]
@@ -150,18 +150,11 @@ class Level1Compiler(object):
 			return m.group(2)
 		assert False,"Cannot process '"+df+"'"										# give up.
 
-	def addNote(self,overrideFret):
-		string = self.strings[self.bar.getPos()]									# string we should play
-		string = self.stringOverride if self.stringOverride is not None else string # string override ?
-		self.stringOverride = None
-		if string is not None:														# playing something
-			fretting = self.fretting[string-1] if overrideFret is None else overrideFret # get fret can be overridden
-			if fretting is not None:												# fretting set
-				self.bar.setPlay(fretting,string)									# play that note
-				self.fretting[string-1] = fretting 									# update current fretting
-				self.lastPlayedString = string 										# remember what was played
-				#print("last",self.lastPlayedString)
+	def advanceEven(self):
 		self.bar.advance()
+		if self.bar.getPos() % 2 != 0:
+			self.bar.advance()
+
 
 # ***************************************************************************************************
 #									Compiler class
@@ -174,7 +167,7 @@ class BanjoCompiler(object):
 	def compile(self,sourceFile,targetFile):
 		sourceFile = sourceFile.replace("/",os.sep)									# Handle slashes.
 		targetFile = targetFile.replace("/",os.sep)
-		print("Compiling\n\t{0}\n\t{1}".format(sourceFile,targetFile))
+		#print("Compiling\n\t{0}\n\t{1}".format(sourceFile,targetFile))
 
 		if not os.path.isfile(sourceFile):											# check file exists
 			return "File "+sourceFile+" cannot be found"
@@ -212,13 +205,14 @@ class BanjoCompiler(object):
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
 		for i in range(0,len(src)):													# work through the source.
-			for bar in [x.strip() for x in src[i].split("|") if x.strip() != ""]:	# split into bars			
+			line = src[i]
+			while line.find("<") >= 0:
+					line = self.macroExpand(line,equates)
+			for bar in [x.strip() for x in line.split("|") if x.strip() != ""]:		# split into bars			
 				try:
-					while bar.find("<") >= 0:
-						bar = self.macroExpand(bar,equates)
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
-					#print('"'+bar+'"',cvt)
+					#print('"'+bar+'"',cvt,trans.fretting)
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
 					err = "Error '{0}' at {1}".format(e.args[0],i+1)

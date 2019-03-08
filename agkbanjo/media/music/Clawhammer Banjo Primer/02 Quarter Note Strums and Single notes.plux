@@ -1,0 +1,13 @@
+.format:=1
+.beats:=4
+.fretting:=0123456789tewhufxv
+.notes:=8
+.name:=02 Quarter Note Strums and Single notes
+.tempo:=60
+.c:=(c)[200..]
+.g:=(g)[020..]
+|().......
+|1a2a3a..1a2a3a..1a2a3a..1a2a3a.
+|1a..1a..1a..1a.
+|1a2a3a..1a2a3a..1a2a3a..1a2a3a.
+|1a..1a..1a..1a.

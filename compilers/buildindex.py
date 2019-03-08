@@ -19,12 +19,11 @@ class BuildIndex(object):
 
 	def build(self,baseDirectory):
 		for root,dirs,files in os.walk(baseDirectory):
-			files = [x for x in files if not x.endswith(".banjo") and not x.startswith("__") and not x.endswith(".txt")]
+			files = [x for x in files if x.endswith(".plux") and not x.startswith("__") and not x.endswith(".txt")]
 			dirs = [x for x in dirs if not x.startswith("__")]
 			files.sort()
 			dirs.sort()
-			if len(files) + len(dirs) > 0:
-				self.buildOneIndex(baseDirectory,root,files,dirs)
+			self.buildOneIndex(baseDirectory,root,files,dirs)
 
 	def buildOneIndex(self,stem,root,files,dirs):		
 		root = root.replace("\\","/")
