@@ -1,8 +1,11 @@
 #
-#			Test for compiler.
+#			Test : Brad Laird's "Cripple Creek - Simplified Version"
 #
 format := 1
 beats := 2
 tempo := 60
 
-(c)[234..]6&7++!.//|(d)1$32&^5.
+(G) 5 5. 0 x0 | (C)x1 2 (G)0 !. | x0 !. xx2 xx0 | (D)xxx0 xxx2 (G)xx0 !.
+
+x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+
