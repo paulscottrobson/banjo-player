@@ -16,4 +16,4 @@
 #
 #	Specifier:
 #
-#	(melody:drone:pinch:chords:twofinger:pegleg:forward:reverse:foggy)
+#	(melody:drone:pinch:chords:twofinger:pegleg:alternating:forward:reverse:foggy)
