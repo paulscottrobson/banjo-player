@@ -1,8 +1,16 @@
 #
-#			Test : Brad Laird's "Cripple Creek - Simplified Version"
+#			Ode to Joy Preamble (Part 1)
 #
 format := 1
-beats := 2
+beats := 4
 tempo := 60
 
-(C) x34^^ & 1 | [23456] {12345123} ********
+xx0 xx2 xx0 xx2 | xx0 xx2 xx0 xx2 | xx0 xx2 xx4 xx0 | xx0 xx2 xx4 xx0
+
+xx0 xx2 xx4 xx2 | xx0 xx2 xx4 xx2 | xx0 xx2 xx4 xx5 | xx0 xx2 xx4 xx5
+
+xx0 xx2 xx4 xx5 | xx4 xx2 xx0     | xx0 xx2 xx4 xx5 | xx4 xx2 xx0     | xx4 xx5 xx7
+
+xx4 xx5 xx7     | xx0 xx2 xx4 xx5 | xx0 xx2 xx4 xx0 | xx4 xx5 xx7     | xx4 xx5 xx7
+
+xx0 xx2 xx4 xx5 | xx7 xx5 xx4 xx2 | xx0

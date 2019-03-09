@@ -31,13 +31,11 @@ notes in a bar.
 
 {sssssssss}		Set the current strings to play, can be 1-5 or . (default is ........)
 
-xxxf/v^ 		Play fretting on the specified string, no x's is string 1,1 is 2 etc.
-				Advance 1 position 1/2 beat). Updates the [fffff] setting *completely*.
-				Can be modified using optional /v^
+* 				play the note on current string specified by fretting default, advance one
 
-&				advance two beats (1/2 beat)
+f 				play the note on current string 'f' - override fretting default, advance one
 
-* 				play the note specified by strings on the current fret.
+. 				advance one.
 
 <id>			Macro expansion.
 

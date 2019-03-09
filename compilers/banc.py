@@ -25,12 +25,10 @@ class BanjoException(Exception):
 class Bar(object):
 	def __init__(self,notesPerBar = 8):
 		self.bar = [ None ] * notesPerBar											# Bar notes
-		self.fretting = [ None ] * 5												# Current fretting
 		self.pos = 0																# Position in bar
 		self.lastpos = None 														# Last position played
 
 	def movePos(self,count = 1):													# change position
-		assert self.pos <= len(self.bar),"Too many notes in bar"
 		self.pos += count
 
 	def getPos(self):																# get position
@@ -42,7 +40,7 @@ class Bar(object):
 			self.setPlay(fretting[i],i+1,False)
 
 	def getCurrentFretting(self):													# get all fretting
-		return self.fretting
+		return Bar.fretting
 
 	def setDisplayChord(self,chord):												# set chord displayed
 		self.__default()
@@ -51,12 +49,14 @@ class Bar(object):
 
 	def setPlay(self,fretting,string,playIt = True):								# set individual fret for string, playing it if required
 		assert string >= 1 and string <= 5
-		assert (fretting >= 0 and fretting <= 16) or (fretting is None)
+		if fretting is not None:
+			assert (fretting >= 0 and fretting <= 16) 
+		assert self.pos >= 0 and self.pos < len(self.bar),"Too many notes"
 		if fretting is not None and playIt:
 			self.__default()
 			self.bar[self.pos]["play"][string-1] = fretting
 			self.lastPos = self.pos
-		self.fretting[string-1] = fretting
+		Bar.fretting[string-1] = fretting
 
 	def modify(self,modifier):														# apply modifier to last played note(s)
 		assert self.lastPos is not None,"Trying to modify note when none given"
@@ -84,12 +84,14 @@ class Bar(object):
 							r = r + note["modifier"] * note["modcount"]
 		return r
 
+Bar.fretting = [ None ] * 5															# Current fretting
+
 # ***************************************************************************************************
 #						Translate Level 1 format, which is very simple
 # ***************************************************************************************************
 
 class Level1Compiler(object):
-	def __init__(self,equates,melodyOnly):
+	def __init__(self,equates):
 		self.equates = equates
 		self.frettingCode = equates["fretting"]
 		self.beats = int(equates["beats"])
@@ -105,27 +107,18 @@ class Level1Compiler(object):
 
 	def process(self,df):
 		#
-		m = re.match("^([x]*)(["+self.frettingCode+"]+)([\\	/v\\^]*)(.*)",df)		# check individual fret
-		if m is not None:
-			cString = len(m.group(1))+1												# first string one more than x count
-			for c in m.group(2):													# copy fretting in.
-				self.bar.setPlay(self.frettingCode.find(c),cString)
-				cString += 1
-			for c in m.group(3).replace("v","+").replace("^","-"):					# add hammer on/pull offs/slides
-				self.bar.modify(c)			
+		if df[0] == '.':															# advance one don't play.
 			self.bar.movePos(1)
-			return m.group(4)
-		#
-		if df[0] == "&" or df[0] == ".":											# position adjustment
-			self.bar.movePos(2 if df[0] == "&" else 1)
 			return df[1:]
 		#
-		if df[0] == "*":															# sequence note
+		if df[0] == "*" or self.frettingCode.find(df[0]) >= 0:						# sequence note or override
 			pos = self.bar.getPos()
-			print(pos)
 			if self.currentStrings[pos] is not None:
 				cString = self.currentStrings[pos]
-				self.bar.setPlay(self.bar.getCurrentFretting()[cString-1],cString)
+				fretting = self.bar.getCurrentFretting()[cString-1]
+				if df[0] != '*':
+					fretting = self.frettingCode.find(df[0])
+				self.bar.setPlay(fretting,cString)
 			self.bar.movePos(1)
 			return df[1:]
 		#
@@ -158,7 +151,7 @@ class BanjoCompiler(object):
 	def __init__(self):
 		pass
 
-	def compile(self,sourceFile,targetFile,melodyOnly):
+	def compile(self,sourceFile,targetFile):
 		sourceFile = sourceFile.replace("/",os.sep)									# Handle slashes.
 		targetFile = targetFile.replace("/",os.sep)
 		#print("Compiling\n\t{0}\n\t{1}".format(sourceFile,targetFile))
@@ -183,7 +176,7 @@ class BanjoCompiler(object):
 		src = [x for x in src if x.find(":=") < 0]									# remove equates.
 
 		if equates["format"] == "1":												# workout the compiler/translator
-			trans = Level1Compiler(equates,melodyOnly)
+			trans = Level1Compiler(equates)
 		else:
 			raise BanjoException("Bad source format "+equates["format"])
 		#print("\tUsing format {0}.".format(equates["format"]))
@@ -208,7 +201,7 @@ class BanjoCompiler(object):
 				try:
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
-					print('"'+bar+'"',cvt)
+					#print('"'+bar+'"',cvt)
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
 					if len(e.args) == 0:
@@ -230,6 +223,6 @@ class BanjoCompiler(object):
 		return "".join(s)
 
 if __name__ == "__main__":
-	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/media/music/__test.plux",False)
+	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/media/music/__test.plux")
 	if err is not None:
 		print(err)

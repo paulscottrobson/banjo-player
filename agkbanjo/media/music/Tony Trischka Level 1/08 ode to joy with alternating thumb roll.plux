@@ -1,0 +1,17 @@
+.format:=1
+.beats:=4
+.fretting:=0123456789tewhufs
+.notes:=8
+.name:=08 ode to joy with alternating thumb roll
+.tempo:=60
+.ar1:={32313231}
+.ar2:={32513251}
+|.......
+|3e.2a.3e.1a.3f.2a.3h.1a
+|3h.2a.3f.1a.3e.2a.3c.1a
+|3a.2a.3a.1a.3c.2a.3e.1a
+|3e.2a.5a.1a.3c.2a.5a.1a
+|3e.2a.3e.1a.3f.2a.3h.1a
+|3h.2a.3f.1a.3e.2a.3c.1a
+|3a.2a.3a.1a.3c.2a.3e.1a
+|3c.2a.5a.1a.3a.2a.5a.1a
