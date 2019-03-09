@@ -23,55 +23,64 @@ class BanjoException(Exception):
 # ***************************************************************************************************
 
 class Bar(object):
-	def __init__(self,notesPerBar):
-		self.bar = [ None ] * notesPerBar
-		self.pos = 0
-		self.lastpos = None
+	def __init__(self,notesPerBar = 8):
+		self.bar = [ None ] * notesPerBar											# Bar notes
+		self.fretting = [ None ] * 5												# Current fretting
+		self.pos = 0																# Position in bar
+		self.lastpos = None 														# Last position played
 
-	def advance(self):
+	def movePos(self,count = 1):													# change position
 		assert self.pos <= len(self.bar),"Too many notes in bar"
-		self.pos += 1
+		self.pos += count
 
-	def rewind(self):
-		assert self.pos > 0,"Can't rewind at the start"
-		self.pos -= 1
-
-	def getPos(self):
+	def getPos(self):																# get position
 		return self.pos
 
-	def setChord(self,chord):
-		self.default()
+	def setCurrentFretting(self,fretting):											# update all fretting
+		assert len(fretting) == 5
+		for i in range(0,5):
+			self.setPlay(fretting[i],i+1,False)
+
+	def getCurrentFretting(self):													# get all fretting
+		return self.fretting
+
+	def setDisplayChord(self,chord):												# set chord displayed
+		self.__default()
+		chord = chord.strip()
 		self.bar[self.pos]["chord"] = chord[0].upper()+chord[1:].lower() if chord != "" else ""
 
-	def setPlay(self,fretting,string):
-		self.default()
-		self.bar[self.pos]["play"][string-1] = fretting
-		self.lastPos = self.pos
-		#print(fretting,string)
+	def setPlay(self,fretting,string,playIt = True):								# set individual fret for string, playing it if required
+		assert string >= 1 and string <= 5
+		assert (fretting >= 0 and fretting <= 16) or (fretting is None)
+		if fretting is not None and playIt:
+			self.__default()
+			self.bar[self.pos]["play"][string-1] = fretting
+			self.lastPos = self.pos
+		self.fretting[string-1] = fretting
 
-	def modify(self,modifier):
+	def modify(self,modifier):														# apply modifier to last played note(s)
 		assert self.lastPos is not None,"Trying to modify note when none given"
 		assert "/+-".find(modifier) >= 0,"Unknown modifier"
 		self.bar[self.lastPos]["modifier"] = modifier
 		self.bar[self.lastPos]["modcount"] += 1
 
-	def default(self):
-		if self.bar[self.pos] is None:
+	def __default(self):
+		if self.bar[self.pos] is None:												# set to default empty
 			self.bar[self.pos] = { "play":[None]*5,"chord":None,"modifier":None,"modcount":0 }
 
 	def render(self):
-		return ".".join([self.renderNote(x) for x in self.bar])
+		return ".".join([self.__renderNote(x) for x in self.bar])					# render and join notes
 
-	def renderNote(self,note):
-		r = ""
+	def __renderNote(self,note):													# render a note
+		r = ""	
 		if note is not None:
-			if note["chord"] is not None:
+			if note["chord"] is not None:											# chord if present
 				r = r + "("+note["chord"]+")"
-			if note["play"] is not None:
+			if note["play"] is not None:											# add all played notes
 				for s in range(0,5):
 					if note["play"][s] is not None:
 						r = r + chr(s+49)+chr(note["play"][s]+65)
-						if note["modifier"] is not None:
+						if note["modifier"] is not None:							# modifying them.
 							r = r + note["modifier"] * note["modcount"]
 		return r
 
@@ -85,8 +94,7 @@ class Level1Compiler(object):
 		self.frettingCode = equates["fretting"]
 		self.beats = int(equates["beats"])
 		self.noteCount = 6 if self.beats == 3 else 8
-		self.fretting = [ 0,0,0,None,None ]
-		self.melodyOnly = melodyOnly
+		self.currentStrings = [ None ] * self.noteCount
 
 	def translate(self,barDef):
 		self.bar = Bar(self.noteCount)
@@ -96,62 +104,51 @@ class Level1Compiler(object):
 		return self.bar.render()
 
 	def process(self,df):
-		if df[0] == "&":															# one note rest
-			self.bar.advance()
-			self.bar.advance()
-			return df[1:]
 		#
-		if df[0] == "-":															# one note backwards
-			self.bar.rewind()
-			return df[1:]
-		#
-		if df[0] == '.':
-			self.bar.rewind()
-			if not self.melodyOnly:
-				self.bar.setPlay(0,5)
-			self.bar.advance()
-			return df[1:]
-		#
-		if df[0] == '!':
-			if not self.melodyOnly:
-				for i in range(1,3+1):
-					if self.fretting[i-1] is not None:
-						self.bar.setPlay(self.fretting[i-1],i)
-			self.bar.advance()
-			self.bar.advance()
-			return df[1:]
-		#
-		m = re.match("^(x*)(["+self.frettingCode+"]+)([\\/v\\^]*)(.*)$",df)
+		m = re.match("^([x]*)(["+self.frettingCode+"]+)([\\	/v\\^]*)(.*)",df)		# check individual fret
 		if m is not None:
-			self.fretting = [ 0,0,0,None,None ]										# fretting to set
-			cString = len(m.group(1))+1												# first string.
+			cString = len(m.group(1))+1												# first string one more than x count
 			for c in m.group(2):													# copy fretting in.
-				assert cString <= 5,"Too many notes"
-				self.fretting[cString-1] = self.frettingCode.find(c)
-				self.bar.setPlay(self.fretting[cString-1],cString)
-				cString += 1			
-			for c in m.group(3).replace("v","+").replace("^","-"):					# apply translated modifiers.
-				self.bar.modify(c)
-			self.bar.advance()
-			self.bar.advance()
+				self.bar.setPlay(self.frettingCode.find(c),cString)
+				cString += 1
+			for c in m.group(3).replace("v","+").replace("^","-"):					# add hammer on/pull offs/slides
+				self.bar.modify(c)			
+			self.bar.movePos(1)
 			return m.group(4)
 		#
-		m = re.match("^\[(["+self.frettingCode+"\\.]+)\](.*)$",df)					# check for [fretting]
+		if df[0] == "&" or df[0] == ".":											# position adjustment
+			self.bar.movePos(2 if df[0] == "&" else 1)
+			return df[1:]
+		#
+		if df[0] == "*":															# sequence note
+			pos = self.bar.getPos()
+			print(pos)
+			if self.currentStrings[pos] is not None:
+				cString = self.currentStrings[pos]
+				self.bar.setPlay(self.bar.getCurrentFretting()[cString-1],cString)
+			self.bar.movePos(1)
+			return df[1:]
+		#
+		m = re.match("^\[(["+self.frettingCode+"\\.]+)\](.*)$",df)					# [fffff] set fretting		
 		if m is not None:
-			assert len(m.group(1)) == 5,"Should be 5 frets in fretting" 
-			self.fretting = [ None ] * 5
-			for i in range(0,5):
-				if m.group(1)[i] != '.':
-					self.fretting[i] = self.frettingCode.find(m.group(1)[i])
+			assert len(m.group(1)) == 5,"Has to be 5 fret positions in a fret setting"
+			frets = [self.frettingCode.find(x) for x in m.group(1)]					# decode frets
+			frets = [x if x >= 0 else None for x in frets]							# ., which will be -1 => None
+			self.bar.setCurrentFretting(frets)										# update fretting
 			return m.group(2)
 		#
-		m = re.match("^\((.*?)\)(.*)$",df)											# check for (chord)
+		m = re.match("^\{([1-5\\.]+)\}(.*)$",df)									# {ssssssss} set strings
 		if m is not None:
-			self.bar.setChord(m.group(1))
+			assert len(m.group(1)) == self.noteCount,"Wrong number of notes in string set"
+			self.currentStrings = [int(x) if x != "." else None for x in m.group(1)]
 			return m.group(2)
 		#
-		assert False,"Cannot process '"+df+"'"										# give up.
-
+		m = re.match("^\((.*?)\)\s*(.*)$",df)										# check for chord
+		if m is not None:
+			self.bar.setDisplayChord(m.group(1))
+			return m.group(2)	
+		#
+		assert False,"Cannot process \""+df+"\""									# give up.
 
 # ***************************************************************************************************
 #									Compiler class
@@ -177,6 +174,7 @@ class BanjoCompiler(object):
 		equates["fretting"] = "0123456789tewhufs"									# standard fretting
 		equates["notes"] = "8"														# standard notes.
 		equates["name"] = sourceFile.split(os.sep)[-1][:-6].replace("_"," ")		# default name
+
 		for equate in [x for x in src if x.find(":=") >= 0]:						# search for them
 			parts = [x.strip() for x in equate.split(":=")]							# split around :=
 			if parts[0] == "" or len(parts) != 2:
@@ -201,6 +199,7 @@ class BanjoCompiler(object):
 		err = None
 		for k in equates.keys():													# output the defined equates
 			hOut.write(".{0}:={1}\n".format(k,equates[k]))
+
 		for i in range(0,len(src)):													# work through the source.
 			line = src[i]
 			while line.find("<") >= 0:
@@ -209,9 +208,11 @@ class BanjoCompiler(object):
 				try:
 					cvt = trans.translate(bar).lower()								# translate it
 					cvt = cvt if cvt != "" else "/"									# non empty if empty
-					print('"'+bar+'"',cvt,trans.fretting)
+					print('"'+bar+'"',cvt)
 					hOut.write("|"+cvt+"\n")										# write out
 				except AssertionError as e:											# if translator fails.
+					if len(e.args) == 0:
+						raise e
 					err = "Error '{0}' at {1}".format(e.args[0],i+1)
 					return err
 				barCount += 1

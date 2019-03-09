@@ -29,19 +29,15 @@ notes in a bar.
 [fffff]			Set the current fretting. Can be '.' for don't play this string.
 				(default value is 000..)
 
-xxxf 			Play fretting on the specified string, no x's is string 1,1 is 2 etc.
-				Advance to 2 positions (1 beat). Updates the [fffff] setting *completely*.
+{sssssssss}		Set the current strings to play, can be 1-5 or . (default is ........)
 
-/v^				modifier to last defined note. Also adjusts the current fretting,
-				overriding the [fffff] setting. v maps to '+' (hammer on) ^ to '-' (pull off)
+xxxf/v^ 		Play fretting on the specified string, no x's is string 1,1 is 2 etc.
+				Advance 1 position 1/2 beat). Updates the [fffff] setting *completely*.
+				Can be modified using optional /v^
 
-- 				back one position (1/2 beat)
+&				advance two beats (1/2 beat)
 
-&				advance two positions (1 beat)
-
-!				Play current frets as a brush chord involving strings 1-3 at most, advance 2 positions.
-
-.				Add a 5th string pull to the previous note (e.g. back 1), does *not* change position.
+* 				play the note specified by strings on the current fret.
 
 <id>			Macro expansion.
 
