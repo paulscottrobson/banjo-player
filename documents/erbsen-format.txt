@@ -1,19 +1,26 @@
-#
-#	Erbsen format.
-#
-#	Takes the basic melody 2 beats per bar
-#	Options are :-
-#		(1) Add drone notes to 'double' notes.
-#		(2) Add a pinch after each single melody note.
-#		(3) Add the chords in.
-#		(4) Play with 
-#				(a)	two finger roll x151 on any note which is a single.
-#				(b) pegleg roll x.51
-#				(c) alternating thumb roll x251 
-#				(d) forward roll x15x15x1 on any single note
-#				(e) reverse roll x21512x1
-#				(f) foggy roll x1x15x15
-#
-#	Specifier:
-#
-#	(melody:drone:pinch:chords:twofinger:pegleg:alternating:forward:reverse:foggy)
+Erbsen Format
+=============
+
+xxxn - & 		format. 2 beats to a bar. (C)hord insertions. 
+
+Options:
+
+(d)rone : 		add drone notes on string 1 to any half-beat
+(p)inch : 		add a pinch after any single beat
+(c)hord : 		replace any chords with the actual notes.
+(a)lternate : 	play the alternate thumb roll (x251)
+(f)orward : 	play the forward roll x15x15x1 (with the forward fudge)
+(p)egleg : 		play x_51
+(r)everse : 	play x21512x1
+(b)reakdown : 	play x1x15x15
+(m)elody : 		insert the melody.
+
+(rolls only on single notes)
+
+done in bar units.
+
+@<name> = <letters> , <x>.erbsen is generated as <x>_<name>.plux
+multiples specify various types
+
+default : beats (2), name, notes (8)
+
