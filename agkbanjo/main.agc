@@ -31,4 +31,3 @@ SetErrorMode(2)
 
 // TODO: 	
 //		TAB Display / scrolling tab ?
-// 		Clawhammer Arrows option ?

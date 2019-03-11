@@ -1,0 +1,19 @@
+#
+#	Erbsen format.
+#
+#	Takes the basic melody 2 beats per bar
+#	Options are :-
+#		(1) Add drone notes to 'double' notes.
+#		(2) Add a pinch after each single melody note.
+#		(3) Add the chords in.
+#		(4) Play with 
+#				(a)	two finger roll x151 on any note which is a single.
+#				(b) pegleg roll x.51
+#				(c) alternating thumb roll x251 
+#				(d) forward roll x15x15x1 on any single note
+#				(e) reverse roll x21512x1
+#				(f) foggy roll x1x15x15
+#
+#	Specifier:
+#
+#	(melody:drone:pinch:chords:twofinger:pegleg:alternating:forward:reverse:foggy)
