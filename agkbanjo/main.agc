@@ -31,5 +31,4 @@ SetErrorMode(2)
 
 // TODO: 	
 //		TAB Display / scrolling tab ?
-//  	Bounce twice the rate
-// 		Make buttons dip
+// 		Clawhammer Arrows option ?

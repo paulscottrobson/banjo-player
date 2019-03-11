@@ -232,8 +232,15 @@ function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo
 			id = diBar.baseID + b * 20 + s
 			fretting = bar.notes[b].fretting[s]
 			if fretting <> BAR_DONTPLAY
-				SetTextPosition(id,x1+GetSpriteWidth(id)/2.0-GetTextTotalWidth(id)/2.0,FretRenderer_StringY(s)-GetTextTotalHeight(id)/2)
-				SetSpritePositionByOffset(id,x1,FretRenderer_StringY(s))
+				ystep = 0
+				if x1 >= frg.ballX-GetSpriteWidth(id) and x1 <= frg.ballX
+					offset = abs(x1-frg.ballX) * 100 / GetSpriteWidth(id)
+					if offset > 50 then offset = 100-offset
+					ystep = frg.stringAreaHeight / 20
+					if offset < 10 then ystep = ystep * offset / 10
+				endif
+				SetTextPosition(id,x1+GetSpriteWidth(id)/2.0-GetTextTotalWidth(id)/2.0,FretRenderer_StringY(s)-GetTextTotalHeight(id)/2+yStep)
+				SetSpritePositionByOffset(id,x1,FretRenderer_StringY(s)+ystep)
 				SetTextColorAlpha(id,alpha)
 				SetSpriteColorAlpha(id,alpha)
 			endif

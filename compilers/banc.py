@@ -93,10 +93,11 @@ Bar.fretting = [ None ] * 5															# Current fretting
 class Level1Compiler(object):
 	def __init__(self,equates):
 		self.equates = equates
-		self.frettingCode = equates["fretting"]
-		self.beats = int(equates["beats"])
-		self.noteCount = 6 if self.beats == 3 else 8
-		self.currentStrings = [ None ] * self.noteCount
+		self.frettingCode = equates["fretting"]										# letter -> fret
+		self.beats = int(equates["beats"])											# beats
+		self.noteCount = int(equates["notes"])										# notes
+		self.currentStrings = [ 0 ] * self.noteCount								# current frets
+		self.frailStrings = int(equates["frailstrings"])							# no of strings to frail
 
 	def translate(self,barDef):
 		self.bar = Bar(self.noteCount)
@@ -147,7 +148,7 @@ class Level1Compiler(object):
 #									Compiler class
 # ***************************************************************************************************
 
-class BanjoCompiler(object):
+class BanjoCompiler(object,equates = {}):
 	def __init__(self):
 		pass
 
@@ -162,10 +163,12 @@ class BanjoCompiler(object):
 		src = [x if x.find("#") < 0 else x[:x.find("#")].strip() for x in src]		# remove comments
 		src = [x.lower() for x in src]												# make everything LC
 
-		equates = { "format":"0" }													# work out equates.
+		equates["format"] = "1" 													# standard format
 		equates["beats"] = "4" 														# standard beats/bar
 		equates["fretting"] = "0123456789tewhufs"									# standard fretting
 		equates["notes"] = "8"														# standard notes.
+		equates["frailstrings"] = "3"												# strings to frail.
+
 		equates["name"] = sourceFile.split(os.sep)[-1][:-6].replace("_"," ")		# default name
 
 		for equate in [x for x in src if x.find(":=") >= 0]:						# search for them

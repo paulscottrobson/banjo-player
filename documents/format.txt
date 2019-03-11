@@ -29,13 +29,24 @@ notes in a bar.
 [fffff]			Set the current fretting. Can be '.' for don't play this string.
 				(default value is 000..)
 
-{sssssssss}		Set the current strings to play, can be 1-5 or . (default is ........)
+xxxffff/^v 		Play one or more notes, also overrides the current fretting. Advance
+				by two beats
 
-* 				play the note on current string specified by fretting default, advance one
+&				Advance by two beats
 
-f 				play the note on current string 'f' - override fretting default, advance one
+-				Go back one beat.
 
-. 				advance one.
+! 				Play the current fretting as a frail, e.g. the chord followed by string 5/fret 0
+				Advance by two beats
 
-<id>			Macro expansion.
+.				Added a pluck to the previous note (e.g. add 5/0 to previous note). Does not move.
 
+
+Options
+=======
+
+melodyonly 		When this is non zero (string value), do not add the notes on ! and .
+				while still advancing the pointers.
+
+noeffects 		When this is non zero dump the modifiers (/^v) and modify the note immediately,
+				before creating it. This effectively removes those effects.
