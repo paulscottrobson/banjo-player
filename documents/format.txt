@@ -19,23 +19,19 @@ Clawhammer Format (#1)
 Comments prefixed by #
 
 Fretting values are 0-9 t:10 e:11 w:12 h:13 u:14 f:15 s:16
+Always 8 notes in a bar.
 
-Positions can be quarter notes (2/4 time) or half notes (3/4 4/4 time) and there are 6 or 8
-notes in a bar.
+<xxx><frets><^v/>			Sets the current fretting. Forward two notes
 
-(<name>)		Set the display chord to <name>
-				(default value is empty string)
+-  							Back one note.
 
-[fffff]			Set the current fretting. Can be '.' for don't play this string.
-				(default value is 000..)
+&							Rest, forward 2 notes
 
-{sssssssss}		Set the current strings to play, can be 1-5 or . (default is ........)
+! 							Play as frailed notes, forward 2 notes
 
-* 				play the note on current string specified by fretting default, advance one
+(xxx)						Set displayed chord, no movement.
 
-f 				play the note on current string 'f' - override fretting default, advance one
+.							Pluck previous note on 5th string.
 
-. 				advance one.
-
-<id>			Macro expansion.
+<id>						Macro expansion.
 

@@ -1,0 +1,13 @@
+format := 1 
+beats := 4
+tempo := 60
+brush := 2
+
+& 
+
+aPart := 5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+
+bPart := x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+
+<aPart> | <aPart> | <bPart> | <bPart>
+

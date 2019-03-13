@@ -1,7 +1,9 @@
 //
 // ../agkbanjo/media/music
 //
-Bluegrass for Ignoramus
-Bluegrass For Ignoramus (folder)
-Tony Trischka Level 1
-Tony Trischka Level 1 (folder)
+ClawHammer Banjo Primer
+Clawhammer Banjo Primer (folder)
+ClawHammer for Ignoramus
+Clawhammer For Ignoramus (folder)
+Test
+Test (folder)

@@ -1,0 +1,19 @@
+.format:=1
+.beats:=4
+.fretting:=0123456789tewhufs
+.notes:=8
+.brush:=3
+.name:=24 Lynchburg Town
+.tempo:=60
+.tuning:=gcgcd
+.chord_c:=200..
+.chord_g:=020..
+|.......
+|1a++..(c)1c2a3a.5a.1c..1a.
+|2a..1a2a3a.5a.1a..1c.
+|1d..1d2a3a.5a.1d..1c.
+|1a..1a2a3a.5a.1a..1a2a3a.5a
+|1d..1d2a3a.5a.1h..1h2a3a.5a
+|1f..1f2a3a.5a.1c..1c2a3a.5a
+|1f..1c..1a..3e.
+|(c)1a..1a2a3a.5a.1a..1a2a3a.5a

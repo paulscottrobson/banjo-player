@@ -10,7 +10,7 @@
 # ***************************************************************************************************
 # ***************************************************************************************************
 
-import os,sys,banc,erbsen
+import os,sys,banc
 
 class MusicBuilder(object):
 
@@ -23,9 +23,6 @@ class MusicBuilder(object):
 			for f in [x for x in files if x[-6:] == ".banjo"]:
 				print("Compiling  : \"{0}\"".format(f.split(os.sep)[-1]))
 				self.buildFile(root+os.sep+f)
-			for f in [x for x in files if x[-7:] == ".erbsen"]:
-				print("Processing : \"{0}\"".format(f.split(os.sep)[-1]))
-				erbsen.ErbsenProcessor(root+os.sep+f,root)
 		print()
 		print("Recent     : \"{0}\" to \"__test.plux\"".format(self.latestFile.split(os.sep)[-1]))
 		result = self.compiler.compile(self.latestFile,self.tree+os.sep+"__test.plux")

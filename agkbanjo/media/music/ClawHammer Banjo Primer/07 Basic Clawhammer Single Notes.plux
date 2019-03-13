@@ -1,0 +1,13 @@
+.format:=1
+.beats:=4
+.fretting:=0123456789tewhufs
+.notes:=8
+.brush:=3
+.name:=07 Basic Clawhammer Single Notes
+.tempo:=60
+.bar:=0 0 . 0 0 .
+|.......
+|1a..1a.5a.1a..1a.5a
+|1a..1a.5a.1a..1a.5a
+|1a..1a.5a.1a..1a.5a
+|1a..1a.5a.1a..1a.5a

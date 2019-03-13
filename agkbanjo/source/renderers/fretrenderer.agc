@@ -226,7 +226,7 @@ function FretRenderer_MoveBarGraphics(bar ref as Bar,diBar ref as BarDisplayInfo
 		if mod(b,2) = 0 then SetSpritePositionByOffset(diBar.baseID+b*20,x1,frg.fretY)
 		if bar.notes[b].chordLabel <> ""
 			id = diBar.baseID+b*20
-			SetTextPosition(id,x1+frg.barWidth/2/bar.notesInBar/2-GetTextTotalWidth(id)/2,frg.fretY-GetTextTotalHeight(id)*1.1)
+			SetTextPosition(id,x1+frg.barWidth/bar.notesInBar/2-GetTextTotalWidth(id)/2,frg.fretY-GetTextTotalHeight(id)*1.1)
 		endif
 		for s = 1 to 5
 			id = diBar.baseID + b * 20 + s

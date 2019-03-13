@@ -1,8 +1,0 @@
-#
-#		Down the Road (page 16). Slightly modified so last 'road'
-#		is 2 quavers.
-#		
-@melody := melody:drone:pinch:forward
-
-(G)xx0 xx0 | xx0 xxx2 | xx0 xx0- xxx2- | xxx0- xxx2- xx0 
-(C)x0 x3 | x0- xx0- xxx2 | xx0 xx0- xxx2- | xxx0- xxx2- xx0- xx0-

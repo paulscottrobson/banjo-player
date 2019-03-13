@@ -1,0 +1,9 @@
+format := 1 
+beats := 4
+tempo := 60
+
+bar := 0 0 . 0 0 .
+
+& 
+
+<bar> | <bar> | <bar> |<bar> 

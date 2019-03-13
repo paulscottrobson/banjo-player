@@ -97,6 +97,7 @@ class Level1Compiler(object):
 		self.beats = int(equates["beats"])
 		self.noteCount = int(equates["notes"])
 		self.currentStrings = [ None ] * self.noteCount
+		self.brushCount = int(equates["brush"])
 
 	def translate(self,barDef):
 		self.bar = Bar(self.noteCount)
@@ -106,41 +107,52 @@ class Level1Compiler(object):
 		return self.bar.render()
 
 	def process(self,df):
-		#
-		if df[0] == '.':															# advance one don't play.
-			self.bar.movePos(1)
-			return df[1:]
-		#
-		if df[0] == "*" or self.frettingCode.find(df[0]) >= 0:						# sequence note or override
-			pos = self.bar.getPos()
-			if self.currentStrings[pos] is not None:
-				cString = self.currentStrings[pos]
-				fretting = self.bar.getCurrentFretting()[cString-1]
-				if df[0] != '*':
-					fretting = self.frettingCode.find(df[0])
-				self.bar.setPlay(fretting,cString)
-			self.bar.movePos(1)
-			return df[1:]
-		#
-		m = re.match("^\[(["+self.frettingCode+"\\.]+)\](.*)$",df)					# [fffff] set fretting		
+		m = re.match("^(x*)(["+self.frettingCode+"]+)([\\^\\/v]*)(.*)$",df)			# check for note.
 		if m is not None:
-			assert len(m.group(1)) == 5,"Has to be 5 fret positions in a fret setting"
-			frets = [self.frettingCode.find(x) for x in m.group(1)]					# decode frets
-			frets = [x if x >= 0 else None for x in frets]							# ., which will be -1 => None
-			self.bar.setCurrentFretting(frets)										# update fretting
+			cString = len(m.group(1))+1												# starting string.
+			self.bar.setCurrentFretting([None]*5)									# clear all fretting.
+			for c in m.group(2):													# fretting.
+				self.bar.setPlay(self.frettingCode.find(c),cString)
+				cString += 1
+			for c in m.group(3).replace("^","+").replace("v","-"):					# modifiers
+				self.bar.modify(c)
+			self.bar.movePos(2)														# forward 2
+			return m.group(4)
+		#
+		m = re.match("^\((.*?)\)(.*)$",df)											# set chord ?
+		if m is not None:
+			self.bar.setDisplayChord(m.group(1))									# display chord.
+			key = "chord_"+m.group(1)												# chord definition key
+			assert key in self.equates,"Missing chord "+m.group(1)					# check it
+			chord = [x for x in self.equates[key]]									# split up.
+			chord = [int(x) if x != "." else None for x in chord]					# convert it
+			self.bar.setCurrentFretting(chord)										# Set chord
 			return m.group(2)
 		#
-		m = re.match("^\{([1-5\\.]+)\}(.*)$",df)									# {ssssssss} set strings
-		if m is not None:
-			assert len(m.group(1)) == self.noteCount,"Wrong number of notes in string set"
-			self.currentStrings = [int(x) if x != "." else None for x in m.group(1)]
-			return m.group(2)
+		if df[0] == "!":															# brush current fretting
+			fretting = self.bar.getCurrentFretting()
+			for i in range(0,self.brushCount):
+				if fretting[i] is not None:
+					self.bar.setPlay(fretting[i],i+1)
+				else:
+					self.bar.setPlay(0,i+1)
+			self.bar.movePos(2)														# forward 2
+			return df[1:]
 		#
-		m = re.match("^\((.*?)\)\s*(.*)$",df)										# check for chord
-		if m is not None:
-			self.bar.setDisplayChord(m.group(1))
-			return m.group(2)	
+		if df[0] == ".":
+			self.bar.movePos(-1)													# backward 1
+			self.bar.setPlay(0,5)													# pluck g5
+			self.bar.movePos(1)														# forward 1
+			return df[1:]
 		#
+		if df[0] == "&":
+			self.bar.movePos(2)														# forward 2
+			return df[1:]
+		#
+		if df[0] == "-":
+			self.bar.movePos(-1)													# backward 1
+			return df[1:]
+
 		assert False,"Cannot process \""+df+"\""									# give up.
 
 
@@ -168,7 +180,7 @@ class BanjoCompiler(object):
 		equates["beats"] = "4" 														# standard beats/bar
 		equates["fretting"] = "0123456789tewhufs"									# standard fretting
 		equates["notes"] = "8"														# standard notes.
-
+		equates["brush"] = "3"														# strings to brush.
 		equates["name"] = sourceFile.split(os.sep)[-1][:-6].replace("_"," ")		# default name
 
 		for equate in [x for x in src if x.find(":=") >= 0]:						# search for them
@@ -226,6 +238,6 @@ class BanjoCompiler(object):
 		return "".join(s)
 
 if __name__ == "__main__":
-	err = BanjoCompiler().compile("./cripple.banjo","../agkbanjo/media/music/__test.plux")
+	err = BanjoCompiler().compile("./test.banjo","../agkbanjo/media/music/__test.plux")
 	if err is not None:
 		print(err)
