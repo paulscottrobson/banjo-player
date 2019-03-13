@@ -3,7 +3,7 @@
 #
 #		Name:		erbsen.py
 #		Purpose:	Generates variants for Wayne Erbsen's Clawhammer book
-#		Date:		7th March 2019
+#		Date:		13th March 2019
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # ***************************************************************************************************
@@ -11,120 +11,125 @@
 
 import os,sys,re
 
-class ErbsenNotePair:
-	def __init__(self,defn,firstHalf):
-		self.originalDefinition = defn 											# save definition and half
-		self.isFirstHalf = firstHalf
-		self.halfBeats = [[ None,None ]] * 4									# [fretting,string] for each 1/2 beat
-		self.chord = ""															# extract chord if given
-		if defn.find(":") >= 0:
-			defn = defn.split(":")
-			self.chord = defn[0]
-			defn = defn[1]
-		self.notes = [self.decodeNote(x) for x in defn.split("-")]				# one or two notes
-		assert len(self.notes) == 1 or len(self.notes) == 2
-		self.isDoubleNote = len(self.notes) == 2
-		print(self.originalDefinition,self.chord,self.notes)
-
-	def decodeNote(self,defn):
-																				# add current string if missing
-		defn = defn if defn.find(".") >= 0 else defn + "."+str(ErbsenNotePair.currentString)
-		defn = defn.split(".")													# split up
-		assert len(defn) == 2
-		defn = { "fretting":int(defn[0]),"string":int(defn[1])}					# create note
-		ErbsenNotePair.currentString = defn["string"]							# update current string
-		return defn
-
-	def action(self,type,source):
-		if type == "melody":													# melody, write notes
-			for i in range(0,len(self.notes)):
-				self.halfBeats[i*2] = [self.notes[i]["fretting"],self.notes[i]["string"]]
-		elif type == "drone":													# drone if quavers
-			if self.isDoubleNote:
-				self.halfBeats[1] = [0,1]
-				self.halfBeats[3] = [0,1]
-		elif type == "pinch":													# pinch if crotchet
-			if not self.isDoubleNote:
-				self.halfBeats[2] = [0,-1]
-		elif type == "twofinger":												# patterns two finger
-			self.renderPattern("*151",source)
-		elif type == "alternating":												
-			self.renderPattern("*251",source)
-		elif type == "pegleg":
-			self.renderPattern("*.51",source)
-		elif type == "forward":
-			self.renderPattern("*15*" if self.isFirstHalf else "15*1",source)
-		elif type == "reverse":
-			self.renderPattern("*215" if self.isFirstHalf else "12*1",source)
-		elif type == "foggy":
-			self.renderPattern("*1*1" if self.isFirstHalf else "5*15",source)
-		else:
-			assert False,type+"?"
-
-	def renderPattern(self,pattern,source):
-		if self.isDoubleNote:
-			self.action("melody",source)
-			#self.action("drone",source)
-		else:
+class Bar(object):
+	def __init__(self,defn):
+		self.definition = defn
+		self.notes = [ None ] * 4 																# notes in definition
+		self.output = []																		# what is actually output
+		for i in range(0,8):
+			self.output.append([None,None,None,None,None,None])
+		self.fretting = [ None ] * 8															# fret at this position on melody note
+		self.string = [ None ] * 8 																# string at this position on melody
+		self.decode(defn)																		# convert into notes
+	#
+	def decode(self,defn):
+		self.isAll234 = True 																	# is it all string 2-4
+		defn = [x for x in defn.split(" ") if x != ""]											# split up
+		pos = 0 																				# current position.
+		for d in defn:																			# for each note
+			m = re.match("^(x*)([0-9])(-?)$",d)													# decode it
+			assert m is not None,"Bad note "+d
+			self.notes[pos] = [int(m.group(2)),len(m.group(1))+1] 								# set up note played
+			for n in range(pos*2,8):															# update fretting
+				self.fretting[n] = self.notes[pos][0]
+				self.string[n] = self.notes[pos][1]
+			if self.notes[pos][1] < 2 or self.notes[pos][1] > 4:								# check notes
+				self.isAll234 = False
+			pos = pos + (2 if m.group(3) == "" else 1) 											# advance 1 or 2
+		self.is1Half = self.notes[1] is not None												# check for half beats
+		self.is2Half = self.notes[3] is not None
+		if self.fretting[4] > 0:
+			self.fretting[3] = self.fretting[4] 												# fix for rolls on 3.
+			self.string[3] = self.string[4]
+	#
+	def applyModifier(self,modifier,useDefault):
+		doIt = not useDefault
+		if modifier == "melody":																# melody.
 			for i in range(0,4):
-				if pattern[i] != '.':
-					if pattern[i] != '*':
-						self.halfBeats[i] = [0,int(pattern[i])]
-					else:
-						self.halfBeats[i] = source.getFretString((0 if self.isFirstHalf else 4)+i)
-				
-ErbsenNotePair.currentString = 1
+				if self.notes[i] is not None:
+					self.output[i*2][self.notes[i][1]] = self.notes[i][0]
+		elif modifier == "pinch":																# pinch
+			if doIt or not self.is1Half:
+				self.output[2][1] = 0
+				self.output[2][5] = 0
+			if doIt or not self.is2Half:
+				self.output[6][1] = 0
+				self.output[6][5] = 0
+		elif modifier == "drone":																# drone
+			if doIt or self.is1Half:
+				self.output[1][1] = 0
+				self.output[3][1] = 0
+			if doIt or self.is2Half:
+				self.output[5][1] = 0
+				self.output[7][1] = 0
+		elif modifier == "twofinger":															# two finger roll
+			self.generateRoll("x151x151",useDefault,useDefault)
+		elif modifier == "pegleg":																# pegleg roll
+			self.generateRoll("x_51x_51",useDefault,useDefault)
+		elif modifier == "forward":																# forward roll
+			self.generateRoll("x15x15x1",useDefault,useDefault)
+		elif modifier == "reverse":																# reverse roll
+			self.generateRoll("x21512x1",useDefault,useDefault)
+		elif modifier == "foggy":																# foggy mountain roll
+			self.generateRoll("x1x15x15",useDefault,useDefault)
+		else:
+			assert False,"Unknown modifier "+modifier
+		print(self.definition,self.notes,self.fretting,self.render())
+	#
+	def generateRoll(self,pattern,useDefault,requires234):
+		if useDefault and (self.is1Half or self.is2Half):										# default is only if 2 single beat notes
+			return
+		if requires234 and (not self.isAll234):													# must require 2/3/4
+			return
+		for i in range(0,8):																	# each note
+			self.output[i] = [ None,None,None,None,None,None ]									# erase
+			if pattern[i] != "_":																# put pattern in
+				if pattern[i] == "x":				
+					self.output[i][self.string[i]] = self.fretting[i]							# melody note
+				else:
+					self.output[i][int(pattern[i])] = 0											# roll note
+	#
+	def render(self):
+		return ".".join([self.renderNote(n) for n in range(0,8)])
+	#
+	def renderNote(self,note):
+		render = ""
+		for i in range(1,5+1):
+			if self.output[note][i] is not None:
+				render += str(i)+chr(self.output[note][i]+97)
+		return render
 
-class ErbsenGenerator:
-	def __init__(self,directory,sourceFile):
-		self.directory = directory
-		self.fileRoot = sourceFile[:-7]
-																				# Read file and preprocess
-		src = [x.replace("\t"," ").strip() for x in open(directory+os.sep+sourceFile).readlines()]
-		src = [x if x.find("#") < 0 else x[:x.find("#")].strip() for x in src]
-		src = [x.lower().strip() for x in src if x != ""]
-		self.equates = { "beats":"2","tempo":"60","format":"1","step":"4" }		# Sort out equates
-		for f in [x for x in src if x.find(":=") >= 0]:
-			parts = [x.strip() for x in f.split(":=") if x.strip() != ""]
-			assert len(parts) == 2
-			self.equates[parts[0]] = parts[1]
-		src = [x for x in src if x.find(":=") < 0]								# Remove equates
-		typeList = [x for x in src if x.startswith("(") and x.endswith(")")]	# Find the list of options
-		assert len(typeList) == 1
-		self.typeList = [x.strip() for x in typeList[0][1:-1].split(":") if x.strip() != ""]
-		src = [x for x in src if not(x.startswith("(") and x.endswith(")"))]	# remove options
-																				# convert into bars in a list
-		self.barSource = [x.strip() for x in "|".join(src).split("|") if x.strip() != ""]
+class ErbsenProcessor(object):
+	def __init__(self,srcFile,objDirectory):
+		src = [x.strip() for x in open(srcFile).readlines()]									# read file
+		src = [x if x.find("#") < 0 else x[:x.find("#")].strip() for x in src]					# remove comments
+		models = [x[1:].strip().replace(" ","").lower() for x in src if x.startswith("@")]		# extract variants
+		src = [x for x in src if x != "" and (not x.startswith("@"))]							# get just bar data
+		self.barSource = [x.strip() for x in "|".join(src).split("|") if x.strip() != ""]		# convert to bar list
+		self.barCount = len(self.barSource)
+		self.name = srcFile.split(os.sep)[-1][:-7].lower()										# name of tune from file
+		for m in models:																		# for each variant
+			parts = [x.strip() for x in m.split(":=") if x.strip() != ""]						# split into name,parts
+			assert len(parts) == 2 and parts[0] != "" and parts[1] != ""						# check it
+			objName = objDirectory+os.sep+self.name+"_("+parts[0]+").plux"						# target file name
+			self.generate(objName,parts[1].split(":"))											# create it.
+	#
+	def generate(self,targetFile,modifiers):
+		self.bars = [Bar(x) for x in self.barSource]											# create all bars
+		for m in modifiers:
+			overrideList = None
+			modifierType = m
+			print("**** "+modifierType+" ****")
+			for bar in range(0,self.barCount):
+				if overrideList is None:
+					self.bars[bar].applyModifier(m,True)
+				elif overrideList[bar+1]:
+					self.bars[bar].applyModifier(m,False)
 
-		self.typeList = ["reverse"]
+		print(targetFile,modifiers)
 
-		for i in range(0,len(self.typeList)):									# for each type set
-			descr = self.typeList[i]											# get the description
-			for bar in self.barSource:											# for each bar, split up
-				barParts = [x.strip() for x in bar.split(" ") if x.strip() != ""]
-				assert len(barParts) == 2
-				self.notePair1 = ErbsenNotePair(barParts[0],True)				# 4 beats each part
-				self.notePair2 = ErbsenNotePair(barParts[1],False)
-				for part in [x for x in descr.split(",") if x != ""]:			# apply the type set items.
-					self.modifier = part
-					self.notePair1.action(part,self)
-					self.notePair2.action(part,self)
-				print(self.notePair1.halfBeats)
-				print(self.notePair2.halfBeats)
 
-	def getFretString(self,offset):
-		if offset == 3 and self.modifier == "forward":							# on forward,3 use 2nd half note
-			if not self.notePair2.isDoubleNote:									# only if it's a single note
-				offset = 4
 
-		source = self.notePair1 if offset < 4 else self.notePair2 				# pick which one
-		assert not source.isDoubleNote
-		return [source.notes[0]["fretting"],source.notes[0]["string"]]			# return the note
-
-for root,dirs,files in os.walk(".."):
-	for f in [x for x in files if x.endswith(".erbsen")]:
-		if f.find("road") >= 0:
-			ErbsenGenerator(root,f)
-
+ErbsenProcessor("downtheroad.erbsen",".")
 
 

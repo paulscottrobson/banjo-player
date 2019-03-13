@@ -2,9 +2,7 @@
 #		Down the Road (page 16). Slightly modified so last 'road'
 #		is 2 quavers.
 #		
-@melody = m
-@cool_licks = mdp
-@warm_licks = a
+@melody := melody:drone:pinch:forward
 
 xx0 xx0 | xx0 xxx2 | xx0 xx0- xx2- | xxx0- xxx2- xx0 
 x0 x3 | x0- xx0- xxx2 | xx0 xx0- xxx2- | xxx0- xxx2- xx0- xx0-
