@@ -10,7 +10,7 @@
 # ***************************************************************************************************
 # ***************************************************************************************************
 
-import os,sys,banc
+import os,sys,banc,erbsen
 
 class MusicBuilder(object):
 
@@ -21,10 +21,13 @@ class MusicBuilder(object):
 		self.latestFile = None
 		for root,dirs,files in os.walk(self.tree):
 			for f in [x for x in files if x[-6:] == ".banjo"]:
-				print("Compiling : \"{0}\"".format(f.split(os.sep)[-1]))
+				print("Compiling  : \"{0}\"".format(f.split(os.sep)[-1]))
 				self.buildFile(root+os.sep+f)
+			for f in [x for x in files if x[-7:] == ".erbsen"]:
+				print("Processing : \"{0}\"".format(f.split(os.sep)[-1]))
+				erbsen.ErbsenProcessor(root+os.sep+f,root)
 		print()
-		print("Recent    : \"{0}\" to \"__test.plux\"".format(self.latestFile.split(os.sep)[-1]))
+		print("Recent     : \"{0}\" to \"__test.plux\"".format(self.latestFile.split(os.sep)[-1]))
 		result = self.compiler.compile(self.latestFile,self.tree+os.sep+"__test.plux")
 		if result is not None:
 			print(result)

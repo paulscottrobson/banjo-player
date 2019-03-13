@@ -1,0 +1,14 @@
+.format:=1
+.beats:=2
+.fretting:=0123456789
+.notes:=8
+.tempo:=60
+.name:=downtheroad_(melody)
+|3a.1a.5a.3a.1a.5a.3a.1a
+|3a.1a.5a.4c.1a.5a.4c.1a
+|3a..1a5a..3a.1a.4c.1a
+|4a.1a.4c.1a.3a..1a5a.
+|2a.1a.5a.2d.1a.5a.2d.1a
+|2a.1a.3a.1a.4c..1a5a.
+|3a..1a5a..3a.1a.4c.1a
+|4a.1a.4c.1a.3a.1a.3a.1a

@@ -45,7 +45,7 @@ function Program_SetupDisplay()
 	SetSpritePosition(prg.background,0,0)
 	SetSpriteSize(prg.background,SCWIDTH,SCHEIGHT)
 	SetSpriteDepth(prg.background,9999)
-	
+
 	prg.info = CreateText("Written by Paul Robson (paul@robsons.org.uk) v"+VERSION)
 	SetTextFont(prg.info,LoadFont("rocko.ttf"))
 	SetTextSize(prg.info,SCWIDTH/70)
@@ -57,7 +57,7 @@ endfunction
 // ***************************************************************************************************
 
 function Program_CreateDisplay()
-	
+
 	yc = (SCHEIGHT+DPHEIGHT)/2
 	prg.bpmLabel = CreateText("000")
 	sp = SCHEIGHT-DPHEIGHT
@@ -92,7 +92,7 @@ function Program_OpenTune(musicFile as string)
 endfunction
 
 // ***************************************************************************************************
-//									  Tidy up 
+//									  Tidy up
 // ***************************************************************************************************
 
 function Program_CloseTune()
@@ -120,28 +120,28 @@ function Program_MainLoop()
 		if debug <> "" then print("[DEBUG]"+debug)				// Output any debugging info
 		elapsed = GetMilliseconds() - lastTime					// Track time between frames.
 		lastTime = GetMilliseconds()
-		
+
 		if Button_GetState(prg.pauseButton) = 0
 																// Convert to a time in bars
 			elapsed# = elapsed / 1000.0 						// Actual elapsed time in seconds.
 			beatsPerSec# = prg.beatsPerMinute# / 60.0 			// Beats per second
 			beatsPerBar# = prg.tune.bars[trunc(prg.pos#)].beatsInBar // Beats per bar
 			barsPerSec# = beatsPerSec# / beatsPerBar#			// Bars per second
-			
+
 			lastpos# = prg.pos#									// Last position
 			prg.pos# = prg.pos# + barsPerSec# * elapsed# 		// New position
 			if GetRawKeyPressed(32) <> 0 then prg.pos# = 0		// Space resets
 			if GetRawKeyPressed(asc("Q")) <> 0 then exitPlay=1	// Q back to selector
-			
+
 			endPos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_END)
 			if prg.pos# >= endPos# 								// Off right hand end ?
 				prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_START)
 				lastPos# = prg.pos#
-				if Button_GetState(prg.speedupButton) <> 0 
+				if Button_GetState(prg.speedupButton) <> 0
 					Program_SetSpeed(prg.beatsPerMinute# + prg.tune.stepBPM)
 				endif
 			endif
-			
+
 			notes = prg.tune.bars[trunc(prg.pos#)].notesInBar 	// How many beats in bar
 			qb1 = trunc(lastpos# * notes)						// Work out quarterbeat position
 			qb2 = trunc(prg.pos# * notes)
@@ -163,7 +163,7 @@ function Program_MainLoop()
 			newSpeed = prg.tune.defaultBPM+(Rotator_Get(prg.speedRotator)-0.5)*2*(prg.tune.defaultBPM*0.95)
 			Program_SetSpeed(newSpeed)
 		endif
-		
+
 		if GetPointerPressed() and GetPointerY() < DPHEIGHT		// Switch renderer
 			//prg.rendererID = 1-prg.rendererID
 			//Manager_SwitchRenderer(prg.rendererID)
@@ -190,7 +190,7 @@ function Program_SelectFromMenu(menuDirectory as string,canReturn as integer)
 			selected = Program_SelectFromMenu(subdir$,1)		// Do sub menu
 		endif
 		if right(selected,5) = ".plux"
-			if FindString(selected,"/") = 0 
+			if FindString(selected,"/") = 0
 				selected = menuDirectory+selected
 			endif
 		endif
@@ -205,7 +205,7 @@ readTest$ = ReadLine(1)
 CloseFile(1)
 repeat
 	file$ = "__test.plux"
-	//if left(readTest$,1) = "1" then file$ = Program_SelectFromMenu("",0)
+	if left(readTest$,1) = "1" then file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()

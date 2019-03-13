@@ -29,6 +29,3 @@ clear 		Blank roll (default: all)
 All rolls erase the current pattern.
 
 
-outstanding:
-	chord
-	clear
