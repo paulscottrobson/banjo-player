@@ -1,0 +1,19 @@
+#
+#		Old Blue (page 25)
+#
+format := 1 
+beats := 4
+tempo := 60
+tuning := gcgcd
+chord_c := 200..
+chord_g := 020..
+chord_  := 000..
+
+variants := 1
+
+&
+
+2 !. 0 x0 | 2!. 5!. | 2 !. 0 x0 | 0!. x0 (C)!.
+2 !. 0 x0 | 2!. 5!. | 2 !. 0 x0 | 0!. x0 (C)!.
+
+& & 5 !. | 2!. 2 !. | 2 x0 0 !. | x0 (C)!. x0 !. | x0!. x0 !.
