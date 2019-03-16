@@ -1,0 +1,10 @@
+
+beats := 4
+tempo := 60
+step := 4
+
+. (31313131) [00000]
+
+xx4* xx4* xx5* xx7* | xx7* xx5* xx4* xx2* | xx0* xx0* xx2* xx4* | xx4* xxxx0 0 xx2* xxxx0 0 
+
+xx4* xx4* xx5* xx7* | xx7* xx5* xx4* xx2* | xx0* xx0* xx2* xx4* | xx2* xxxx0 0 xx0* xxxx0 0 

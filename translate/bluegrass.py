@@ -93,7 +93,8 @@ step := 4
 	h = open("__test.banjo","w")
 	h.write(src)
 	h.close()
-	BluegrassTune("__test.banjo")
+	BluegrassTune("__test.banjo").write(".")
+	
 
 
 

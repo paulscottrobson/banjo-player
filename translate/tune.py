@@ -28,6 +28,9 @@ class BaseTune(object):
 		src = [x if x.find("#") < 0 else x[:x.find("#")] for x in src]			# remove comments
 		src = [x.replace("\t"," ").strip().lower() for x in src]				# tidy up.
 		self.equates = { "beats":"4","tempo":"80","step":"4" }					# default values.
+		name = os.path.splitext(os.path.basename(sourceFile))[0]				# get name of tune.
+		name = " ".join([x[0].upper()+x[1:].lower() for x in name.split(" ") if x != ""])
+		self.equates["name"] = name
 		for equ in [x.replace(" ","") for x in src if x.find(":=") >= 0]:		# process equates
 			equp = equ.split(":=")												# split up and verify
 			if len(equp) != 2 or equp[0] == "":
@@ -42,7 +45,7 @@ class BaseTune(object):
 			barSource = [x.strip() for x in exp.split("|") if x.strip()!=""]	# split up into bars
 			for barSrc in barSource:											# for each bar
 				self.barList.append(self.createBar(barSrc))						# convert it
-				print("****"+barSrc+"****\n"+self.barList[-1].toString()+"\n\n")
+				#print("****"+barSrc+"****\n"+self.barList[-1].toString()+"\n\n")
 	#
 	#		Expand all the macros in a line.
 	#
@@ -78,6 +81,25 @@ class BaseTune(object):
 		while definition != "":													# while more to do
 			definition = self.decode(bar,definition).strip()					# take some definition off
 		return bar
+	#
+	#		Write out result(s)
+	#
+	def write(self,targetDirectory,override):
+		self.writeOne(targetDirectory,"",override)
+	#
+	#		Write a single output with a modified (possibly) filename.
+	#
+	def writeOne(self,targetDirectory,modifier,override):
+		modifier = modifier if modifier == "" else " ("+modifier.strip()+")"	# parenthesise.
+		fileName = self.equates["name"]+modifier+".plux"						# construct and process
+		fileName = targetDirectory+os.sep+fileName.lower().replace(" ","_")
+		fileName = fileName if override is None else override					# can override the filename
+		h = open(fileName,"w")													# open output file.
+		keys = [x for x in self.equates.keys()]									# output equates.
+		h.write("".join([".{0}:={1}\n".format(x,self.equates[x]) for x in keys]))
+		h.write("".join(["{0}\n".format(x.render()) for x in self.barList]))	# output bars
+		h.close()
+
 
 if __name__ == "__main__":
 	src = """
