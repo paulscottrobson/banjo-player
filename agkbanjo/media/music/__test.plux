@@ -1,9 +1,13 @@
 .beats:=4
 .tempo:=60
 .step:=4
-.name:=Alternating Thumb Roll 3
+.name:=Ode To Joy Preamble 2
 |.......
-|3a.2a.3a.1a.3a.2a.5a.1a
-|3a.2a.3a.1a.3a.2a.5a.1a
-|3a.2a.3a.1a.3a.2a.5a.1a
-|3a.2a.3a.1a.3a.2a.5a.1a
+|3a.2a.3a.2a.3a.2a.3a.2a
+|3a.2a.3a.2a.3a.2a.3a.2a
+|3a.2a.3c.2a.3a.2a.3c.2a
+|3a.2a.3c.2a.3a.2a.3c.2a
+|3a.2a.3c.2a.3e.2a.3c.2a
+|3a.2a.3c.2a.3e.2a.3c.2a
+|3e.2a.3f.2a.3h.2a.3f.2a
+|3e.2a.3f.2a.3h.2a.3f.2a
