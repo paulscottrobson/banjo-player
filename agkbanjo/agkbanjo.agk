@@ -60,7 +60,10 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=1;source%2Fui%2Fbutton.agc;0;0
+FILE_NAME_0=0;source%2Fmusic.agc;0;2
+FILE_NAME_1=0;source%2Fplayer.agc;1258;3
+FILE_NAME_2=1;source%2Fprogram.agc;9182;1
+FILE_NAME_3=0;source%2Fui%2Fbutton.agc;0;0
 
 [project]
 description=

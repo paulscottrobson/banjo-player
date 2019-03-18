@@ -1,28 +1,25 @@
-.beats:=4
+.beats:=2
 .tempo:=60
 .step:=4
-.name:=12 Cripple Creek Version 1
+.name:=5.3 Melody Staccato
 .tuning:=gdgbd
+.bar:=xxx0 xxxx0 xxx0 xxxx0
+.b1:=0 & !.
+.b2:=x0 & !.
+.b3:=xx0 & !.
+.b4:=xxx0 & !.
+.chord.c:=21020
 .c:=0 000 .
-.apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
-.bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
-.chord.c:=20000
+.apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
+.bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
 .chord.g:=02020
 .chord.:=00000
 |.......
-|1f..1f2a3a.5a.1a..2a.
-|2b..1c..1a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
-|1f..1f2a3a.5a.1a..2a.
-|2b..1c..1a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|2a..1a2a3a.5a.3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|2a..1a2a3a.5a.3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
+|2a.5a.2a.5a.3a.5a.3a.5a
+|4a.5a.4a.5a.3a..3a.5a
+|2a.5a.2a.5a.3a.5a.3a.5a
+|3c.5a.4e.5a.4a..4a.5a
+|2a.5a.2a.5a.3a.5a.3a.5a
+|2b.5a.2b.5a.2b..2b.5a
+|3c.5a.2b.5a.2a.5a.3c.5a
+|3a..3a.5a.3a...

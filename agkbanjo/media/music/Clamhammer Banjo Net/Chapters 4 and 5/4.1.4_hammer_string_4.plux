@@ -1,0 +1,15 @@
+.beats:=2
+.tempo:=60
+.step:=4
+.name:=4.1.4 Hammer String 4
+.tuning:=gdgbd
+.bar:=xxx0 & xxx0 .
+|.......
+|4a....4a.5a..
+|4a....4a.5a..
+|4a....4a.5a..
+|4a....4a.5a..
+|4a....4a.5a..
+|4a....4a.5a..
+|4a....4a.5a..
+|4a....4a.5a..

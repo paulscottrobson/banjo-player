@@ -3,6 +3,12 @@
 .step:=4
 .name:=06 Bonus Exercise
 .tuning:=gdgbd
+.bar:=xxx0 xxxx0 xxx0 xxxx0
+.b1:=0 & !.
+.b2:=x0 & !.
+.b3:=xx0 & !.
+.b4:=xxx0 & !.
+.chord.c:=21020
 .c:=000
 |.......
 |1a..2a..3a..4a.

@@ -33,8 +33,8 @@ function Player_Initialise(music ref as Music)
 	plg.tuning[1] =	15					// D4
 	
 	if music.tuning = "gcgcd"
-		plg.tuning[4] = 1 				// C3
-		plg.tuning[2] = 13 				// C4
+		//plg.tuning[4] = 1 				// C3
+		//plg.tuning[2] = 13 				// C4
 	endif
 	
 	for bar = 0 to music.barCount
