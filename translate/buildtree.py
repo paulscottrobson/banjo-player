@@ -11,7 +11,7 @@
 # ***************************************************************************************************
 
 import os,sys
-from bluegrass import *
+from clawhammer import *
 
 class MusicBuilder(object):
 
@@ -21,7 +21,6 @@ class MusicBuilder(object):
 		self.latestFile = None
 		for root,dirs,files in os.walk(self.tree):
 			for f in files:
-
 				self.buildFile(root,f,None)
 		print()
 		if self.latestFile is not None:
@@ -30,9 +29,14 @@ class MusicBuilder(object):
 
 	def buildFile(self,directory,fileName,override):
 		compiled = False
-		if fileName[-6:] == ".banjo":
+		if fileName[-5:] == ".claw":
 			compiled = True
-			BluegrassTune(directory+os.sep+fileName).write(directory,override)
+			ClawhammerTune(directory+os.sep+fileName).write(directory,override)
+			ClawhammerTune(directory+os.sep+fileName,{ "subtype":"melody" }).write(directory,override)
+			ClawhammerTune(directory+os.sep+fileName,{ "subtype":"basic" }).write(directory,override)
+		if fileName[-7:] == ".clawex":
+			compiled = True
+			ClawhammerTune(directory+os.sep+fileName).write(directory,override)
 
 		if compiled:
 			#print(">>>",directory,fileName,override)

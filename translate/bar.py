@@ -25,6 +25,7 @@ class Bar(object):
 			self.fretting.append(["."] * 5)
 		self.modifiers = [ None ] * size 										# modifier
 		self.modifierCount = [ 0 ] * size 										# modifier count.		
+		self.chords = [ "" ] * size 											# display chord
 		self.pos = 0 															# position in bar
 		self.lastNote = None													# last note set.
 	#
@@ -54,6 +55,13 @@ class Bar(object):
 	#
 	def setPinch(self):
 		self.setNotes("0...0")
+	#
+	#		Set display chord
+	#
+	def setDisplayChord(self,display):
+		if self.pos < 0 or self.pos >= len(self.fretting):						# validate position
+			raise MusicException("Bar position out of range "+str(self.pos))
+		self.chords[self.pos] = display
 	#
 	#		Apply a modifier to the current position.
 	#
@@ -92,6 +100,8 @@ class Bar(object):
 		notes = "".join([str(i+1)+chr(Bar.FRETTING.find(self.fretting[n][i])+97) for i in range(0,5) if self.fretting[n][i] != "."])
 		if self.modifiers[n] is not None:
 			notes += (self.modifiers[n]*self.modifierCount[n])
+		if self.chords[n] != "":
+			notes = "("+self.chords[n]+")"+notes
 		return notes
 
 Bar.FRETTING = "0123456789tewhufs"												# fretting values.

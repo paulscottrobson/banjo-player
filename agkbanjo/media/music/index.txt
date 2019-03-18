@@ -1,7 +1,7 @@
 //
 // ../agkbanjo/media/music
 //
-banjo_primer
-Banjo Primer (folder)
-tony trischka
-Tony Trischka (folder)
+Clawhammer Banjo Primer
+Clawhammer Banjo Primer (folder)
+Clawhammer for Ignoramus
+Clawhammer For Ignoramus (folder)

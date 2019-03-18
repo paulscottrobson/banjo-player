@@ -1,0 +1,11 @@
+.beats:=4
+.tempo:=60
+.step:=4
+.name:=07 Clawhammer Rhythm Single Notes
+.tuning:=gdgbd
+.c:=0 0 .
+|.......
+|1a..1a.5a.1a..1a.5a
+|1a..1a.5a.1a..1a.5a
+|1a..1a.5a.1a..1a.5a
+|1a..1a.5a.1a..1a.5a

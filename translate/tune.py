@@ -23,16 +23,21 @@ class BaseTune(object):
 	#
 	#		Constructor loads in tune, decoding it using the superclass
 	#
-	def __init__(self,sourceFile):
+	def __init__(self,sourceFile,equates = {}):
 		src = [x for x in open(sourceFile).readlines()]							# read source in.
 		src = [x if x.find("#") < 0 else x[:x.find("#")] for x in src]			# remove comments
 		src = [x.replace("\t"," ").strip().lower() for x in src]				# tidy up.
-		self.equates = { "beats":"4","tempo":"80","step":"4" }					# default values.
+		self.equates = equates 													# optional passed in.
+		self.equates["beats"] = "4"												# default values.
+		self.equates["tempo"] = "80"
+		self.equates["step"] = "4"
 		name = os.path.splitext(os.path.basename(sourceFile))[0]				# get name of tune.
+		if "subtype" in self.equates:											# modifiable name.
+			name = name + " ("+self.equates["subtype"]+")"
 		name = " ".join([x[0].upper()+x[1:].lower() for x in name.split(" ") if x != ""])
-		self.equates["name"] = name
-		for equ in [x.replace(" ","") for x in src if x.find(":=") >= 0]:		# process equates
-			equp = equ.split(":=")												# split up and verify
+		self.equates["name"] = name 
+		for equ in [x.lower().strip() for x in src if x.find(":=") >= 0]:		# process equates
+			equp = [x.strip() for x in equ.split(":=")]							# split up and verify
 			if len(equp) != 2 or equp[0] == "":
 				raise MusicException("Bad equate "+equp)
 			self.equates[equp[0]] = equp[1]				
