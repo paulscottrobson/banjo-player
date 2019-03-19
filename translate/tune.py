@@ -25,7 +25,7 @@ class BaseTune(object):
 	#
 	def __init__(self,sourceFile,equates = {}):
 		src = [x for x in open(sourceFile).readlines()]							# read source in.
-		src = [x if x.find("#") < 0 else x[:x.find("#")] for x in src]			# remove comments
+		src = [x if x.find("##") < 0 else x[:x.find("##")] for x in src]		# remove comments
 		src = [x.replace("\t"," ").strip().lower() for x in src]				# tidy up.
 		self.equates = equates 													# optional passed in.
 		self.equates["beats"] = "4"												# default values.
@@ -108,9 +108,9 @@ class BaseTune(object):
 
 if __name__ == "__main__":
 	src = """
-#
-#		test script
-#
+##
+##		test script
+##
 beats := 4
 tempo := 100
 step := 4

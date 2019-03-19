@@ -1,8 +1,8 @@
 //
 // ../agkbanjo/media/music
 //
-Clamhammer Banjo Net
-Clamhammer Banjo Net (folder)
+Clawhammer Banjo Net
+Clawhammer Banjo Net (folder)
 Clawhammer Banjo Primer
 Clawhammer Banjo Primer (folder)
 Clawhammer for Ignoramus

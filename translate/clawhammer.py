@@ -77,11 +77,21 @@ class ClawhammerTune(BaseTune):
 		#
 		m = re.match("^(x*)(["+Bar.FRETTING+"]+)([v\^\/]*)(.*)$",df)			# Note
 		if m is not None:
+
+			adjustment = 0 														# calculate modifier target
+			for mo in m.group(3):												# the amount the note will
+				adjustment += (-1 if mo == "^" else 1)							# change by.
+			newFretting = [Bar.FRETTING.find(x) for x in m.group(2)]			# New fretting, as number
+			for f in newFretting:												# Check in range.
+				if f+adjustment < 0:
+					raise MusicException("Pull off too far")
+			newFretting = [Bar.FRETTING[x+adjustment] for x in newFretting]		# Back to letter frets
+
 			cString = len(m.group(1))+1											# selected string
-			bar.setNotes(m.group(2),cString)									# set notes
+			bar.setNotes("".join(newFretting),cString)							# set notes
 
 			frettingChanged = False 											# check fretting changed.
-			for f in m.group(2):												# scan each
+			for f in newFretting:												# scan each
 				if f != self.fretting[cString-1]:								# changed ?
 					frettingChanged = True
 				cString += 1
@@ -91,7 +101,7 @@ class ClawhammerTune(BaseTune):
 
 			cString = len(m.group(1))+1											# selected string
 			if (not self.melodyOnly) and (not self.simple):	
-				for f in m.group(2):											# copy new fretting in.
+				for f in newFretting:											# copy new fretting in.
 					self.fretting[cString-1] = f
 					cString += 1
 
@@ -105,14 +115,16 @@ class ClawhammerTune(BaseTune):
 
 if __name__ == "__main__":
 	src = """
-#
-#		test script
-#
+##
+##		test script
+##
 beats := 4
 tempo := 100
 step := 4
 
-x21v !.  xx158^ 2//
+1//- !- 2vv- !- 3^^- !-
+
+##x21v !.  xx158^ 2//
 
 """.strip()
 	h = open("__test.claw","w")

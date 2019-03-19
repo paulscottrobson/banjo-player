@@ -3,15 +3,12 @@
 .step:=4
 .name:=07 Little Birdie
 .tuning:=gcgcd
+.b1:=0 & 0.
+.b2:=x0 & x0.
+.b3:=xx0 & xx0.
+.b4:=xxx0 & xxx0.
 .bar:=xxx0 xxxx0 xxx0 xxxx0
-.b1:=0 & !.
-.b2:=x0 & !.
-.b3:=xx0 & !.
-.b4:=xxx0 & !.
 .chord.c:=20000
-.c:=0 000 .
-.apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
-.bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
 .chord.g:=02020
 .chord.:=00000
 |....3a..3c.

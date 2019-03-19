@@ -1,8 +1,10 @@
-#
-#		test script
-#
+##
+##		test script
+##
 beats := 4
 tempo := 100
 step := 4
 
-x21v !.  xx158^ 2//
+1//- !- 2vv- !- 3^^- !-
+
+##x21v !.  xx158^ 2//

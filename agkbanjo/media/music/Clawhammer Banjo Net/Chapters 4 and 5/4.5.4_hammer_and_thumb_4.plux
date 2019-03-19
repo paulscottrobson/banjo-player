@@ -1,0 +1,20 @@
+.beats:=2
+.tempo:=60
+.step:=4
+.name:=4.5.4 Hammer And Thumb 4
+.tuning:=gdgbd
+.b1:=0 & 0.
+.b2:=x0 & x0.
+.b3:=xx0 & xx0.
+.b4:=xxx0 & xxx0.
+.bar:=xxx0 xxxx0 xxx0 xxxx0
+.chord.c:=21020
+|.......
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.
+|4a..5a..4a..5a.

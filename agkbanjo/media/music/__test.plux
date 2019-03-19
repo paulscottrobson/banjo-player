@@ -1,25 +1,25 @@
 .beats:=2
-.tempo:=60
+.tempo:=30
 .step:=4
-.name:=5.3 Melody Staccato
+.name:=6.2 Hammer On Exercise 2
 .tuning:=gdgbd
+.b1:=0 & 0.
+.b2:=x0 & x0.
+.b3:=xx0 & xx0.
+.b4:=xxx0 & xxx0.
 .bar:=xxx0 xxxx0 xxx0 xxxx0
-.b1:=0 & !.
-.b2:=x0 & !.
-.b3:=xx0 & !.
-.b4:=xxx0 & !.
-.chord.c:=21020
-.c:=0 000 .
-.apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
-.bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
+.chord.c:=20000
 .chord.g:=02020
 .chord.:=00000
-|.......
-|2a.5a.2a.5a.3a.5a.3a.5a
-|4a.5a.4a.5a.3a..3a.5a
-|2a.5a.2a.5a.3a.5a.3a.5a
-|3c.5a.4e.5a.4a..4a.5a
-|2a.5a.2a.5a.3a.5a.3a.5a
-|2b.5a.2b.5a.2b..2b.5a
-|3c.5a.2b.5a.2a.5a.3c.5a
-|3a..3a.5a.3a...
+.apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.c:=000
+|......2a.3c
+|3a.4e.3c++..3a.4c.4a.5a
+|4c++..2a3a4c.5a.4a..3c++.
+|2a..1a2a.5a.2a.3c.3c++.
+|2a.5a.3c..3c..2a.3c
+|3a.4e.3c++..3a.4c.4a.5a
+|4c++..2a3a4c.5a.4a..2a3a4a.5a
+|2a..1a.5a.1a..1c++.
+|1a.5a.3c..3a...

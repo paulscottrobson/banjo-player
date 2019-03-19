@@ -1,0 +1,9 @@
+##
+##		test script
+##
+beats := 4
+tempo := 100
+step := 4
+demo := abc
+
+1 {demo} 2 {demo}

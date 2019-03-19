@@ -85,8 +85,12 @@ function Bar_Load(this ref as Bar,barDesc as string)
 		if d$ = "." then inc currentNote
 		if d$ = "+" or d$ = "-" or d$ = "/"
 			this.notes[currentNote].modifierString = currentString
-			if d$ = "+" or d$ = "/" then inc this.notes[currentNote].newFretting
-			if d$ = "-" then dec this.notes[currentNote].newFretting
+			for s = 1 to 5
+				if this.notes[currentNote].fretting[s] <> BAR_DONTPLAY
+					if d$ = "+" or d$ = "/" then dec this.notes[currentNote].fretting[s]
+					if d$ = "-" then inc this.notes[currentNote].fretting[s]
+				endif
+			next s
 			if d$ = "+" then this.notes[currentNote].modifier = NOTE_HAMMERON
 			if d$ = "-" then this.notes[currentNote].modifier = NOTE_PULLOFF
 			if d$ = "/" then this.notes[currentNote].modifier = NOTE_SLIDE
