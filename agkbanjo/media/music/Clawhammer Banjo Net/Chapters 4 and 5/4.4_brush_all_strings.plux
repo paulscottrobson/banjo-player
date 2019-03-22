@@ -3,6 +3,7 @@
 .step:=4
 .name:=4.4 Brush All Strings
 .tuning:=gdgbd
+.bar:=xx0 & !.
 .b1:=0 & !.
 .b2:=x0 & !.
 .b3:=xx0 & !.
