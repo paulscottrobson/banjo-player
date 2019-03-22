@@ -12,6 +12,7 @@
 
 import os,sys
 from clawhammer import *
+from bluegrass import *
 
 class MusicBuilder(object):
 
@@ -34,6 +35,10 @@ class MusicBuilder(object):
 			ClawhammerTune(directory+os.sep+fileName).write(directory,override)
 			ClawhammerTune(directory+os.sep+fileName,{ "subtype":"melody" }).write(directory,override)
 			ClawhammerTune(directory+os.sep+fileName,{ "subtype":"basic" }).write(directory,override)
+		if fileName[-6:] == ".banjo":
+			compiled = True
+			BluegrassTune(directory+os.sep+fileName).write(directory,override)
+
 		if fileName[-7:] == ".clawex":
 			compiled = True
 			ClawhammerTune(directory+os.sep+fileName).write(directory,override)

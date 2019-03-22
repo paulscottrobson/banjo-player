@@ -1,8 +1,0 @@
-beats := 4
-tempo := 60
-step := 4
-tuning := gdgbd
-
-c := 000
-
-& & & & | 0 0 0 0 | x0 x0 x0 x0 |0 0 0 0 | x0 x0 x0 x0 |

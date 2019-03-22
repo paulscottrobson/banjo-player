@@ -1,4 +1,3 @@
-
 [apk_settings]
 alias=
 app_icon_path=
@@ -64,7 +63,7 @@ FILE_NAME_0=0;main.agc;0;5
 FILE_NAME_1=0;source%2Fbar.agc;3854;4
 FILE_NAME_2=0;source%2Fmusic.agc;0;2
 FILE_NAME_3=0;source%2Fplayer.agc;1680;3
-FILE_NAME_4=1;source%2Fprogram.agc;9182;1
+FILE_NAME_4=1;source%2Fprogram.agc;9120;1
 FILE_NAME_5=0;source%2Fui%2Fbutton.agc;0;0
 
 [project]
