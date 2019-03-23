@@ -1,9 +1,0 @@
-.beats:=4
-.tempo:=60
-.step:=4
-.name:=01 Forward Roll
-|.......
-|5a.3a.1a.5a.3a.1a.5a.1a
-|5a.3a.1a.5a.3a.1a.5a.1a
-|5a.3a.1a.5a.3a.1a.5a.1a
-|5a.3a.1a.5a.3a.1a.5a.1a
