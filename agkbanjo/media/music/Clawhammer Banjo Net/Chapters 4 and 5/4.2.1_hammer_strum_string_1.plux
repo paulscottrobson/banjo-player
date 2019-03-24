@@ -1,0 +1,15 @@
+.beats:=2
+.tempo:=60
+.step:=4
+.name:=4.2.1 Hammer Strum String 1
+.tuning:=gdgbd
+.bar:=0 & !.
+|.......
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
+|1a....1a2a3a.5a..
