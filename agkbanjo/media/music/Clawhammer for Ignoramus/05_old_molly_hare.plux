@@ -3,13 +3,9 @@
 .step:=4
 .name:=05 Old Molly Hare
 .tuning:=gcgcd
-.bar:=xxx0 xxxx0 xxx0 xxxx0
-.b1:=0 & !.
-.b2:=x0 & !.
-.b3:=xx0 & !.
-.b4:=xxx0 & !.
 .chord.c:=20000
-.c:=0 000 .
+.chord.g:=02020
+.chord.:=00000
 .apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
 .bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
 |.......
