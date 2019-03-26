@@ -1,7 +1,7 @@
 .beats:=2
 .tempo:=30
 .step:=4
-.name:=8.2 Slide Exercise 2
+.name:=7.1 Pull Off Exercise 1
 .tuning:=gdgbd
 .chord.c:=21020
 .chord.g:=02020
@@ -15,11 +15,11 @@
 .b3:=xx0 & xx0.
 .b4:=xxx0 & xxx0.
 |.......
-|3e//..1a2a3e.5a.3a----..1a2a3a.5a
-|2b/..1c2b3a.5a.2b..1c2b3a.5a
-|3e//..1a2a3e.5a.3a----..1a2a3a.5a
-|3c//..1a2b3c.5a.3c..1a2b3c.5a
-|3e//..1a2a3e.5a.3a----..1a2a3a.5a
-|2b/..1c2b3a.5a.2b..1c2b3a.5a
-|3e//..1a2a3e.5a.3c..1a2b3c.5a
-|3a..1a2a3a.5a.3a...
+|1a--..1a2a3a.5a.2a-..1a2a3a.5a
+|3a--..1a2a3a.5a.4a--..1a2a3a.5a
+|2a.1a.1a2a3a.5a.1a..1a2a3a.5a
+|2a.1a.1a2a3a.5a.1a..1a2a3a.5a
+|1a--..1a2a3a.5a.2a-..1a2a3a.5a
+|3a--..1a2a3a.5a.4a--..1a2a3a.5a
+|3a--..1a2a3a.5a.3a..1a2a3a.5a
+|3a--..1a2a3a.5a.3a...
