@@ -1,0 +1,13 @@
+.beats:=4
+.tempo:=60
+.step:=4
+.name:=10 Melody Notes With Clawhammer Rhythm
+.tuning:=gdgbd
+.apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.c:=0 000 .
+|.......
+|1a..1a.5a.1c..1c.5a
+|1a..1a.5a.1c..1c.5a
+|1a..1a.5a.1c..1c.5a
+|2a..3c..3a..3a.5a
