@@ -3,13 +3,7 @@
 .step:=4
 .name:=5.0 Basic Melody
 .tuning:=gdgbd
-.apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
-.bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
-.c:=000
-.chord.c:=21020
-.chord.g:=02020
-.chord.:=00000
-.bar:=xx0 & !.
+.bar:=xxx0 xxxx0 xxx0 xxxx0
 .b1:=0 & !.
 .b2:=x0 & !.
 .b3:=xx0 & !.
