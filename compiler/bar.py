@@ -59,6 +59,19 @@ class Bar(object):
 	def getEndStrings(self):
 		return self.finalStrings
 	#
+	#		Pluck one string.
+	#
+	def setPluck(self,pos,string,fretting):
+		if self.stringOverride is not None:										# handle string override
+			string = self.stringOverride
+			self.strings[pos] = string
+			self.stringOverride = None
+		self.notes[pos][string-1] = fretting
+		self.isUsed[pos] = True 	
+		self.lastNote = pos
+		self.fretting[string-1] = fretting
+		return string
+	#
 	#		Convert to string
 	#
 	def toString(self):
@@ -77,7 +90,14 @@ class Bar(object):
 	#		Convert to output format.
 	#
 	def toOutput(self):
-		return "???"
+		return ".".join([self.__renderNote(n) for n in range(0,len(self.notes))])
+	#
+	def __renderNote(self,pos):
+		return "".join(["" if self.notes[pos][i] is None else self.__renderPluck(pos,i) for i in range(0,5)])
+	#
+	def __renderPluck(self,pos,strn):
+		return str(strn+1)+chr(self.notes[pos][strn]+97)		
+
 
 # ***************************************************************************************************
 #
@@ -98,9 +118,7 @@ class BluegrassBar(Bar):
 				self.strings[self.position] = strn
 				self.stringOverride = None
 			if strn is not None:												# if one is played
-				self.notes[self.position][strn-1] = self.fretting[strn-1] 		# pluck that string with that fretting				
-				self.isUsed[self.position] = True 	
-				self.lastNote = self.position
+				self.setPluck(self.position,strn,self.fretting[strn-1])			
 			self.position += 1 													# next position
 			return d[1:]
 		#
@@ -119,25 +137,18 @@ class BluegrassBar(Bar):
 		#
 		m = re.match("^([\\-"+Bar.FRETS+"]+)(.*)$",d)							# list of frets
 		if m is not None:
-			strn = self.strings[self.position]								# which string.
-			if self.stringOverride is not None:									# handle string override
-				strn = self.stringOverride
-				self.strings[self.position] = strn
-				self.stringOverride = None
+			strn = self.strings[self.position]									# which string.
 			for cFret in m.group(1):											# put notes out.
 				if cFret != "-":
-					self.notes[self.position][strn-1] = Bar.FRETS.find(cFret)
-					self.fretting[strn-1] = self.notes[self.position][strn-1]					
-					self.isUsed[self.position] = True 	
-					self.lastNote = self.position
-				strn += 1
+					strn = self.setPluck(self.position,strn,Bar.FRETS.find(cFret))+1
+				else:
+					strn = strn + 1
 			self.position += 1
 			return m.group(2)
 		#
 		raise MusicException("Cannot process '{0}'".format(d),self.barNumber)	# give up.
 
 Bar.FRETS = "0123456789tlwhufxv"
-
 
 if __name__ == "__main__":
 	# So bluegrass stuff can be done like this
