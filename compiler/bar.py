@@ -42,13 +42,22 @@ class Bar(object):
 			self.notes.append([None] * 5)
 			self.modifiers.append([None] * 5)
 		self.position = 0 														# 1/2 beat position
-		self.fretting = [x for x in self.initialFretting]						# fretting.
+		self.fretting = [x for x in self.initialFretting]						# fretting.and strings
+		self.strings = [x for x in self.entryStrings]
 		self.stringOverride = None 												# override
 		self.lastNote = None 													# last note created
 		desc = self.description.strip().lower() 								# preprocess.
 		while desc != "":														# while something left
 			desc = self.processOne(desc).strip()								# keep going
-		self.finalFretting = self.fretting 										# remember final fretting
+		self.finalFretting = self.fretting 										# remember final fretting/strings
+		self.finalStrings = self.strings
+	#
+	#		Get end fretting/strings
+	#
+	def getEndFretting(self):
+		return self.finalFretting
+	def getEndStrings(self):
+		return self.finalStrings
 	#
 	#		Convert to string
 	#
@@ -69,6 +78,7 @@ class Bar(object):
 	#
 	def toOutput(self):
 		return "???"
+
 # ***************************************************************************************************
 #
 #										Bar that decodes BlueGrass
@@ -82,9 +92,10 @@ class BluegrassBar(Bar):
 	def processOne(self,d):
 		#
 		if d.startswith("*"):													# * take from current.
-			strn = self.entryStrings[self.position]								# which string.
+			strn = self.strings[self.position]									# which string.
 			if self.stringOverride is not None:									# handle string override
 				strn = self.stringOverride
+				self.strings[self.position] = strn
 				self.stringOverride = None
 			if strn is not None:												# if one is played
 				self.notes[self.position][strn-1] = self.fretting[strn-1] 		# pluck that string with that fretting				
@@ -108,13 +119,15 @@ class BluegrassBar(Bar):
 		#
 		m = re.match("^([\\-"+Bar.FRETS+"]+)(.*)$",d)							# list of frets
 		if m is not None:
-			strn = self.entryStrings[self.position]								# which string.
+			strn = self.strings[self.position]								# which string.
 			if self.stringOverride is not None:									# handle string override
 				strn = self.stringOverride
+				self.strings[self.position] = strn
 				self.stringOverride = None
 			for cFret in m.group(1):											# put notes out.
 				if cFret != "-":
 					self.notes[self.position][strn-1] = Bar.FRETS.find(cFret)
+					self.fretting[strn-1] = self.notes[self.position][strn-1]					
 					self.isUsed[self.position] = True 	
 					self.lastNote = self.position
 				strn += 1
@@ -129,7 +142,7 @@ Bar.FRETS = "0123456789tlwhufxv"
 if __name__ == "__main__":
 	# So bluegrass stuff can be done like this
 	b = BluegrassBar(1,"*.**@1**4-5*",4,[12,3,4,1,2],[1,2,None,4,5,1,2,3])
-	# and Wayne Erbsen's tunes like this.
 	print(b.toString())
+	# and Wayne Erbsen's tunes like this.
 	b1 = BluegrassBar(1,"@2 3 && @4 7 &&")	
 	print(b1.toString())
