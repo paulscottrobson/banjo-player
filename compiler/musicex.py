@@ -3,7 +3,7 @@
 #
 #		Name:		musicex.py
 #		Purpose:	Exception class for Music Translation
-#		Date:		14th March 2019
+#		Date:		1st April 2019
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # ***************************************************************************************************
@@ -17,13 +17,13 @@
 
 class MusicException(Exception):
 	#
-	def __init__(self,msg):
+	def __init__(self,msg,index):
 		self.errorMessage = msg
+		self.index = index
 	#
 	def getMessage(self):
-		return "{0} ({1})".format(self.errorMessage,MusicException.Number)
+		return "{0} ({1})".format(self.errorMessage,self.index)
 
-MusicException.Number = 0
 
 if __name__ == "__main__":
 	MusicException.Number = 42
