@@ -126,6 +126,24 @@ class BluegrassBar(Bar):
 			self.position += 1
 			return d[1:]
 		#
+		m = re.match("^\\[(["+Bar.FRETS+"]+)\\](.*)$",d)						# set fretting and initial fretting []
+		if m is not None:
+			if len(m.group(1)) != 5:
+				raise MusicException("Bad number of frets "+d)
+			for i in range(0,5):
+				self.fretting[i] = Bar.FRETS.find(m.group(1)[i])
+				self.initialFretting[i] = self.fretting[i]
+			return m.group(2)
+		#
+		m = re.match("^\\<([1-5\\.]+)\\>(.*)$",d)								# set strings and initial strings
+		if m is not None:
+			if len(m.group(1)) != self.beats*2:
+				raise MusicException("Bad number of strings "+d)
+			for i in range(0,self.beats*2):
+				self.strings[i] = None if m.group(1)[i] == '.' else int(m.group(1)[i])
+				self.entryStrings[i] = self.strings[i]
+			return m.group(2)
+		#
 		m = re.match("^\\@([1-5])(.*)$",d)										# string override.
 		if m is not None:
 			self.stringOverride = int(m.group(1))
@@ -157,3 +175,6 @@ if __name__ == "__main__":
 	# and Wayne Erbsen's tunes like this.
 	b1 = BluegrassBar(1,"@2 3 && @4 7 &&")	
 	print(b1.toString())
+	# and setting the bar
+	b2 = BluegrassBar(1,"[12345]<123.12.4>********",4,[5,6,7,8,9],[1,2,3,1,2,3,1,3])
+	print(b2.toString())
