@@ -40,6 +40,8 @@ class Bar(object):
 			self.notes.append([None] * self.stringCount)						# note, modifier, count
 		self.position = 0 														# 1/2 beat position
 		self.fretting = [x for x in self.initialFretting]						# fretting.and strings
+		self.activeString = [ None ] * (self.beats * 2) 						# string played each pos
+		self.activeFret = [ None ] * (self.beats * 2)							# fret played each pos
 		self.lastNote = None 													# last note created
 		desc = self.description.strip().lower() 								# preprocess.
 		while desc != "":														# while something left
@@ -61,7 +63,15 @@ class Bar(object):
 		self.notes[pos][string-1] = [self.fretting[string-1],None,0]
 		self.isUsed[pos] = True 	
 		self.lastNote = pos
+		for b in range(pos,self.beats*2):
+			self.activeString[b] = string
+			self.activeFret[b] = self.fretting[string-1]
 		return string
+	#
+	#		Update positional fretting forward
+	#
+	def nextPosition(self):
+		self.position += 1
 	#
 	#		Set a fretting
 	#
@@ -113,12 +123,14 @@ class BluegrassBar(Bar):
 			return d[1:]
 		#
 		if d.startswith("&"):													# & advance to next beat
-			self.position = int((self.position+2)/2) * 2
+			self.nextPosition()
+			if self.position % 2 != 0:
+				self.nextPosition()
 			return d[1:]
 		#
 		if d[0] >= '1' and d[0] <= chr(self.stringCount+48):					# 1-5 pluck string/advance
 			self.setPluck(self.position,int(d[0]))
-			self.position += 1
+			self.nextPosition()
 			return d[1:]
 		#
 		m = re.match("^\\#(["+Bar.FRETS+"]*)(.*)$",d)							# reset fretting.
@@ -135,7 +147,7 @@ class BluegrassBar(Bar):
 			string = len(m.group(1))+1											# string to play
 			self.setFretting(string,Bar.FRETS.find(m.group(2)))					# set its fretting
 			self.setPluck(self.position,string)									# pluck it.
-			self.position += 1
+			self.nextPosition()
 			return m.group(3)
 		#		
 		raise MusicException("Cannot process '{0}'".format(d),self.barNumber)	# give up.
@@ -145,6 +157,73 @@ class BluegrassBar(Bar):
 	#
 	def isNoteQuaver(self,note):
 		return self.isUsed[(note-1)*4+2]
+	#
+	#		Check there is a note at all
+	#
+	def isNotePresent(self,note):
+		return self.isUsed[(note-1)*4]
+	#
+	#		Apply modifiers
+	#
+	def modify(self,modifier,isBefore):
+		modifier = modifier.strip().lower()
+		if modifier == "pluck":
+			self.modifyPluck(isBefore)
+		elif modifier == "drone":
+			self.modifyDrone(isBefore)
+		elif modifier == "twofinger":
+			self.convertToRoll("*151*151",isBefore)
+		elif modifier == "forward":
+			self.convertToRoll("*15*15*1",isBefore)
+		elif modifier == "reverse":
+			self.convertToRoll("*21512*1",isBefore,[3,4])
+		elif modifier == "pegleg":
+			self.convertToRoll("*_51*_51",isBefore)
+		elif modifier == "altthumb":
+			self.convertToRoll("*251*251",isBefore,[3,4])
+		elif modifier == "foggy":
+			self.convertToRoll("*1*15*15",isBefore)
+		else:
+			assert False,"Unknown modifier "+modifier
+	#
+	#		Pluck modification
+	#
+	def modifyPluck(self,isBefore):
+		if not isBefore:
+			for beat in range(1,int(self.beats/2)+1):
+				if not self.isNoteQuaver(beat) and self.isNotePresent(beat):
+					self.notes[beat*4-2][0] = [0,None,None]
+					self.notes[beat*4-2][4] = [0,None,None]
+	#
+	#		Drone modification
+	#
+	def modifyDrone(self,isBefore):
+		if not isBefore:
+			for beat in range(1,int(self.beats/2)+1):
+				if self.isNoteQuaver(beat) and self.isNotePresent(beat):
+					self.notes[beat*4-1][0] = [0,None,None]
+					self.notes[beat*4-3][0] = [0,None,None]
+
+	#
+	#		Convert to roll.
+	#
+	def convertToRoll(self,rollDefinition,isBefore,allowedStrings = [2,3,4]):
+		if not isBefore:
+			for beat in range(1,int(self.beats/2)+1):
+				if not self.isNoteQuaver(beat) and self.isNotePresent(beat):
+					start = (beat - 1) * 4			
+					if self.activeString[start] in allowedStrings:
+						for pos in range(start,start + 4):
+							self.notes[pos] = [None,None,None] * 5
+							string = rollDefinition[pos % len(rollDefinition)]
+							if string != '_':
+								if string != '*':							
+									self.notes[pos][int(string)-1] = [0,None,None]
+								else:
+									p = pos
+									if p % 4 == 3 and p < self.beats*2-1:
+										p += 1
+									self.notes[pos][self.activeString[p]-1] = [self.activeFret[p],None,None]
 
 Bar.FRETS = "0123456789tlwhufxv"
 

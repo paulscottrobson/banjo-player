@@ -88,7 +88,13 @@ if __name__ == "__main__":
 
 	bt2 = BluegrassTune()
 	bt2.readFile("boilemcabbage.bluegrass")
+	modifier = "forward"
 	for i in range(0,bt2.barCount):
+		print("=============================")
+		print(bt2.bars[i].toString())
+		bt2.bars[i].modify(modifier,True)
+		bt2.bars[i].processDescription()
+		bt2.bars[i].modify(modifier,False)
 		print(bt2.bars[i].toString())
 	r = bt2.render()
 	open("../agkbanjo/media/music/__test.plux","w").write(r)
