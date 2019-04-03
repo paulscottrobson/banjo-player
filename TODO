@@ -1,3 +1,13 @@
+DEV:
+	Tune class which builds a composite tune
+	Pre and post modifiers e.g.
+	- Run pre modifiers.
+	- Generate tune
+	- Run post modifiers.
+	- Generate output.
+	Call twice with a parameter.
+	So you can both rewrite a bars descriptor (say) *or* change it, add pinches
+
 TODO:
 	Tab display.
 	

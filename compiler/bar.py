@@ -22,11 +22,12 @@ class Bar(object):
 	#
 	#		Initialise.
 	#
-	def __init__(self,barNumber,description,beats = 4,entryFretting = None):
+	def __init__(self,barNumber,description,beats = 4,stringCount = 5,entryFretting = None):
 		self.barNumber = barNumber
 		self.description = description
 		self.beats = beats
-		self.initialFretting = entryFretting if entryFretting is not None else [ 0 ] * 5
+		self.stringCount = stringCount
+		self.initialFretting = entryFretting if entryFretting is not None else [ 0 ] * self.stringCount
 		self.processDescription()
 	#
 	#		Convert the initial fretting/strings and the descriptor into a set of notes played
@@ -36,7 +37,7 @@ class Bar(object):
 		self.notes = [] 														# create empty note structure
 		self.isUsed = [ False ] * 8												# checks if note played any 1/2 beat		
 		for b in range(0,self.beats * 2):
-			self.notes.append([None] * 5)										# note, modifier, count
+			self.notes.append([None] * self.stringCount)						# note, modifier, count
 		self.position = 0 														# 1/2 beat position
 		self.fretting = [x for x in self.initialFretting]						# fretting.and strings
 		self.lastNote = None 													# last note created
@@ -53,6 +54,10 @@ class Bar(object):
 	#		Pluck one string.
 	#
 	def setPluck(self,pos,string):
+		if string < 1 or string > self.stringCount:
+			raise MusicException("Bad String {0}".format(string),self.barNumber)
+		if pos < 0 or pos >= self.beats * 2:
+			raise MusicException("Bad position {0}".format(string),self.barNumber)			
 		self.notes[pos][string-1] = [self.fretting[string-1],None,0]
 		self.isUsed[pos] = True 	
 		self.lastNote = pos
@@ -61,6 +66,8 @@ class Bar(object):
 	#		Set a fretting
 	#
 	def setFretting(self,string,fretPos):
+		if string < 1 or string > self.stringCount:
+			raise MusicException("Bad String {0}".format(string),self.barNumber)
 		self.fretting[string-1] = fretPos
 	#
 	#		Convert to string
@@ -69,8 +76,8 @@ class Bar(object):
 		s = "Bar:{0} Beats:{1} Descriptor:\"{2}\" Output:\"{3}\"\n".format(self.barNumber,self.beats,self.description,self.toOutput())
 		s = s + "Start Fretting:"+",".join([str(x) for x in self.initialFretting])
 		s = s + " End Fretting:"+",".join([str(x) for x in self.finalFretting])+"\n"
-		for st in range(0,5):
-			s = s + "|"
+		for st in range(0,self.stringCount):
+			s = s + str(st+1)+" |"
 			for be in range(0,self.beats * 2):
 				pluck = self.notes[be][st]
 				s = s + ("---.---" if pluck is None else ("---"+str(pluck[0])+"---")[:7])
@@ -83,7 +90,7 @@ class Bar(object):
 		return ".".join([self.__renderNote(n) for n in range(0,len(self.notes))])
 	#
 	def __renderNote(self,pos):
-		return "".join(["" if self.notes[pos][i] is None else self.__renderPluck(pos,i) for i in range(0,5)])
+		return "".join(["" if self.notes[pos][i] is None else self.__renderPluck(pos,i) for i in range(0,self.stringCount)])
 	#
 	def __renderPluck(self,pos,strn):
 		return str(strn+1)+chr(self.notes[pos][strn][0]+97)		
@@ -109,7 +116,7 @@ class BluegrassBar(Bar):
 			self.position = int((self.position+2)/2) * 2
 			return d[1:]
 		#
-		if d[0] >= '1' and d[0] <= '5':											# 1-5 pluck string/advance
+		if d[0] >= '1' and d[0] <= chr(self.stringCount+48):					# 1-5 pluck string/advance
 			self.setPluck(self.position,int(d[0]))
 			self.position += 1
 			return d[1:]
@@ -120,15 +127,36 @@ class BluegrassBar(Bar):
 			for i in range(0,len(newFretting)):
 				self.setFretting(i+1,newFretting[i])
 			return m.group(2)
+		#																		# Single note format.
+		m = re.match("^\\%(x*)(["+Bar.FRETS+"])(.*)$",d)
+		if m is not None:
+			for i in range(1,self.stringCount+1):								# zero all frets
+				self.setFretting(i,0)
+			string = len(m.group(1))+1											# string to play
+			self.setFretting(string,Bar.FRETS.find(m.group(2)))					# set its fretting
+			self.setPluck(self.position,string)									# pluck it.
+			self.position += 1
+			return m.group(3)
 		#		
 		raise MusicException("Cannot process '{0}'".format(d),self.barNumber)	# give up.
+	#
+	#		These are for Wayne Erbsen's lick modifications, tests for whether each half of a
+	#		bar is one or two notes (the music is in 2/4 time)
+	#
+	def isNoteQuaver(self,note):
+		return self.isUsed[(note-1)*4+2]
 
 Bar.FRETS = "0123456789tlwhufxv"
 
 if __name__ == "__main__":
 	# So bluegrass stuff can be done like this
-	b = BluegrassBar(1,"123 #56789 12345",4)
+	b = BluegrassBar(1,"123 #56789 12345",4,5)
 	print(b.toString())
 	# and Wayne Erbsen's tunes like this.
 	b1 = BluegrassBar(1,"#00370 3 && 4 &&")	
 	print(b1.toString())
+	# or this
+	b1 = BluegrassBar(1,"%xx3 & %5 & %xxx4 &&")	
+	print(b1.toString())
+	print(b1.isNoteQuaver(1))
+	print(b1.isNoteQuaver(2))	
