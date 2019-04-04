@@ -4,7 +4,7 @@
 tempo := 60
 
 option1 := "cool" *:pinch
-option2 := "warm" *:chords
+option2 := "warm" *:chords;*:pinch
 option3 := "even warmer" *:twofinger
 option4 := "hot" *:forward
 

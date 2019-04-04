@@ -45,6 +45,7 @@ class Bar(object):
 		for b in range(0,self.beats * 2):
 			self.notes.append([None] * self.stringCount)						# note, modifier, count
 		self.position = 0 														# 1/2 beat position
+		self.chords = [ None ] * (self.beats*2)									# chords
 		self.fretting = [x for x in self.initialFretting]						# fretting.and strings
 		self.activeString = [ None ] * (self.beats * 2) 						# string played each pos
 		self.activeFret = [ None ] * (self.beats * 2)							# fret played each pos
@@ -73,6 +74,13 @@ class Bar(object):
 			self.activeString[b] = string
 			self.activeFret[b] = self.fretting[string-1]
 		return string
+	#
+	#		Set a display chord
+	#
+	def setChord(self,pos,dispChord):
+		if pos < 0 or pos >= self.beats * 2:
+			raise MusicException("Bad position {0}".format(string),self.barNumber)			
+		self.chords[self.position] = dispChord
 	#
 	#		Update positional fretting forward
 	#
@@ -106,7 +114,9 @@ class Bar(object):
 		return ".".join([self.__renderNote(n) for n in range(0,len(self.notes))])
 	#
 	def __renderNote(self,pos):
-		return "".join(["" if self.notes[pos][i] is None else self.__renderPluck(pos,i) for i in range(0,self.stringCount)])
+		note = "".join(["" if self.notes[pos][i] is None else self.__renderPluck(pos,i) for i in range(0,self.stringCount)])
+		note = note if self.chords[pos] is None else "({0}){1}".format(self.chords[pos],note)
+		return note
 	#
 	def __renderPluck(self,pos,strn):
 		return str(strn+1)+chr(self.notes[pos][strn][0]+97)		
@@ -144,6 +154,11 @@ class BluegrassBar(Bar):
 			newFretting = [Bar.FRETS.find(x) for x in (m.group(1)+"00000")[:5]]
 			for i in range(0,len(newFretting)):
 				self.setFretting(i+1,newFretting[i])
+			return m.group(2)
+		#
+		m = re.match("^\\(([a-g][\\#b]?)\\)(.*)$",d)							# Chord definition
+		if m is not None:
+			self.setChord(self.position,m.group(1))
 			return m.group(2)
 		#																		# Single note format.
 		m = re.match("^\\%(x*)(["+Bar.FRETS+"])(.*)$",d)
@@ -190,7 +205,7 @@ class BluegrassBar(Bar):
 		elif modifier == "foggy":
 			self.convertToRoll("*1*15*15",isBefore)
 		elif modifier == "chords":
-			pass
+			self.modifyChords(isBefore)
 		elif modifier.startswith("[") and modifier.endswith("]"):
 			if isBefore:
 				self.resetDescription(modifier[1:-1].strip())
@@ -205,6 +220,7 @@ class BluegrassBar(Bar):
 				if not self.isNoteQuaver(beat) and self.isNotePresent(beat):
 					self.notes[beat*4-2][0] = [0,None,None]
 					self.notes[beat*4-2][4] = [0,None,None]
+					self.isUsed[beat*4-2] = True
 	#
 	#		Drone modification
 	#
@@ -214,7 +230,20 @@ class BluegrassBar(Bar):
 				if self.isNoteQuaver(beat) and self.isNotePresent(beat):
 					self.notes[beat*4-1][0] = [0,None,None]
 					self.notes[beat*4-3][0] = [0,None,None]
-
+					self.isUsed[beat*4-1] = True
+					self.isUsed[beat*4-3] = True
+	#
+	#		Chord modification
+	#
+	def modifyChords(self,isBefore):
+		if not isBefore:
+			for beat in range(0,self.beats*2):
+				if self.chords[beat] is not None:
+					chordDef = self.getChord(self.chords[beat])
+					self.isUsed[beat] = True
+					for i in range(0,4):
+						f = Bar.FRETS.find(chordDef[i])
+						self.notes[beat][i] = [f,None,None]
 	#
 	#		Convert to roll.
 	#
@@ -228,14 +257,21 @@ class BluegrassBar(Bar):
 							self.notes[pos] = [None,None,None] * 5
 							string = rollDefinition[pos % len(rollDefinition)]
 							if string != '_':
+								self.isUsed[pos] = True
 								if string != '*':							
-									self.notes[pos][int(string)-1] = [0,None,None]
+									self.notes[pos][int(string)-1] = [0,None,None]								
 								else:
 									p = pos
 									if p % 4 == 3 and p < self.beats*2-1:
 										p += 1
 									self.notes[pos][self.activeString[p]-1] = [self.activeFret[p],None,None]
-
+	#
+	#		Get chord fretting
+	#
+	def getChord(self,chord):
+		if chord == "c":
+			return "21020"
+		assert False,"Unknown chord "+c
 Bar.FRETS = "0123456789tlwhufxv"
 
 if __name__ == "__main__":
@@ -243,7 +279,8 @@ if __name__ == "__main__":
 	b = BluegrassBar(1,"123 #56789 12345",4,5)
 	print(b.toString())
 	# and Wayne Erbsen's tunes like this.
-	b1 = BluegrassBar(1,"#00370 3 && 4 &&")	
+	b1 = BluegrassBar(1,"#00370 3 && (C)4 &&")	
+	b1.modify("chords",False)
 	print(b1.toString())
 	# or this
 	b1 = BluegrassBar(1,"%xx3 & %5 & %xxx4 &&")	

@@ -1,0 +1,13 @@
+//
+// ../agkbanjo/media/music/bluegrass_for_complete_ignoramus/01_boil_em_cabbage_down
+//
+boil_em_cabbage_down.plux
+Boil Em Cabbage Down
+boil_em_cabbage_down_(cool).plux
+Boil Em Cabbage Down (cool)
+boil_em_cabbage_down_(even_warmer).plux
+Boil Em Cabbage Down (even Warmer)
+boil_em_cabbage_down_(hot).plux
+Boil Em Cabbage Down (hot)
+boil_em_cabbage_down_(warm).plux
+Boil Em Cabbage Down (warm)
