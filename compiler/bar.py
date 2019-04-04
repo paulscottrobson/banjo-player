@@ -220,7 +220,6 @@ class BluegrassBar(Bar):
 				if not self.isNoteQuaver(beat) and self.isNotePresent(beat):
 					self.notes[beat*4-2][0] = [0,None,None]
 					self.notes[beat*4-2][4] = [0,None,None]
-					self.isUsed[beat*4-2] = True
 	#
 	#		Drone modification
 	#
@@ -230,8 +229,6 @@ class BluegrassBar(Bar):
 				if self.isNoteQuaver(beat) and self.isNotePresent(beat):
 					self.notes[beat*4-1][0] = [0,None,None]
 					self.notes[beat*4-3][0] = [0,None,None]
-					self.isUsed[beat*4-1] = True
-					self.isUsed[beat*4-3] = True
 	#
 	#		Chord modification
 	#
@@ -240,7 +237,6 @@ class BluegrassBar(Bar):
 			for beat in range(0,self.beats*2):
 				if self.chords[beat] is not None:
 					chordDef = self.getChord(self.chords[beat])
-					self.isUsed[beat] = True
 					for i in range(0,4):
 						f = Bar.FRETS.find(chordDef[i])
 						self.notes[beat][i] = [f,None,None]

@@ -119,8 +119,10 @@ class Tune(object):
 		last = 0
 		while self.get("option"+str(last+1)) is not None:
 			last += 1
+		fileList = []
 		for op in range(0,last+1):
-			self.renderAdjustedTune(op,targetDirectory)
+			name = self.renderAdjustedTune(op,targetDirectory)
+			fileList.append(name)
 	#
 	#		Render tune with given option number (0 = standard) in directory.
 	#
@@ -141,6 +143,7 @@ class Tune(object):
 		h = open(fileName,"w")
 		h.write(self.render())
 		h.close()
+		return fileName
 
 # ***************************************************************************************************
 #
