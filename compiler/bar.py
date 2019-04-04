@@ -24,11 +24,17 @@ class Bar(object):
 	#
 	def __init__(self,barNumber,description,beats = 4,stringCount = 5,entryFretting = None):
 		self.barNumber = barNumber
-		self.description = description
+		self.defaultDescription = description
 		self.beats = beats
 		self.stringCount = stringCount
 		self.initialFretting = entryFretting if entryFretting is not None else [ 0 ] * self.stringCount
+		self.resetDescription(None)
 		self.processDescription()
+	#
+	#		Set the description, using either this one or the overridden one.
+	#
+	def resetDescription(self,override):
+		self.description = override if override is not None else self.defaultDescription
 	#
 	#		Convert the initial fretting/strings and the descriptor into a set of notes played
 	#		at each half beat.
@@ -167,8 +173,8 @@ class BluegrassBar(Bar):
 	#
 	def modify(self,modifier,isBefore):
 		modifier = modifier.strip().lower()
-		if modifier == "pluck":
-			self.modifyPluck(isBefore)
+		if modifier == "pinch":
+			self.modifyPinch(isBefore)
 		elif modifier == "drone":
 			self.modifyDrone(isBefore)
 		elif modifier == "twofinger":
@@ -183,12 +189,17 @@ class BluegrassBar(Bar):
 			self.convertToRoll("*251*251",isBefore,[3,4])
 		elif modifier == "foggy":
 			self.convertToRoll("*1*15*15",isBefore)
+		elif modifier == "chords":
+			pass
+		elif modifier.startswith("[") and modifier.endswith("]"):
+			if isBefore:
+				self.resetDescription(modifier[1:-1].strip())
 		else:
 			assert False,"Unknown modifier "+modifier
 	#
-	#		Pluck modification
+	#		Pinch modification
 	#
-	def modifyPluck(self,isBefore):
+	def modifyPinch(self,isBefore):
 		if not isBefore:
 			for beat in range(1,int(self.beats/2)+1):
 				if not self.isNoteQuaver(beat) and self.isNotePresent(beat):
