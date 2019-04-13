@@ -3,11 +3,14 @@
 .step:=4
 .name:=5.2 Hammer Thumb Melody
 .tuning:=gdgbd
-.bar:=xxx0 xxxx0 xxx0 xxxx0
-.b1:=0 & !.
-.b2:=x0 & !.
-.b3:=xx0 & !.
-.b4:=xxx0 & !.
+.apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.c:=000
+.bar:=xxx0 & !.
+.b1:=0 & 0.
+.b2:=x0 & x0.
+.b3:=xx0 & xx0.
+.b4:=xxx0 & xxx0.
 .chord.c:=21020
 |.......
 |2a..2a.5a.3a..3a.5a
