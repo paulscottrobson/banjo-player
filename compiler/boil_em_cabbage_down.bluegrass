@@ -1,0 +1,13 @@
+##
+##		Boil Em Cabbage Down.
+##
+tempo := 60
+
+option1 := "cool" *:pinch
+option2 := "warm" *:chords
+option3 := "even warmer" *:twofinger
+option4 := "hot" *:forward
+
+&
+#0 2 && 2 & | #01 (C)2 && 2 && | #0 2 && 2 && | #002 3 && 3 &&
+# 2&&2&&|#01 (C)2&&2&&|#002 2&&3&&|#0 3&&3&&
