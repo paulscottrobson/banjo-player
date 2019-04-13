@@ -1,0 +1,15 @@
+//
+// ../agkbanjo/media/music/Clawhammer for Ignoramus
+//
+05_old_molly_hare.plux
+05 Old Molly Hare
+05_old_molly_hare_(basic).plux
+05 Old Molly Hare (basic)
+05_old_molly_hare_(melody).plux
+05 Old Molly Hare (melody)
+07_little_birdie.plux
+07 Little Birdie
+07_little_birdie_(basic).plux
+07 Little Birdie (basic)
+07_little_birdie_(melody).plux
+07 Little Birdie (melody)

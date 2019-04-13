@@ -1,0 +1,15 @@
+//
+// ../agkbanjo/media/music/Clawhammer Banjo Net/Chapters 6,7 and 8
+//
+6.1_hammer_on_excercise_1.plux
+6.1 Hammer On Excercise 1
+6.2_hammer_on_exercise_2.plux
+6.2 Hammer On Exercise 2
+7.1_pull_off_exercise_1.plux
+7.1 Pull Off Exercise 1
+7.2_pull_off_exercise_2.plux
+7.2 Pull Off Exercise 2
+8.1_slide_exercise_1.plux
+8.1 Slide Exercise 1
+8.2_slide_exercise_2.plux
+8.2 Slide Exercise 2

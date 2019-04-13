@@ -1,0 +1,26 @@
+.subtype:=melody
+.beats:=4
+.tempo:=100
+.step:=4
+.name:=07 Little Birdie (melody)
+.tuning:=gcgcd
+.chord.c:=20000
+.chord.g:=02020
+.chord.:=00000
+|....3a..3c.
+|2a..(c)..1c...
+|1c....1a..2a.
+|3e..(g)..3a...
+|3a....3a..3e.
+|1a....1a..2a.
+|1c....1c..1a.
+|2a..(c)..2a...
+|2a....3a..3c.
+|2a..(c)..1c...
+|1c....1a..2a.
+|3e..(g)..3a...
+|3a....3a..3e.
+|1a....1a..2a.
+|1c....1c..1a.
+|2a..(c)..2a...
+|2a.......

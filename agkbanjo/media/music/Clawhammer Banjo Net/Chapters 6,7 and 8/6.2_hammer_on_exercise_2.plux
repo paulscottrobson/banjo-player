@@ -1,0 +1,20 @@
+.beats:=2
+.tempo:=30
+.step:=4
+.name:=6.2 Hammer On Exercise 2
+.tuning:=gdgbd
+.bar:=xxx0 xxxx0 xxx0 xxxx0
+.b1:=0 & !.
+.b2:=x0 & !.
+.b3:=xx0 & !.
+.b4:=xxx0 & !.
+.chord.c:=21020
+|......2a.3c
+|3a.4e.3c++..3a.4c.4a.5a
+|4c++..2a3a4c.5a.4a..3c++.
+|2a..1a2a.5a.2a.3c.3c++.
+|2a.5a.3c..3c..2a.3c
+|3a.4e.3c++..3a.4c.4a.5a
+|4c++..2a3a4c.5a.4a..2a3a4a.5a
+|2a..1a.5a.1a..1c++.
+|1a.5a.3c..3a...
