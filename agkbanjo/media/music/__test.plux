@@ -1,33 +1,17 @@
 .beats:=4
 .tempo:=60
 .step:=4
-.name:=12 Cripple Creek Version 1
-.tuning:=gdgbd
-.apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
-.bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
-.c:=000
-.bar:=xx0 & xx0 .
-.b1:=0 & !.
-.b2:=x0 & !.
-.b3:=xx0 & !.
-.b4:=xxx0 & !.
-.chord.c:=20000
-.chord.g:=02020
-.chord.:=00000
+.name:=Boil Em Cabbage Down
+.option1:="cool" *:pinch
+.option2:="warm" *:chords
+.option3:="even warmer" *:twofinger
+.option4:="hot" *:forward
 |.......
-|1f..1f2a3a.5a.1a..2a.
-|2b..1c..1a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
-|1f..1f2a3a.5a.1a..2a.
-|2b..1c..1a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|2a..1a2a3a.5a.3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|2a..1a2a3a.5a.3a..1a2a3a.5a
-|2a..1a2a3a.5a.3c..3a.
-|4a..4c..3a..1a2a3a.5a
+|2a....2a...
+|(c)2b....2b...
+|2a....2a...
+|3c....3c...
+|2a....2a...
+|(c)2b....2b...
+|2a....3c...
+|3a....3a...
