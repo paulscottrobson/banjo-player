@@ -1,0 +1,11 @@
+.beats:=4
+.tempo:=60
+.step:=4
+.name:=02 Quarter Notes And Single Notes
+.tuning:=gdgbd
+.c:=000
+|.......
+|1a2a3a..1a2a3a..1a2a3a..1a2a3a.
+|1a..1a..1a..1a.
+|1a2a3a..1a2a3a..1a2a3a..1a2a3a.
+|1a..1a..1a..1a.

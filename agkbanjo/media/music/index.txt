@@ -1,5 +1,9 @@
 //
 // ../agkbanjo/media/music
 //
-bluegrass_banjo_complete_ignoramus
-Bluegrass Banjo Complete Ignoramus (folder)
+Clawhammer Banjo Net
+Clawhammer Banjo Net (folder)
+Clawhammer Banjo Primer
+Clawhammer Banjo Primer (folder)
+Clawhammer for Ignoramus
+Clawhammer For Ignoramus (folder)

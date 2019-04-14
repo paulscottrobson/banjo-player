@@ -1,0 +1,25 @@
+.beats:=2
+.tempo:=60
+.step:=4
+.name:=5.2 Hammer Thumb Melody
+.tuning:=gdgbd
+.c:=0 000 .
+.apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
+.bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
+.chord.c:=21020
+.chord.g:=02020
+.chord.:=00000
+.bar:=x0 & x0 .
+.b1:=0 & !.
+.b2:=x0 & !.
+.b3:=xx0 & !.
+.b4:=xxx0 & !.
+|.......
+|2a..2a.5a.3a..3a.5a
+|4a..4a.5a.3a..3a.5a
+|2a..2a.5a.3a..3a.5a
+|3c..4e.5a.4a..4a.5a
+|2a..2a.5a.3a..3a.5a
+|2b..(c)2b.5a.2b..2b.5a
+|3c..2b.5a.2a..3c.5a
+|3a..3a.5a.3a...
