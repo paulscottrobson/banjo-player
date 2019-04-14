@@ -3,11 +3,11 @@
 .step:=4
 .name:=5.1 Basic Melody
 .tuning:=gdgbd
-.bar:=xxx0 & xxx0 .
-.randomstring:=x
 .c:=0 000 .
+.randomstring:=xxx
 .apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
 .bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
+.bar:=xxx0 & xxx0 .
 .chord.c:=21020
 .chord.g:=02020
 .chord.:=00000

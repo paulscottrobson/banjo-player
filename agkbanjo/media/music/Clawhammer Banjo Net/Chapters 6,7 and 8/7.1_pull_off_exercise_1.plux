@@ -3,11 +3,11 @@
 .step:=4
 .name:=7.1 Pull Off Exercise 1
 .tuning:=gdgbd
-.bar:={randomstring}0 & {randomstring}0
-.randomstring:=xx
 .c:=0 000 .
+.randomstring:=x
 .apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
 .bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
+.bar:={randomstring}0 & {randomstring}0
 .chord.c:=20000
 .chord.g:=02020
 .chord.:=00000

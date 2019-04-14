@@ -3,9 +3,8 @@
 .step:=4
 .name:=10 Melody Notes With Clawhammer Rhythm
 .tuning:=gdgbd
-.bar:={randomstring}0 & {randomstring}0
-.randomstring:=x
 .c:=0 0 .
+.randomstring:=xxx
 .apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
 .bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
 |.......

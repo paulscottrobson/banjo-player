@@ -3,11 +3,11 @@
 .step:=4
 .name:=07 Little Birdie
 .tuning:=gcgcd
-.bar:={randomstring}0 & {randomstring}0
-.randomstring:=
 .c:=0 000 .
+.randomstring:=xx
 .apart:=5 !. 0 x0 | x1 2 0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
 .bpart:=x0 !. xx2 xx0 | x0 !. xx0 !. | x0 !. xx2 xx0 | xxx0 xxx2 xx0 !.
+.bar:={randomstring}0 & {randomstring}0
 .chord.c:=20000
 .chord.g:=02020
 .chord.:=00000

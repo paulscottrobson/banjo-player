@@ -3,11 +3,11 @@
 .step:=4
 .name:=4.1.1 Hammer String 1
 .tuning:=gdgbd
-.bar:=0 & 0 .
-.randomstring:=xx
 .c:=0 000 .
+.randomstring:=xx
 .apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
 .bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.
+.bar:=0 & 0 .
 .chord.c:=20000
 .chord.g:=02020
 .chord.:=00000

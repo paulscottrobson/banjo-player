@@ -3,9 +3,8 @@
 .step:=4
 .name:=01 Quarter Note Strums
 .tuning:=gdgbd
-.bar:={randomstring}0 & {randomstring}0
-.randomstring:=xx
 .c:=000
+.randomstring:=xx
 |.......
 |1a2a3a..1a2a3a..1a2a3a..1a2a3a.
 |1a2a3a..1a2a3a..1a2a3a..1a2a3a.

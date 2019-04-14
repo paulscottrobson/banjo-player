@@ -1,7 +1,7 @@
 ##
 ##		Down the Road
 ##
-tempo := 160
+tempo := 60
 
 option1 := "cool" *:pinch
 option2 := "warm" *:twofinger
