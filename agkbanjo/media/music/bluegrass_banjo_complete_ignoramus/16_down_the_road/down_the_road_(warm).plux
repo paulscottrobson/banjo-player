@@ -1,0 +1,16 @@
+.beats:=4
+.tempo:=160
+.step:=4
+.name:=Down The Road
+.option1:="cool" *:pinch
+.option2:="warm" *:twofinger
+.option3:="hot" *:altthumb
+|.......
+|3a.1a.5a.1a.3a.1a.5a.1a
+|3a.1a.5a.1a.4c.1a.5a.1a
+|3a.1a.5a.1a.3a..4c.
+|4a..4c..3a.1a.5a.1a
+|2a.1a.5a.1a.2d.1a.5a.1a
+|2a..3a..4c.1a.5a.1a
+|3a.1a.5a.1a.3a..4c.
+|4a..4c..3a.1a.5a.1a
