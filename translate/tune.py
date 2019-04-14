@@ -9,7 +9,7 @@
 # ***************************************************************************************************
 # ***************************************************************************************************
 
-import os,re,sys
+import os,re,sys,random
 from musicex import *
 from bar import *
 
@@ -61,9 +61,11 @@ class BaseTune(object):
 			completed = True
 			for i in range(0,len(l)):											# look at all parts
 				if l[i].startswith("{") and l[i].endswith("}"):					# found a macro
-					if l[i][1:-1] not in self.equates:							# check it exists.
+					key = l[i][1:-1]
+					self.equates["randomstring"] = "x" * random.randint(0,3)
+					if key not in self.equates:									# check it exists.
 						raise MusicException("Cannot expand "+l[i])
-					l[i] = self.equates[l[i][1:-1]]								# expand the macro.
+					l[i] = self.equates[key]									# expand the macro.
 					completed = False 											# may need one more pass
 			l = "".join(l)														# back together.
 		return l

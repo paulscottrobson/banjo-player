@@ -3,6 +3,8 @@
 .step:=4
 .name:=06 Bonus Exercise
 .tuning:=gdgbd
+.bar:={randomstring}0 & {randomstring}0
+.randomstring:=xxx
 .c:=000
 |.......
 |1a..2a..3a..4a.

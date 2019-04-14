@@ -3,6 +3,8 @@
 .step:=4
 .name:=07 Clawhammer Rhythm Single Notes
 .tuning:=gdgbd
+.bar:={randomstring}0 & {randomstring}0
+.randomstring:=x
 .c:=0 0 .
 |.......
 |1a..1a.5a.1a..1a.5a

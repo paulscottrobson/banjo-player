@@ -3,6 +3,8 @@
 .step:=4
 .name:=02 Quarter Notes And Single Notes
 .tuning:=gdgbd
+.bar:={randomstring}0 & {randomstring}0
+.randomstring:=xxx
 .c:=000
 |.......
 |1a2a3a..1a2a3a..1a2a3a..1a2a3a.

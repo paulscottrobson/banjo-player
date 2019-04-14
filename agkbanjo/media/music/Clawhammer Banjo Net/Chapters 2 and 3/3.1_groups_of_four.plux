@@ -3,6 +3,8 @@
 .step:=4
 .name:=3.1 Groups Of Four
 .tuning:=gdgbd
+.bar:={randomstring}0 & {randomstring}0
+.randomstring:=xx
 .c:=0 000 .
 .apart:=5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (c)!.
 .bpart:=2 !. 3 !. | 2 (c)!. 0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.

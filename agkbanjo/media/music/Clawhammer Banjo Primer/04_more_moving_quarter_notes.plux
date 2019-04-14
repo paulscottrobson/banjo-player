@@ -3,6 +3,8 @@
 .step:=4
 .name:=04 More Moving Quarter Notes
 .tuning:=gdgbd
+.bar:={randomstring}0 & {randomstring}0
+.randomstring:=xx
 .c:=000
 |.......
 |1a..1a..2a..2a.
