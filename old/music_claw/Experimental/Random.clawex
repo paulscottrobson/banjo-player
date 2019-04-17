@@ -1,0 +1,18 @@
+beats := 4
+tempo := 90
+step := 4
+tuning := gdgbd
+
+& & & & 
+
+bar := {randomstring}0 & {randomstring}0 
+
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}

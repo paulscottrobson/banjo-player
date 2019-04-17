@@ -48,7 +48,8 @@ function Player_Initialise(music ref as Music)
 					endif
 					ntype = music.bars[bar].notes[note].modifier
 					if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
-						noteid = plg.tuning[strn]+music.bars[bar].notes[note].newFretting
+						if ntype = NOTE_PULLOFF then notedir = -1 else notedir = 1
+						noteid = noteid + notedir * plg.tuning[strn]+music.bars[bar].notes[note].modifierAdjust
 						if GetSoundExists(noteid + plg.baseID) = 0 
 							LoadSoundOGG(noteid + plg.baseID,"sounds/"+str(noteid)+".ogg")
 						endif
@@ -89,6 +90,7 @@ function Player_PlayNote(note ref as Note)
 	endif
 	ntype = note.modifier
 	if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
-		plg.pendingNote = plg.tuning[note.modifierstring]+note.newFretting
+		if ntype = NOTE_PULLOFF then notedir = -1 else notedir = 1
+		plg.pendingNote = plg.tuning[note.modifierstring]+note.fretting[s] + notedir * note.modifierAdjust
 	endif
 endfunction
