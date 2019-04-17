@@ -1,0 +1,10 @@
+//
+//			Little Birdie
+//
+chord_c := 2000
+chord_g := 0202
+chord_ := 0000
+
+& & xx0 xx2 | x0 (C)!. 2 !. | 2 !. 0 x0 | 4 (G)!. xx0 !. | xx0 !. xx0 xx4
+
+0 ()!. 0 x0 | 2 !. 2 0 | x0 (C)!. x0 !. | !. xx0 xx2

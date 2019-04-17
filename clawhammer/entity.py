@@ -27,6 +27,11 @@ class BaseMusicEntity(object):
 	def setChord(self,chord):
 		self.chord = chord.strip().lower()
 	#
+	#		Get chord Rendering
+	#
+	def getChordRendering(self):
+		return "" if self.chord is None else "("+self.chord+")"
+	#
 	#		Make this a 'pluck'
 	#
 	def setPluck(self):
@@ -72,7 +77,7 @@ class BeatRest(BaseMusicEntity):
 	#		Convert note to final format, at one half beat
 	#
 	def render(self):
-		return "."+self.getPluckRendering()
+		return self.getChordRendering()+"."+self.getPluckRendering()
 	def toString(self):
 		return "&"+self.getPluckToString()
 
@@ -86,15 +91,9 @@ class BeatRest(BaseMusicEntity):
 class Note(BaseMusicEntity):
 	def __init__(self,definition):
 		BaseMusicEntity.__init__(self)
-		self.chord = None 												# No displayed chord
 		self.modifier = Note.NORMAL 									# no slides/pulloff/hammers
 		self.modifierOffset = 0											# how it changes numerically.
 		self.setFretting(definition)
-	#
-	#		Set chordal display
-	#
-	def setChord(self,chord):
-		self.chord = chord.strip().lower()
 	#
 	#		Get current fretting (copy)
 	#	
@@ -120,7 +119,7 @@ class Note(BaseMusicEntity):
 	#		Render note.
 	#
 	def render(self):
-		render = "" if self.chord is None else "("+self.chord+")"		# chord display
+		render = self.getChordRendering()								# chord display
 		for string in range(0,5):										# build played notes.
 			if self.fretting[string] is not None:
 				render += self.noteToRender(string+1,self.fretting[string])
@@ -153,6 +152,7 @@ class Note(BaseMusicEntity):
 		if self.modifier == Note.NORMAL:
 			return str(fret) 
 		return str(fret)+("/" if self.modifier == Note.SLIDE else "-")+str(fret+self.modifierOffset)
+
 Note.NORMAL = 0															# types.
 Note.HAMMERON = 1
 Note.PULLOFF = 2

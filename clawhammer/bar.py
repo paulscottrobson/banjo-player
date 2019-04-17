@@ -20,16 +20,20 @@ from entity import *
 # ***************************************************************************************************
 
 class Bar(object):
-	def __init__(self,definition,barNumber,beats):
+	def __init__(self,definition,keys,barNumber,beats):
 		self.barNumber = barNumber
+		self.keys = keys
 		if barNumber <= 1:
 			Bar.currentFretting = [0,0,0,0,0]
 		self.beats = beats
 		MusicException.Number = barNumber
 		self.entities = []
+		self.pendingChordDisplay = None
 		definition = definition.strip().lower()
 		while definition != "":
 			definition = self.processElement(definition.strip()).strip()
+		if len(self.entities) > self.beats:
+			raise MusicException("Bar too large")
 	#
 	#		Process a single element off the definition
 	#
@@ -48,12 +52,27 @@ class Bar(object):
 		m = re.match("^(x*)(["+BaseMusicEntity.ENCODE+"]+)(.*)$",d)
 		if m is not None:
 			newNote = Note(m.group(1)+m.group(2))
+			if self.pendingChordDisplay:
+				newNote.setChord(self.pendingChordDisplay)
+				self.pendingChordDisplay = None
 			self.entities.append(newNote)
 			if self.isFingeringChange(newNote.getFretting(),Bar.currentFretting):
 				Bar.currentFretting = newNote.getFretting()
 			return m.group(3)
 		#
-		elif d.startswith("."):
+		m = re.match("^\\((.*?)\\)(.*)$",d)
+		if m is not None:
+			self.pendingChordDisplay = m.group(1).lower()
+			if "chord_"+self.pendingChordDisplay not in self.keys:
+				raise MusicException("Chord "+self.pendingChordDisplay+" unknown")
+			chord =(self.keys["chord_"+self.pendingChordDisplay]+"0000")[:4]
+			if re.match("^["+BaseMusicEntity.ENCODE+"]+$",chord) is None:
+				raise MusicException("Bad chord definition "+chord)
+			for i in range(0,len(chord)):
+				Bar.currentFretting[i] = BaseMusicEntity.ENCODE.find(chord[i])
+			return m.group(2)
+		#
+		if d.startswith("."):
 			if len(self.entities) == 0:
 				raise MusicException("No note to pluck")
 			self.entities[-1].setPluck()
@@ -65,6 +84,9 @@ class Bar(object):
 		#
 		elif d.startswith("!"):
 			self.entities.append(Brush(Bar.currentFretting))
+			if self.pendingChordDisplay:
+				self.entities[-1].setChord(self.pendingChordDisplay)
+				self.pendingChordDisplay = None
 			return d[1:]
 		else:
 			raise MusicException("Cannot understand "+d)
@@ -82,16 +104,24 @@ class Bar(object):
 	#
 	def toString(self):
 		return "[{0}]:".format(self.barNumber)+",".join([x.toString() for x in self.entities])
+	#
+	#		Render a bar
+	#
+	def render(self):
+		return "".join([x.render() for x in self.entities])
 
 Bar.currentFretting = [0,0,0,0,0]
 
 if __name__ == "__main__":
-	b = Bar("5 x3 7 x2.",1,4)
-	print(b.toString())
+	b = Bar("5 x3 7 x2.",{ "chord_c":"2000" },1,4)
+	print(b.toString(),b.render())
 	print("=====================================")
-	b = Bar("! & !. &",2,4)
-	print(b.toString())
+	b = Bar("! & !. &",{ "chord_c":"2000" },2,4)
+	print(b.toString(),b.render())
 	print("=====================================")
-	b = Bar("5-7 x3-1 7/9 !.",3,4)
-	print(b.toString())
+	b = Bar("5-7 x3-1 7/9 !.",{ "chord_c":"2000" },3,4)
+	print(b.toString(),b.render())
+	print("=====================================")
+	b = Bar("5!. (c)!.",{ "chord_c":"2135" },4,4)
+	print(b.toString(),b.render())
 	print("=====================================")
