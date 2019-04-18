@@ -85,7 +85,7 @@ function Bar_Load(this ref as Bar,barDesc as string)
 		if d$ = "." then inc currentNote
 		if d$ = "+" or d$ = "-" or d$ = "/"
 			this.notes[currentNote].modifierString = currentString
-			this.notes[currentNote].modifierAdjust = 0
+			inc this.notes[currentNote].modifierAdjust 
 			if d$ = "+" then this.notes[currentNote].modifier = NOTE_HAMMERON
 			if d$ = "-" then this.notes[currentNote].modifier = NOTE_PULLOFF
 			if d$ = "/" then this.notes[currentNote].modifier = NOTE_SLIDE
@@ -114,7 +114,7 @@ function Bar_GetNoteText(this ref as bar,note as integer,strn as integer)
 				note$ = note$+"/"+str(this.notes[note].fretting[strn]+this.notes[note].modifierAdjust)
 			endcase
 			case NOTE_HAMMERON:
-				note$ = note$+"+"+str(this.notes[note].fretting[strn]+this.notes[note].modifierAdjust)
+				note$ = note$+"-"+str(this.notes[note].fretting[strn]+this.notes[note].modifierAdjust)
 			endcase
 		endselect
 	endif

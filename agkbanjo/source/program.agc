@@ -205,7 +205,7 @@ readTest$ = ReadLine(1)
 CloseFile(1)
 repeat
 	file$ = "__test.plux"
-	if left(readTest$,1) = "1" then file$ = Program_SelectFromMenu("",0)
+//if left(readTest$,1) = "1" then file$ = Program_SelectFromMenu("",0)
 	Program_OpenTune(file$)
 	Program_MainLoop()
 	Program_CloseTune()
