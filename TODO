@@ -1,5 +1,7 @@
 DEV:
-	Add modifiers and only render them as a modifier.
+	Modify the display,player,documents so there is a fast/slow slide option.	
+	Rethink the bluegrass documentation which will have to be recovered
+	Implement the compiler system.
 	
 TODO:
 	Tab display.

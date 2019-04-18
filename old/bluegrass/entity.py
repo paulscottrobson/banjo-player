@@ -29,9 +29,9 @@ class BaseMusicEntity(object):
 	def getRenderedChord(self,keys):
 		if self.chord is None:											# no chord here.
 			return None
-		if self.chord not in keys:										# check chord defined
+		if "chord_"+self.chord not in keys:								# check chord defined
 			raise MusicException("Unknown chord "+self.chord)
-		play = self.textToChordArray(keys[self.chord])					# get notes to play here.
+		play = self.textToChordArray(keys["chord_"+self.chord])			# get notes to play here.
 		play[4] = None 													# do not strum string 5
 		return self.noteArrayRender(play)								# and render it.
 	#
@@ -123,7 +123,6 @@ Note.HAMMERON = 1
 Note.PULLOFF = 2
 Note.SLIDE = 3
 
-
 # ***************************************************************************************************
 #
 #											Half Beat Rest
@@ -144,9 +143,9 @@ class HalfBeatRest(BaseMusicEntity):
 
 if __name__ == "__main__":
 	bs = BaseMusicEntity()
-	print(bs.getRenderedChord({"c":"0200"}))
+	print(bs.getRenderedChord({"chord_c":"0200"}))
 	bs.setChord("C")
-	print(bs.getRenderedChord({"c":"0200"}))
+	print(bs.getRenderedChord({"chord_c":"0200"}))
 	print("--------------------------------------------")
 	rs = HalfBeatRest()
 	print(rs.render(),rs.getNoteSize())
@@ -155,5 +154,4 @@ if __name__ == "__main__":
 	print(nt.render(),nt.getNoteSize())
 	print("--------------------------------------------")
 	nt.modify(Note.SLIDE,3)
-	print(nt.render(),nt.getNoteSize())
-	
+	print(nt.render(),nt.getNoteSize())	
