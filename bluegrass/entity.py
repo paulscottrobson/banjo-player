@@ -33,7 +33,7 @@ class BaseMusicEntity(object):
 			raise MusicException("Unknown chord "+self.chord)
 		play = self.textToChordArray(keys["chord_"+self.chord])			# get notes to play here.
 		play[4] = None 													# do not strum string 5
-		return self.noteArrayRender(play)								# and render it.
+		return play
 	#
 	#		Convert a string of frets with x prefixes to a note list with None,0-
 	#
@@ -60,14 +60,6 @@ class BaseMusicEntity(object):
 			render += self.noteRender(string+1,notes[string])
 		return render
 	#
-	#		render a single note
-	#
-	def noteRender(self,string,fret):
-		if string is None or fret is None:
-			return ""
-		else:
-			return str(string)+chr(fret+97)
-	#
 	#		Get the fretting search string.
 	#
 	def getFretting(self):
@@ -82,7 +74,7 @@ class BaseMusicEntity(object):
 	#
 	def getNoteSize(self):
 		assert False,"Abstract method"
-	def render(self):
+	def get(self):
 		assert False,"Abstract method"
 
 BaseMusicEntity.FRETTING = "0123456789tlwhufsve"				
@@ -99,15 +91,17 @@ class Note(BaseMusicEntity):
 		BaseMusicEntity.__init__(self)
 		self.notes = self.textToChordArray(noteDefinition)				# original state
 		self.modifier = Note.NORMAL 									# modifier
+		self.modifierOffset = 1
+		self.modifierLength = 0
 	#
-	#		Convert note to final format, at one half beat
+	#		Get note information
 	#
-	def render(self):
-		render = self.noteArrayRender(self.notes)						# "normal" note
-		if self.modifier != Note.NORMAL:								# modify it.
-			render = render if self.modifierLength == 2 else render+"="	# length 
-			render += (" +-/"[self.modifier]) * self.modifierOffset
-		return render + ("." * self.getNoteSize())						# pad out to length
+	def get(self):
+		info = [x for x in self.notes]
+		info.append(1 if self.modifier == Note.NORMAL else self.modifierLength)
+		info.append(" +-/"[self.modifier])
+		info.append(self.modifierOffset)
+		return info
 	#
 	#		Length of note in half beats. Extended if hammer off/pull on to 2.
 	#
@@ -148,10 +142,10 @@ Note.SLIDE = 3
 
 class HalfBeatRest(BaseMusicEntity):
 	#
-	#		Convert note to final format, at one half beat
+	#		Get Half Beat equivalence
 	#
-	def render(self):
-		return "."
+	def get(self):
+		return [ None,None,None,None,None,1,".",0 ]
 	#
 	#		Length of note in half beats.
 	#
@@ -170,18 +164,18 @@ if __name__ == "__main__":
 	print(bs.getRenderedChord({"chord_c":"0200"}))
 	print("--------------------------------------------")
 	rs = HalfBeatRest()
-	print(rs.render(),rs.getNoteSize())
+	print(rs.get(),rs.getNoteSize())
 	print(rs.toString())
 	print("--------------------------------------------")
 	nt = Note("x34")
-	print(nt.render(),nt.getNoteSize())
+	print(nt.get(),nt.getNoteSize())
 	print(nt.toString())
 	print("--------------------------------------------")
 	nt.modify(Note.SLIDE,3)
-	print(nt.render(),nt.getNoteSize())	
+	print(nt.get(),nt.getNoteSize())	
 	print(nt.toString())
 	print("--------------------------------------------")
 	nt.makeFastModifier()
-	print(nt.render(),nt.getNoteSize())	
+	print(nt.get(),nt.getNoteSize())	
 	print(nt.toString())
 
