@@ -71,7 +71,7 @@ class BaseMusicEntity(object):
 	#		Get the fretting search string.
 	#
 	def getFretting(self):
-		return "0123456789tlwhufsve"				
+		return BaseMusicEntity.FRETTING
 	#
 	#		Default modifier, which doesn't work.
 	#
@@ -84,6 +84,8 @@ class BaseMusicEntity(object):
 		assert False,"Abstract method"
 	def render(self):
 		assert False,"Abstract method"
+
+BaseMusicEntity.FRETTING = "0123456789tlwhufsve"				
 
 # ***************************************************************************************************
 #
@@ -103,20 +105,35 @@ class Note(BaseMusicEntity):
 	def render(self):
 		render = self.noteArrayRender(self.notes)						# "normal" note
 		if self.modifier != Note.NORMAL:								# modify it.
+			render = render if self.modifierLength == 2 else render+"="	# length 
 			render += (" +-/"[self.modifier]) * self.modifierOffset
 		return render + ("." * self.getNoteSize())						# pad out to length
 	#
 	#		Length of note in half beats. Extended if hammer off/pull on to 2.
 	#
 	def getNoteSize(self):
-		return 1 if self.modifier is Note.NORMAL else 2
+		return 1 if self.modifier is Note.NORMAL else self.modifierLength
 	#
-	#		Modify the note to be a slide, hammeron or pull off.
+	#		Modify the note to be a slide, hammeron or pull off over two. The count is 
+	#		an absolute value up or down, direction defined by the type.
 	#
 	def modify(self,modifier,count):
 		self.modifier = modifier
 		self.modifierOffset = count
-
+		self.modifierLength = 2
+	#
+	#		Modify the note to be modified over *one* note.
+	#
+	def makeFastModifier(self):
+		self.modifierLength = 1
+	#
+	#		Convert to string
+	#
+	def toString(self):
+		s = "-".join(["X" if self.notes[n] is None else str(self.notes[n]) for n in range(0,5)])
+		if self.modifier != Note.NORMAL:
+			s = s + " " + ("/" if self.modifier == Note.SLIDE else "-")+str(self.modifierOffset)+":"+str(self.modifierLength)
+		return "["+s+"]"
 
 Note.NORMAL = 0															# types.
 Note.HAMMERON = 1
@@ -140,6 +157,11 @@ class HalfBeatRest(BaseMusicEntity):
 	#
 	def getNoteSize(self):
 		return 1
+	#
+	#		String conversion
+	#
+	def toString(self):
+		return "[rest]"
 
 if __name__ == "__main__":
 	bs = BaseMusicEntity()
@@ -149,9 +171,17 @@ if __name__ == "__main__":
 	print("--------------------------------------------")
 	rs = HalfBeatRest()
 	print(rs.render(),rs.getNoteSize())
+	print(rs.toString())
 	print("--------------------------------------------")
 	nt = Note("x34")
 	print(nt.render(),nt.getNoteSize())
+	print(nt.toString())
 	print("--------------------------------------------")
 	nt.modify(Note.SLIDE,3)
 	print(nt.render(),nt.getNoteSize())	
+	print(nt.toString())
+	print("--------------------------------------------")
+	nt.makeFastModifier()
+	print(nt.render(),nt.getNoteSize())	
+	print(nt.toString())
+

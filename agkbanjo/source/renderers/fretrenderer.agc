@@ -69,7 +69,7 @@ function FretRenderer_Create()
 	frg.fretY = DPHEIGHT - frg.fretHeight
 	frg.stringAreaHeight = frg.fretHeight * 9 / 10
 	frg.stringAreaY = frg.fretY + frg.fretHeight/2 - frg.stringAreaHeight/2
-	frg.barWidth = SCWIDTH / 3.0 
+	frg.barWidth = SCWIDTH / 2.8 
 	frg.ballX = SCWIDTH * 14 / 100
 	frg.sineHeight = DPHEIGHT * 1.5 / 10
 																// Border to fretboard

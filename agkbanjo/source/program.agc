@@ -143,11 +143,11 @@ function Program_MainLoop()
 			endif
 
 			notes = prg.tune.bars[trunc(prg.pos#)].notesInBar 	// How many beats in bar
-			qb1 = trunc(lastpos# * notes)						// Work out quarterbeat position
-			qb2 = trunc(prg.pos# * notes)
+			qb1 = trunc(lastpos# * notes * 2)						// Work out eighthbeat position
+			qb2 = trunc(prg.pos# * notes * 2)
 			if qb1 <> qb2 or lastpos# = 0  						// Time for a note ?
-				if mod(qb2,2) = 0 then Player_PlayMetronome()	// Play metronome
-				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(qb2,notes)])
+				if mod(qb2,4) = 0 then Player_PlayMetronome()	// Play metronome
+				Player_PlayNote(prg.tune.bars[trunc(prg.pos#)].notes[mod(trunc(qb2/2),notes)],mod(qb2,2) = 0)
 			endif
 		endif
 	    Manager_MoveRenderTo(prg.pos#)							// Update display position

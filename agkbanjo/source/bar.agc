@@ -26,6 +26,7 @@ type Note
 	modifier as integer 										// Normal or hammer on/pull off etc.
 	modifierString as integer 									// String to which this applies.
 	modifierAdjust as integer 									// Amount by which modifier adjusts
+	modifierLength as integer 									// one or two note length modifier ?
 	chordLabel as string 										// Chord Label, if any.
 endtype
 
@@ -55,6 +56,7 @@ function Bar_Initialise(this ref as Bar,barNumber as integer,beats as integer)
 		this.notes[i].modifier = NOTE_NORMAL					// Normal type of note
 		this.notes[i].modifierString = 0	
 		this.notes[i].modifierAdjust = 0 
+		this.notes[i].modifierLength = 2
 		this.notes[i].chordLabel = ""
 		for s = 1 to 5											// Not playing any strings, yet.
 			this.notes[i].fretting[s] = BAR_DONTPLAY
@@ -79,6 +81,7 @@ function Bar_Load(this ref as Bar,barDesc as string)
 		if d$ >= "A" and d$ <= "Z"
 			this.notes[currentNote].fretting[currentString] = asc(d$) - asc("A")
 			this.notes[currentNote].modifierAdjust = 0
+			this.notes[currentNote].modifierLength = 2
 			this.notes[currentNote].modifier = NOTE_NORMAL
 			this.notes[currentNote].isPlayed = 1
 		endif
@@ -90,6 +93,7 @@ function Bar_Load(this ref as Bar,barDesc as string)
 			if d$ = "-" then this.notes[currentNote].modifier = NOTE_PULLOFF
 			if d$ = "/" then this.notes[currentNote].modifier = NOTE_SLIDE
 		endif
+		if d$ = "=" then this.notes[currentNote].modifierLength = 1
 		if d$ = "("
 			p = FindString(barDesc,")")
 			chord$ = left(barDesc,p-1)
@@ -108,7 +112,7 @@ function Bar_GetNoteText(this ref as bar,note as integer,strn as integer)
 	if strn = this.notes[note].modifierString
 		select this.notes[note].modifier
 			case NOTE_PULLOFF:
-				note$ = note$+"-"+str(this.notes[note].fretting[strn]+this.notes[note].modifierAdjust)
+				note$ = note$+"-"+str(this.notes[note].fretting[strn]-this.notes[note].modifierAdjust)
 			endcase
 			case NOTE_SLIDE:
 				note$ = note$+"/"+str(this.notes[note].fretting[strn]+this.notes[note].modifierAdjust)
@@ -128,6 +132,6 @@ function Bar_IsNoteDoubleWidth(this ref as bar,note as integer,strn as integer)
 	isWide = 0
 	if strn = this.notes[note].modifierString
 		m = this.notes[note].modifier
-		isWide = m = NOTE_PULLOFF or m = NOTE_SLIDE or m = NOTE_HAMMERON
+		isWide = (m = NOTE_PULLOFF or m = NOTE_SLIDE or m = NOTE_HAMMERON) and (this.notes[note].modifierLength = 2)
 	endif
 endfunction isWide

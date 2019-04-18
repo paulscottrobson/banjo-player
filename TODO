@@ -1,7 +1,4 @@
 DEV:
-	Modify the display,player so there is a fast/slow slide option.	
-	How will this be implemented in code ?
-	Modify note entity to allow 2 note/1 note modifiers.
 	Implement the compiler system.
 	Implement the modifiers.
 	

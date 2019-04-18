@@ -14,6 +14,7 @@ type PlayerGlobals
 	baseID as integer
 	metronome as integer
 	pendingNote as integer
+	pendingCount as integer
 endtype
 
 global plg as PlayerGlobals
@@ -76,22 +77,28 @@ endfunction
 //						Play a note which can be up to 5 strings at once
 // ***************************************************************************************************
 
-function Player_PlayNote(note ref as Note)
+function Player_PlayNote(note ref as Note,fullNote as integer)
 	if plg.pendingNote >= 0
-		PlaySound(plg.pendingNote)
-		plg.pendingNote = -1
+		dec plg.pendingCount
+		if plg.pendingCount = 0
+			PlaySound(plg.pendingNote)
+			plg.pendingNote = -1
+		endif
 	endif
-	if note.isPlayed <> 0
-		for s = 1 to 5
-			if note.fretting[s] <> BAR_DONTPLAY
-				rem debug = debug + str(note.fretting[s]+plg.tuning[s])+"."+str(s)+" "
-				PlaySound(plg.tuning[s] + note.fretting[s] + plg.baseID)
-			endif
-		next s
-	endif
-	ntype = note.modifier
-	if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
-		if ntype = NOTE_PULLOFF then notedir = -1 else notedir = 1
-		plg.pendingNote = plg.baseID + plg.tuning[note.modifierstring]+note.fretting[note.modifierstring] + notedir * note.modifierAdjust
+	if fullNote <> 0 
+		if note.isPlayed <> 0
+			for s = 1 to 5
+				if note.fretting[s] <> BAR_DONTPLAY
+					rem debug = debug + str(note.fretting[s]+plg.tuning[s])+"."+str(s)+" "
+					PlaySound(plg.tuning[s] + note.fretting[s] + plg.baseID)
+				endif
+			next s
+		endif
+		ntype = note.modifier
+		if ntype = NOTE_HAMMERON or ntype = NOTE_PULLOFF or ntype = NOTE_SLIDE
+			if ntype = NOTE_PULLOFF then notedir = -1 else notedir = 1
+			plg.pendingNote = plg.baseID + plg.tuning[note.modifierstring]+note.fretting[note.modifierstring] + notedir * note.modifierAdjust
+			plg.pendingCount = note.modifierLength
+		endif
 	endif
 endfunction
