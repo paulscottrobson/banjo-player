@@ -1,7 +1,7 @@
 //
-//			Exercise just brush + pluck with 0
+//			Exercise just brush and 1 with plucks in the middle
 //
 tempo := 60
 
-0 !. 0 !. | 0 !. 0 !. |0 !. 0 !. |0 !. 0 !. 
+! xxxx0 0 xxxx0 |! xxxx0 0 xxxx0 |! xxxx0 0 xxxx0 |! xxxx0 0 xxxx0 
 
