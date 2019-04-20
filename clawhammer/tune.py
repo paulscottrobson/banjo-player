@@ -20,7 +20,7 @@ from bar import *
 #
 # ***************************************************************************************************
 
-class Tune(object):
+class ClawHammerTune(object):
 	def __init__(self):
 		self.bars = []
 		self.keys = { "beats":"4","tempo":"100","tuning":"gdgbd","step":"4" }
@@ -47,6 +47,21 @@ class Tune(object):
 	#
 	def toString(self):
 		return "\n".join([x.toString() for x in self.bars])
+	#
+	#		Render a tune.
+	#
+	def render(self,modifiers = {}):
+		render = "\n".join([".{0}:={1}".format(k,self.keys[k]) for k in self.keys.keys()])
+		render += "\n"
+		render += "\n".join(["|"+x.render() for x in self.bars])
+		return render
+	#
+	#		Write a tune
+	#
+	def write(self,fileName,modifiers = {}):
+		h = open(fileName,"w")
+		h.write(self.render()+"\n\n")
+		h.close()
 
 if __name__ == "__main__":
 	src = """
@@ -57,10 +72,17 @@ if __name__ == "__main__":
 		5!. 7!. |3 !.5!. | 2 !. 3 2 | 0 xx4 x0 (c)!.
 		2 !. 3!. | 2 (c)!.  0 !. | 2 (c)!. 3 2 | 0 xx4 x0 (c)!.	
 	""".split("\n")
-	tune = Tune()
+	tune = ClawHammerTune()
 	tune.loadDefinition(src)
 	print(tune.toString())
 	print("==========================")
-	tune = Tune()
+	tune = ClawHammerTune()
 	tune.loadFile("littlebirdie.claw")
 	print(tune.toString())
+	print(tune.render())
+	print("==========================")
+	tune = ClawHammerTune()
+	tune.loadFile("test.claw")
+	tune.write("../agkbanjo/media/music/__test.plux")
+	print(tune.toString())
+	print(tune.render())

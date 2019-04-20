@@ -1,0 +1,11 @@
+//
+// ../agkbanjo/media/music/cathy-fink-beginner-module-1
+//
+01-right-hand-basics-1.plux
+01 Right Hand Basics 1
+02-right-hand-basics-1b.plux
+02 Right Hand Basics 1b
+03-right-hand-basics-2.plux
+03 Right Hand Basics 2
+03-right-hand-basics-2b.plux
+03 Right Hand Basics 2b

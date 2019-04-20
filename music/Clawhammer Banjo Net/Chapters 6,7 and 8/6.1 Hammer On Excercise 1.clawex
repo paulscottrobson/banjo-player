@@ -1,8 +1,0 @@
-beats := 2
-tempo := 30
-step := 4
-tuning := gdgbd
-
-xxx0vv !. xx0 !. | xx0vv !. x0 000. | x0v !. x0 !. | x0- xx2- !. xx0 !. | xxx0vv !. xx0 !.
-
-xx0vv !. x0 000. | x0v !. x0- xx2- !. | xx0 !. xx0

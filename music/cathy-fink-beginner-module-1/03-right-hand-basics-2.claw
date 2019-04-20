@@ -1,0 +1,7 @@
+//
+//			Exercise just brush + pluck with 0
+//
+tempo := 60
+
+0 !. 0 !. | 0 !. 0 !. |0 !. 0 !. |0 !. 0 !. 
+
