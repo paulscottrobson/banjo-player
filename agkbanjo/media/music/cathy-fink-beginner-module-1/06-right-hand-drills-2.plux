@@ -2,6 +2,7 @@
 .tempo:=60
 .tuning:=gdgbd
 .step:=4
+|..
 |1a2a3a..5a..1a..5a..
 |1a2a3a..5a..1a..5a..
 |1a2a3a..5a..1a..5a..
