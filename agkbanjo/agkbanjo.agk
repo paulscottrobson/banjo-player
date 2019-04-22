@@ -59,8 +59,8 @@ FILE_11=source%2Fui%2Fslider.agc;-1
 FILE_12=source%2Fui%2Fmenu.agc;-1
 
 [files]
-FILE_NAME_0=0;source%2Fbar.agc;0;0
-FILE_NAME_1=1;source%2Fprogram.agc;9006;1
+FILE_NAME_0=1;source%2Fbar.agc;0;0
+FILE_NAME_1=0;source%2Fprogram.agc;9006;1
 
 [project]
 description=
