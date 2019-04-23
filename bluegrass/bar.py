@@ -31,6 +31,12 @@ class Note(object):
 	def getFinalFretting(self):
 		return self.fretting+self.modifierOffset
 	#
+	def render(self):
+		r = str(self.string)+chr(self.fretting+97)
+		if self.modifier is not None:
+			r = r + (self.modifier * abs(self.modifierOffset))
+		return r
+	#
 	def toString(self):
 		s = str(self.fretting)		
 		if self.modifier is not None:
@@ -99,13 +105,13 @@ class Bar(object):
 			elif m == "drone":											# drone
 				for h in range(0,2):									# add drone to quavers
 					if not self.isSingleNote(h):
-						self.notes[h*4+1][0] = Note(1,0)
-						self.notes[h*4+3][0] = Note(1,0)
+						self.notes[h*4+1][0] = Note(0,1)
+						self.notes[h*4+3][0] = Note(0,1)
 			elif m == "pinch":											# pinch 
 				for h in range(0,2):									# add pinch to crotchets
 					if self.isSingleNote(h):
-						self.notes[h*4+2][0] = Note(1,0)
-						self.notes[h*4+2][4] = Note(5,0)
+						self.notes[h*4+2][0] = Note(0,1)
+						self.notes[h*4+2][4] = Note(0,5)
 			elif m == "chord":											# chord
 				for p in range(0,8):									# look for chords in bar
 					if self.chords[p] is not None:
@@ -266,6 +272,15 @@ class Bar(object):
 	def advance(self):
 		self.pos += 1
 	#
+	#		Render
+	#
+	def render(self,modifiers = []):
+		self.convert(modifiers)
+		return ".".join([self.__render(x) for x in range(0,self.beats * 2)])
+	#
+	def __render(self,hb):
+		return "".join([x.render() for x in self.notes[hb] if x is not None])
+	#
 	#		Convert to string
 	#
 	def toString(self):
@@ -288,6 +303,7 @@ if __name__ == "__main__":
 	print(b.getPostStrings())
 	print(b.getPostFretting())
 	print(b.isSingleNote(0),b.isSingleNote(1))
+	print(b.render())
 	print("===========================================")
 
 	b = Bar(2,"#6789t $12345.23 ********",4,{})
@@ -296,6 +312,7 @@ if __name__ == "__main__":
 	print(b.getPostStrings())
 	print(b.getPostFretting())
 	print(b.isSingleNote(0),b.isSingleNote(1))
+	print(b.render())
 
 	print("===========================================")
 
@@ -306,6 +323,7 @@ if __name__ == "__main__":
 	print(b.getPostFretting())
 	print(b.isSingleNote(0),b.isSingleNote(1))
 	print(" ".join([x.toString() if x is not None else "." for x in b.rollNote]))
+	print(b.render())
 
 	print("===========================================")
 	b.convert(["drone"])
@@ -313,12 +331,13 @@ if __name__ == "__main__":
 	print("===========================================")
 	b.convert(["pinch"])
 	print(b.toString())
+	print(b.render(["pinch"]))
 	print("===========================================")
 	b.convert(["chord"])
 	print(b.toString())
+	print(b.render(["chord"]))
 	print("===========================================")
 	b = Bar(4,"xx1 && x2",4,{})
 	b.convert(["roll x15x15x1/234"])
 	print(b.toString())
-
-
+	print(b.render(["roll x15x15x1/234"]))
