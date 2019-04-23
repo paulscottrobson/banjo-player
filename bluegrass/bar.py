@@ -24,6 +24,7 @@ class Note(object):
 		self.string = string
 		self.modifier = None 
 		self.modifierOffset = 0
+		self.modifierShort = False
 	#
 	def getString(self):
 		return self.string
@@ -35,6 +36,8 @@ class Note(object):
 		r = str(self.string)+chr(self.fretting+97)
 		if self.modifier is not None:
 			r = r + (self.modifier * abs(self.modifierOffset))
+			if self.modifierShort:
+				r = r + "="
 		return r
 	#
 	def toString(self):
@@ -49,7 +52,9 @@ class Note(object):
 				raise MusicException("Note modifier changed")
 		self.modifier = c;
 		self.modifierOffset += (-1 if c == "^" else 1)
-
+	#
+	def setModifierShort(self,isShort):
+		self.modifierShort = isShort
 Note.FRETTING = "0123456789tewhufs"
 
 # ***************************************************************************************************
@@ -102,6 +107,8 @@ class Bar(object):
 			if m.startswith("roll"):									# if roll xxxxx/nnn
 				if self.isSingleNote(0) and self.isSingleNote(1):		# if rollable
 					self.processRoll(m[4:].strip())						# do roll processor.
+			elif m.startswith("to"):
+				pass
 			elif m == "drone":											# drone
 				for h in range(0,2):									# add drone to quavers
 					if not self.isSingleNote(h):
@@ -208,6 +215,7 @@ class Bar(object):
 		if m is not None:
 			fullModifier = True 
 			modifyNote = self.getNoteToModify()							# get the note to modify
+			modifyNote.setModifierShort(m.group(1).find("=") >= 0)		# tell modifier its short.
 			for mc in m.group(1):										# do each note.
 				if mc == "=":
 					fullModifier = False
@@ -274,8 +282,7 @@ class Bar(object):
 	#
 	#		Render
 	#
-	def render(self,modifiers = []):
-		self.convert(modifiers)
+	def render(self):
 		return ".".join([self.__render(x) for x in range(0,self.beats * 2)])
 	#
 	def __render(self,hb):
