@@ -35,7 +35,7 @@ class Note(object):
 		s = str(self.fretting)		
 		if self.modifier is not None:
 			s = s + ("/" if self.modifier == "/" else "^")+str(self.getFinalFretting())
-		return s 
+		return s+"."+str(self.string)
 	#
 	def modify(self,c):
 		if self.modifier is not None:
@@ -54,11 +54,11 @@ Note.FRETTING = "0123456789tewhufs"
 
 class Bar(object):
 	def __init__(self,barNumber,definition,beats,keys):
-		self.barNumber = barNumber
+		self.barNumber = barNumber										# save basic info
 		self.keys = keys
-		self.definition = definition.strip().lower()
-		self.alternateText = None
 		self.beats = beats
+		self.definition = definition.strip().lower()
+		self.alternateText = None 										# override text
 		self.notes = None
 		self.noteCount = None
 	#
@@ -86,19 +86,74 @@ class Bar(object):
 	def preRendering(self,modifierList):
 		self.alternateText = None 										# initially no alt-text
 		for m in modifierList:											# look for to xxxxx
-			if m.lower().startswith("to"):		
-				self.alternateText = m[2:].lower().strip()
+			if m.lower().startswith("to"):								# if to xxxxx
+				self.alternateText = m[2:].lower().strip()				# set the alternate text
 	#
 	#		Post rendering options
 	#
 	def postRendering(self,modifierList):
-		pass
+		for m in modifierList:											# for each modifier
+			if m.startswith("roll"):									# if roll xxxxx/nnn
+				if self.isSingleNote(0) and self.isSingleNote(1):		# if rollable
+					self.processRoll(m[4:].strip())						# do roll processor.
+			elif m == "drone":											# drone
+				for h in range(0,2):									# add drone to quavers
+					if not self.isSingleNote(h):
+						self.notes[h*4+1][0] = Note(1,0)
+						self.notes[h*4+3][0] = Note(1,0)
+			elif m == "pinch":											# pinch 
+				for h in range(0,2):									# add pinch to crotchets
+					if self.isSingleNote(h):
+						self.notes[h*4+2][0] = Note(1,0)
+						self.notes[h*4+2][4] = Note(5,0)
+			elif m == "chord":											# chord
+				for p in range(0,8):									# look for chords in bar
+					if self.chords[p] is not None:
+						key = self.chords[p]							# check chord known and format
+						if "chord_"+key not in self.keys:
+							raise MusicException("Unknown chord "+key)
+						chord = self.keys["chord_"+key].lower().strip()
+						if len(chord) != 4 or re.match("^["+Note.FRETTING+"]+$",chord) is None:
+							raise MusicException("Chord {0} badly defined ".format(key))
+						for i in range(0,4):							# copy chord in.
+							self.notes[p][i] = Note(Note.FRETTING.find(chord[i]),i+1)
+						self.notes[p][4] = None
+			else:
+				raise MusicException("Unknown modifier "+m)
+	#
+	#		Convert notes to a predefined roll.
+	#				
+	def processRoll(self,rollDef):
+		m = re.match("^([1-5x]+)\\/([1-5]+)$",rollDef)					# validate roll
+		if m is None or len(m.group(1)) != 8:
+			raise MusicException("Bad roll Definition "+rollDef)		# check roll playable
+		isPlayable = True
+		for r in range(0,self.beats * 2):								# look at each string
+			if self.rollNote[r] is not None:
+				if m.group(2).find(str(self.rollNote[r].getString()))<0: # error if not in useable strings
+					isPlayable = False
+		if isPlayable:													# if okay
+			for r in range(0,self.beats*2):								# work through roll
+				self.notes[r] = [ None,None,None,None,None ]
+				if self.rollNote[r] is not None:						# copying roll strings in
+					if m.group(1)[r] == "x":							# melody note
+						note = self.rollNote[r if r%4 != 3 else 4]		# taken from 3 if at pos 4 (fwd)
+						self.notes[r][note.getString()-1] = note 		# put note in.
+					else:
+						string = int(m.group(1)[r])						# plucked note.
+						self.notes[r][string-1] = Note(0,string)
+	#
+	#		Is a half-bar a single or double note
+	#		
+	def isSingleNote(self,barHalf):
+		return (self.noteCount[barHalf*4+1]+self.noteCount[barHalf*4+2]+self.noteCount[barHalf*4+3] == 0)
 	#
 	#		Generate all the notes
 	#
 	def generateNotes(self):		
 		self.noteCount = [ 0 ] * (self.beats * 2)						# count of notes
 		self.notes = []													# empty notes structure
+		self.rollNote = [ None ] * 8 									# roll note here
 		for i in range(0,self.beats * 2):
 			self.notes.append([ None,None,None,None,None ])
 		self.chords = [ None ] * (self.beats * 2)						# chords to show maybe play			
@@ -107,6 +162,8 @@ class Bar(object):
 		definition = definition.strip().lower()							
 		while definition != "":											# process definition.
 			definition = self.generateOne(definition).strip()
+		while self.pos < self.beats * 2:								# fill out the rest.
+			self.advance()
 	#
 	#		Generate one note.
 	#
@@ -116,17 +173,17 @@ class Bar(object):
 			s = self.strings[self.pos]
 			if s is not None:
 				self.insertNote(s,self.fretting[s-1])				
-			self.pos += 1
+			self.advance()
 			return d[1:]
 		#
 		if d.startswith("&"):											# & advance to next beat
-			self.pos += 1	 											# (used in Erbsen music)
+			self.advance()
 			if self.pos % 2 != 0:
-				self.pos += 1
+				self.advance()
 			return d[1:]
 		#
 		if d.startswith("."):											# . one byte rest
-			self.pos += 1
+			self.advance()
 			return d[1:]
 		#
 		m = re.match("^(x*)(["+Note.FRETTING+"]+)(.*)$",d)				# standard note.
@@ -138,7 +195,7 @@ class Bar(object):
 				self.insertNote(string+1,Note.FRETTING.find(note))
 				self.fretting[string] = Note.FRETTING.find(note)
 				string += 1
-			self.pos += 1 												# forward half beat
+			self.advance()
 			return m.group(3)
 		#
 		m = re.match("^([\\/v\\^\\=]+)(.*)$",d)							# modifiers.
@@ -152,7 +209,7 @@ class Bar(object):
 					modifyNote.modify(mc)
 					self.fretting[modifyNote.getString()-1] = modifyNote.getFinalFretting()
 			if fullModifier:											# no '=' so 1 beat
-				self.pos += 1
+				self.advance()
 			return m.group(2)
 		#
 		m = re.match("^\\((.*?)\\)(.*)$",d)								# (chord)
@@ -167,7 +224,6 @@ class Bar(object):
 			if len(m.group(1)) != self.beats * 2:
 				raise MusicException("String definition not {0}",self.beats * 2)
 			self.strings = [ None if s == "." else int(s) for s in m.group(1)]
-			print(self.strings)
 			return m.group(2)
 		#
 		m = re.match("#(["+Note.FRETTING+"]+)(.*)",d)					# #(fretting)
@@ -180,28 +236,35 @@ class Bar(object):
 	#		Insert a note. Update fretting.
 	#		
 	def insertNote(self,string,fretPosition):
-		if string > 5:
+		if string > 5:													# check sring
 			raise MusicException("Bad String")
-		if self.pos >= self.beats * 2:
+		if self.pos >= self.beats * 2:									# check pos
 			raise MusicException("Bar overflow")
-		self.notes[self.pos][string-1] = Note(fretPosition,string)
-		self.noteCount[self.pos] += 1
+		self.notes[self.pos][string-1] = Note(fretPosition,string)		# set string/pos to pluck
+		for i in range(self.pos,self.beats*2):							# make roll note for rest of bar
+			self.rollNote[i] = self.notes[self.pos][string-1]
+		self.noteCount[self.pos] += 1									# add one to counter.
 	#
 	#		Get note to modify - the last note before current position
 	#		must be only *one* note.
 	#
 	def getNoteToModify(self):
 		p = self.pos 
-		while self.noteCount[p] == 0:
+		while self.noteCount[p] == 0:									# keep going backwards till found
 			if p == 0:
 				raise MusicException("No note to modify")
 			p = p - 1
-		if self.noteCount[p] != 1:
+		if self.noteCount[p] != 1:										# can only be one note.
 			raise MusicException("Cannot modify multiple notes")
-		for i in range(0,5):
-			if self.notes[p][i] is not None:
+		for i in range(0,5):											# return the first note found
+			if self.notes[p][i] is not None:							# must be the only one
 				return self.notes[p][i]
-		assert False
+		assert False 													# ???
+	#
+	#		Advance forward one.
+	#
+	def advance(self):
+		self.pos += 1
 	#
 	#		Convert to string
 	#
@@ -224,7 +287,7 @@ if __name__ == "__main__":
 	print(b.toString())
 	print(b.getPostStrings())
 	print(b.getPostFretting())
-
+	print(b.isSingleNote(0),b.isSingleNote(1))
 	print("===========================================")
 
 	b = Bar(2,"#6789t $12345.23 ********",4,{})
@@ -232,4 +295,30 @@ if __name__ == "__main__":
 	print(b.toString())
 	print(b.getPostStrings())
 	print(b.getPostFretting())
+	print(b.isSingleNote(0),b.isSingleNote(1))
+
+	print("===========================================")
+
+	b = Bar(3,"xx1 && (c)x2 & xxx3",4,{ "chord_c":"2321" })
+	b.convert([])
+	print(b.toString())
+	print(b.getPostStrings())
+	print(b.getPostFretting())
+	print(b.isSingleNote(0),b.isSingleNote(1))
+	print(" ".join([x.toString() if x is not None else "." for x in b.rollNote]))
+
+	print("===========================================")
+	b.convert(["drone"])
+	print(b.toString())
+	print("===========================================")
+	b.convert(["pinch"])
+	print(b.toString())
+	print("===========================================")
+	b.convert(["chord"])
+	print(b.toString())
+	print("===========================================")
+	b = Bar(4,"xx1 && x2",4,{})
+	b.convert(["roll x15x15x1/234"])
+	print(b.toString())
+
 
