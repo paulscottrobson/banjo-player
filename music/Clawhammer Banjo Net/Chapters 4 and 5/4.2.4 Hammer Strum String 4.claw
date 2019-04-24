@@ -4,6 +4,7 @@ step := 4
 tuning := gdgbd
 
 bar := xxx0 & !.
+
 & & & & 
 
 {bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}
