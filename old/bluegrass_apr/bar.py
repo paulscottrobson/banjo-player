@@ -55,6 +55,10 @@ class Note(object):
 	#
 	def setModifierShort(self,isShort):
 		self.modifierShort = isShort
+	#
+	def isLong(self):
+		return self.modifier is not None and (not self.modifierShort)
+
 Note.FRETTING = "0123456789tewhufs"
 
 # ***************************************************************************************************
@@ -105,20 +109,30 @@ class Bar(object):
 	def postRendering(self,modifierList):
 		for m in modifierList:											# for each modifier
 			if m.startswith("roll"):									# if roll xxxxx/nnn
-				if self.isSingleNote(0) and self.isSingleNote(1):		# if rollable
-					self.processRoll(m[4:].strip())						# do roll processor.
+				roll = m[4:].strip()
+				m1 = re.match("^([1-5x]+)\\/([1-5]+)$",roll)			# validate roll
+				if m1 is None or len(m1.group(1)) != 8:
+					raise MusicException("Bad roll Definition "+rollDef)# check roll playable
+				if self.isSingleNote(0):								# do each half seperately.
+					self.processHalfRoll(0,m1.group(1)[:4],m1.group(2))	
+				if self.isSingleNote(1):
+					self.processHalfRoll(4,m1.group(1)[4:],m1.group(2))
+			#
 			elif m.startswith("to"):
 				pass
+			#
 			elif m == "drone":											# drone
 				for h in range(0,2):									# add drone to quavers
 					if not self.isSingleNote(h):
 						self.notes[h*4+1][0] = Note(0,1)
 						self.notes[h*4+3][0] = Note(0,1)
+			#						
 			elif m == "pinch":											# pinch 
 				for h in range(0,2):									# add pinch to crotchets
 					if self.isSingleNote(h):
 						self.notes[h*4+2][0] = Note(0,1)
 						self.notes[h*4+2][4] = Note(0,5)
+			#
 			elif m == "chord":											# chord
 				for p in range(0,8):									# look for chords in bar
 					if self.chords[p] is not None:
@@ -134,27 +148,30 @@ class Bar(object):
 			else:
 				raise MusicException("Unknown modifier "+m)
 	#
-	#		Convert notes to a predefined roll.
+	#		Convert one notes to a predefined roll.
 	#				
-	def processRoll(self,rollDef):
-		m = re.match("^([1-5x]+)\\/([1-5]+)$",rollDef)					# validate roll
-		if m is None or len(m.group(1)) != 8:
-			raise MusicException("Bad roll Definition "+rollDef)		# check roll playable
+	def processHalfRoll(self,start,rollDef,allowed):
 		isPlayable = True
-		for r in range(0,self.beats * 2):								# look at each string
+		for r in range(start,start+4):								# look at each string
 			if self.rollNote[r] is not None:
-				if m.group(2).find(str(self.rollNote[r].getString()))<0: # error if not in useable strings
-					isPlayable = False
-		if isPlayable:													# if okay
-			for r in range(0,self.beats*2):								# work through roll
-				self.notes[r] = [ None,None,None,None,None ]
-				if self.rollNote[r] is not None:						# copying roll strings in
-					if m.group(1)[r] == "x":							# melody note
-						note = self.rollNote[r if r%4 != 3 else 4]		# taken from 3 if at pos 4 (fwd)
-						self.notes[r][note.getString()-1] = note 		# put note in.
+				if allowed.find(str(self.rollNote[r].getString()))<0: # error if not in useable strings
+					isPlayable = False					
+		if isPlayable:												# if okay
+			for r in range(0,4):									# work through roll
+				barNote = r+start 									# note in bar
+				self.notes[barNote] = [ None,None,None,None,None ]
+				ok = self.rollNote[barNote] is not None 			# ok if melody note.
+				if barNote > 0:										# no if preceding long
+					for n in [x for x in self.notes[barNote-1] if x is not None]:
+						if n.isLong():
+							ok = False
+				if ok :												# copying roll strings in
+					if rollDef[r] == "x":							# melody note
+						note = self.rollNote[barNote if barNote != 3 else 4]
+						self.notes[barNote][note.getString()-1] = note 	# put note in.
 					else:
-						string = int(m.group(1)[r])						# plucked note.
-						self.notes[r][string-1] = Note(0,string)
+						string = int(rollDef[r])					# plucked note.
+						self.notes[barNote][string-1] = Note(0,string)
 	#
 	#		Is a half-bar a single or double note
 	#		
@@ -286,7 +303,10 @@ class Bar(object):
 		return ".".join([self.__render(x) for x in range(0,self.beats * 2)])
 	#
 	def __render(self,hb):
-		return "".join([x.render() for x in self.notes[hb] if x is not None])
+		s = "".join([x.render() for x in self.notes[hb] if x is not None])
+		if self.chords[hb] is not None:
+			s = "("+self.chords[hb].strip().lower()+")"+s 
+		return s			
 	#
 	#		Convert to string
 	#

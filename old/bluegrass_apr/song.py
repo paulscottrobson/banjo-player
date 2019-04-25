@@ -60,7 +60,7 @@ class Song(object):
 	#
 	#		Render, possibly modified.
 	#
-	def render(self,targetDirectory,modifierName = "",modifierDescriptor = None,overrideName = None):
+	def render(self,targetDirectory,modifierName = None,modifierDescriptor = None,overrideName = None):
 		frets = [ 0,0,0,0,0 ]											# frets/strings state
 		strings = [ None ] * (int(self.keys["beats"]) * 2)				# carried forward
 		if modifierDescriptor is None:									# no mods
@@ -75,7 +75,9 @@ class Song(object):
 				self.bars[barNumber].convert(modifiers[barNumber],frets,strings)
 				frets = self.bars[barNumber].getPostFretting()
 				strings = self.bars[barNumber].getPostStrings()
-			baseName = self.baseName+"-("+modifierName+").plux"
+			if modifierName is not None:
+				baseName = self.baseName+"-("+modifierName+").plux"
+
 
 		baseName = baseName if overrideName is None else overrideName 	# Possible override.
 		print("\tRendering "+baseName+".	")
@@ -126,13 +128,13 @@ if __name__ == "__main__":
 	s = Song("./down-the-road.blue")
 	s.render("./","pinch","pinch")
 	s.render("../agkbanjo/media/music",None,None,"__test.plux")
-	s.render("../agkbanjo/media/music","demo","1 to xxx2///= && xx0 ; drone ; twofinger ; altthumb","__test.plux")
+	s.render("../agkbanjo/media/music","demo","drone; pinch ; altthumb ; 1 to xxx2///= & xx0","__test.plux")
 	print("=======================")
-	s.renderAll("test")
-	print("=======================")
+#	s.renderAll("test")
+#	print("=======================")
+#	s = Song("./bile-em-cabbage-down.blue")
+#	s.render("../agkbanjo/media/music",None,"pinch;chord","__test.plux")
+#	s.renderAll("test")
 #	s = Song("./carrythrough.blue")	
 #	s.render("../agkbanjo/media/music",None,None,"__test.plux")
 
-#
-#	TODO: If a previous note is a long slide don't generate the roll pattern (Erbsen)
-#	
