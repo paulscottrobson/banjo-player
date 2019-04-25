@@ -286,7 +286,10 @@ class Bar(object):
 		return ".".join([self.__render(x) for x in range(0,self.beats * 2)])
 	#
 	def __render(self,hb):
-		return "".join([x.render() for x in self.notes[hb] if x is not None])
+		s = "".join([x.render() for x in self.notes[hb] if x is not None])
+		if self.chords[hb] is not None:
+			s = "("+self.chords[hb].strip().lower()+")"+s 
+		return s			
 	#
 	#		Convert to string
 	#

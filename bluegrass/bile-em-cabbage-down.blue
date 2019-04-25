@@ -1,0 +1,20 @@
+##
+##		Bile Em Cabbage Down (page 14)
+##
+beats := 4
+tempo := 60
+step := 4
+intro := 1
+
+chord_c := 2101
+
+##option_cool := 3,4,6-8 drone ; pinch
+##option_warm := drone ; twofinger
+##option_hot := drone ; altthumb
+##option_redhot :=  1 to xxx2///= && xx0 ; drone ; pinch ; altthumb 
+
+x0 && x0 | (c) x1 && x1 | x0 && x0 | xx2 && xx2
+x0 && x0 | (c) x1 && x1 | x0 && xx2 | xx0 && xx0
+
+
+
