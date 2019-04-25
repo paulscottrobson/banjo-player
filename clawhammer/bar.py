@@ -89,6 +89,10 @@ class Bar(Exception):
 			self.pos += 2
 			return d[1:]
 		#
+		if d.startswith("-"):
+			self.pos -= 1
+			return d[1:]
+		#
 		if d.startswith("."):												# . pluck
 			if self.pos == 0 or self.pos > self.notes*2:
 				raise MusicException("Cannot put pluck here")
@@ -140,7 +144,6 @@ class Bar(Exception):
 	#		Modify the last fret
 	#
 	def  modifyLastFret(self,isSlide,endPosition):
-		print(self.pos,self.pluckCount)
 		if self.pos == 0 or self.pluckCount[self.pos-2] != 1:				# must be one note.
 			raise MusicException("Previous note must be one pluck only")
 		for s in range(0,5):												# find the one to slide

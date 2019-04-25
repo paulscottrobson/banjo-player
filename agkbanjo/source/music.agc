@@ -28,7 +28,7 @@ function Music_Initialise(this ref as Music)
 	this.defaultBeats = 4										// Beats per bar
 	this.barCount = 0 											// Number of bars in tune
 	this.bars.length = 20 										// Bar array is added in chunks
-	this.tuning = "dbgdg"										// tuning
+	this.tuning = "gdgbd"										// tuning
 endfunction
 
 // ***************************************************************************************************

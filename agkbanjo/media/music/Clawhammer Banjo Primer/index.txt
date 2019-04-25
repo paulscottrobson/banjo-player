@@ -1,0 +1,27 @@
+//
+// ../agkbanjo/media/music/Clawhammer Banjo Primer
+//
+01 Quarter Note Strums.plux
+01 Quarter Note Strums
+02 Quarter Notes and Single Notes.plux
+02 Quarter Notes And Single Notes
+03 Moving Quarter Notes.plux
+03 Moving Quarter Notes
+04 More Moving Quarter Notes.plux
+04 More Moving Quarter Notes
+05 More String Changing Practice.plux
+05 More String Changing Practice
+06 Bonus Exercise.plux
+06 Bonus Exercise
+07 Clawhammer Rhythm Single Notes.plux
+07 Clawhammer Rhythm Single Notes
+08 Clawhammer rhythm with brush stroke.plux
+08 Clawhammer Rhythm With Brush Stroke
+09 Fretted Notes.plux
+09 Fretted Notes
+10 Melody Notes with Clawhammer Rhythm.plux
+10 Melody Notes With Clawhammer Rhythm
+11 Adding the Brush Stroke.plux
+11 Adding The Brush Stroke
+12 Cripple Creek Version 1.plux
+12 Cripple Creek Version 1

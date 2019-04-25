@@ -3,7 +3,7 @@ tempo := 100
 step := 4
 tuning := gcgcd
 
-chord_c := 20000
+chord_c := 2000
 
 aPart := 5 !. 7 !. | 3 !. 5 !. | 2 !. 3 2 | 0 xx4 x0 (C)!.
 

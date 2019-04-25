@@ -11,7 +11,7 @@
 # ***************************************************************************************************
 
 import os,sys
-from song import *
+from tune import *
 
 class MusicBuilder(object):
 
@@ -30,18 +30,18 @@ class MusicBuilder(object):
 
 		if self.latestFile is not None:
 				print("Recompiling "+self.latestFile)
-				f = Song(self.latestFile)
-				f.render(targetDir,None,None,"__test.plux")
+				f = ClawhammerTune(self.latestFile)
+				f.render(targetDir	,"__test.plux")
 
 	def buildFile(self,sourceDir,targetDir,fileName,override):
 		compiled = False
-		if fileName[-5:] == ".blue":
+		if fileName[-5:] == ".claw":
 			print("Compiling "+fileName)
 			if not os.path.exists(targetDir):
 				os.makedirs(targetDir)
 			compiled = True
-			f = Song(sourceDir+os.sep+fileName)
-			f.renderAll(targetDir)
+			f = ClawhammerTune(sourceDir+os.sep+fileName)
+			f.render(targetDir)
 			self.update(sourceDir+os.sep+fileName)
 
 	def update(self,fileName):

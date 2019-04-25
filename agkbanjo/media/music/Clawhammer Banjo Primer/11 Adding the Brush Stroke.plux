@@ -1,0 +1,9 @@
+.beats:=4
+.step:=4
+.tempo:=60
+.tuning:=gdgbd
+|.......
+|1a..1a2a3a.5a.1c..1c2a3a.5a
+|1a..1a2a3a.5a.1c..1c2a3a.5a
+|1a..1a2a3a.5a.1c..1c2a3a.5a
+|2a..3c..3a..1a2a3a.5a

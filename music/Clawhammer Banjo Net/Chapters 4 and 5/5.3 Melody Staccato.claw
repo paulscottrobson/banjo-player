@@ -3,7 +3,7 @@ tempo := 60
 step := 4
 tuning := gdgbd
 
-chord.c := 21020
+chord_c := 21020
 &
 x0. x0. xx0. xx0. | xxx0. xxx0. xx0 xx0. | x0. x0. xx0. xx0. | xx2. xxx4. xxx0 xxx0. 
 

@@ -1,0 +1,14 @@
+.beats:=2
+.step:=4
+.tempo:=60
+.tuning:=gdgbd
+.chord_c:=21020
+|.......
+|2a.5a.2a.5a.3a.5a.3a.5a
+|4a.5a.4a.5a.3a..3a.5a
+|2a.5a.2a.5a.3a.5a.3a.5a
+|3c.5a.4e.5a.4a..4a.5a
+|2a.5a.2a.5a.3a.5a.3a.5a
+|2b.5a.2b.5a.2b..2b.5a
+|3c.5a.2b.5a.2a.5a.3c.5a
+|3a..3a.5a.3a...
