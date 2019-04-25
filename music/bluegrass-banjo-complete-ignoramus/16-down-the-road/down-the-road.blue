@@ -1,0 +1,18 @@
+##
+##		Down the Road (page 16)
+##
+beats := 4
+tempo := 60
+step := 4
+intro := 1
+
+
+option_cool := drone; pinch
+option_warm := drone; twofinger
+option_hot := drone; pinch ; altthumb
+option_redhot := drone; pinch ; altthumb ; 1 to xxx2/// & xx0
+
+xx0 && xx0 | xx0 && xxx2 | xx0 && xx0 & xxx2 | xxx0 & xxx2 & xx0
+x0 && x3 | x0 & xx0 & xxx2 | xx0 && xx0 & xxx2 | xxx0 & xxx2 & xx0
+
+

@@ -1,0 +1,17 @@
+.beats:=4
+.tempo:=60
+.step:=4
+.intro:=1
+.option_cool:=drone; pinch
+.option_warm:=drone; twofinger
+.option_hot:=drone; pinch ; altthumb
+.option_redhot:=drone; pinch ; altthumb ; 1 to xxx2/// & xx0
+|.......
+|4c///..5a.1a.3a.2a.5a.1a
+|3a.2a.5a.1a.4c.2a.5a.1a
+|3a.2a.5a.1a.3a.1a.4c.1a
+|4a.1a.4c.1a.3a.2a.5a.1a
+|2a..1a5a..2d..1a5a.
+|2a.1a.3a.1a.4c.2a.5a.1a
+|3a.2a.5a.1a.3a.1a.4c.1a
+|4a.1a.4c.1a.3a.2a.5a.1a

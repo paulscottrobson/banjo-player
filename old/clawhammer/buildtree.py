@@ -4,7 +4,7 @@
 #		Name:		buildtree.py
 #		Purpose:	Build all music entries in music tree and compiles most recently 
 #					changed to test.plux
-#		Date:		8th February 2019
+#		Date:		25th April 2019
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # ***************************************************************************************************
@@ -29,10 +29,9 @@ class MusicBuilder(object):
 				self.buildFile(root,target,f,None)
 
 		if self.latestFile is not None:
-			print("Recompiling "+self.latestFile)
-			f = ClawHammerTune()
-			f.loadFile(self.latestFile)
-			f.write(self.targetDir+os.sep+"__test.plux","w")
+				print("Recompiling "+self.latestFile)
+				f = ClawhammerTune(self.latestFile)
+				f.render(targetDir	,"__test.plux")
 
 	def buildFile(self,sourceDir,targetDir,fileName,override):
 		compiled = False
@@ -41,11 +40,8 @@ class MusicBuilder(object):
 			if not os.path.exists(targetDir):
 				os.makedirs(targetDir)
 			compiled = True
-			f = ClawHammerTune()
-			f.loadFile(sourceDir+os.sep+fileName)
-			targetFile = ".".join((targetDir+os.sep+fileName).split(".")[:-1])+".plux"
-			print(sourceDir+os.sep+fileName,targetFile)
-			f.write(targetFile)
+			f = ClawhammerTune(sourceDir+os.sep+fileName)
+			f.render(targetDir)
 			self.update(sourceDir+os.sep+fileName)
 
 	def update(self,fileName):

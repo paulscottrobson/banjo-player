@@ -3,7 +3,7 @@
 #
 #		Name:		musicex.py
 #		Purpose:	Exception class for Music Translation
-#		Date:		17th April 2019
+#		Date:		24th April 2019
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #
 # ***************************************************************************************************
