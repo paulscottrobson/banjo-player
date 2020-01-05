@@ -1,0 +1,11 @@
+//
+// ../agkbanjo/media/music/Clawhammer Banjo Net/Chapter 5
+//
+5.0 Basic Melody.plux
+5.0 Basic Melody
+5.1 Basic Melody.plux
+5.1 Basic Melody
+5.2 Hammer Thumb Melody.plux
+5.2 Hammer Thumb Melody
+5.3 Melody Staccato.plux
+5.3 Melody Staccato

@@ -1,0 +1,9 @@
+beats := 2
+tempo := 60
+step := 4
+tuning := gdgbd
+
+bar := x0 & !.
+& & & & 
+
+{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}|{bar}

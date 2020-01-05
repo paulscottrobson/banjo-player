@@ -1,0 +1,13 @@
+//
+// ../agkbanjo/media/music/Clawhammer Banjo Net/Chapter 2 and 3
+//
+2.1 Practice.plux
+2.1 Practice
+3.1 Groups of four.plux
+3.1 Groups Of Four
+3.2 Singles.plux
+3.2 Singles
+3.3 Groups of 4 with Strums.plux
+3.3 Groups Of 4 With Strums
+3.3 Singles with Strums.plux
+3.3 Singles With Strums
