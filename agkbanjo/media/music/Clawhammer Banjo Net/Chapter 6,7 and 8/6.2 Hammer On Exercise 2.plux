@@ -1,7 +1,7 @@
 .beats:=2
-.step:=4
 .tempo:=30
 .tuning:=gdgbd
+.step:=4
 |......2a.3c
 |3a.4e.3a++..3a.4c.4a.5a
 |4a++..2a3a4c.5a.4a..3a++.

@@ -3,6 +3,7 @@ tempo := 30
 step := 4
 tuning := gdgbd
 
+
 &&& x0- xx2- | xx0- xxx4- xx0h2 xx0- xxx2- xxx0- xxxx0- | xxx0h2 x002 .	xxx0 xx0h2 | x0 00 . x0- xx2- xx0h2 | x0. xx2 xx2 x0- xx2-
 
 xx0- xxx4- xx0h2 xx0- xxx2- xxx0 . | xxx0h2 x002. xxx0 x000. | x0 0. 0 0h2 | 0. xx2 xx0

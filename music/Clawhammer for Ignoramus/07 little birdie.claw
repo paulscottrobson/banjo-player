@@ -1,5 +1,5 @@
 beats := 4
-tempo := 100
+tempo := 60
 step := 4
 tuning := gcgcd
 

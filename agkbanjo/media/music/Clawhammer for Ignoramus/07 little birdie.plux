@@ -1,7 +1,7 @@
 .beats:=4
-.step:=4
-.tempo:=100
+.tempo:=60
 .tuning:=gcgcd
+.step:=4
 .chord_c:=2000
 .chord_g:=0202
 .chord_:=0000

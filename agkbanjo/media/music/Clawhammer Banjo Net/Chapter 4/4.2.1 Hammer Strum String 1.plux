@@ -1,7 +1,7 @@
 .beats:=2
-.step:=4
 .tempo:=60
 .tuning:=gdgbd
+.step:=4
 .bar:=0 & !.
 |.......
 |1a....1a2a3a.5a..

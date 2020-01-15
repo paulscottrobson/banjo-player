@@ -138,7 +138,10 @@ function Program_MainLoop()
 				prg.pos# = prg.tune.barCount * Slider_Get(prg.posCtrl,SLIDER_START)
 				lastPos# = prg.pos#
 				if Button_GetState(prg.speedupButton) <> 0
-					Program_SetSpeed(prg.beatsPerMinute# + prg.tune.stepBPM)
+					step# = prg.beatsPerMinute#/10
+					if step# < 2 then step# = 2
+					if step# > 4 then step# = 4
+					Program_SetSpeed(prg.beatsPerMinute# + step#)
 				endif
 			endif
 

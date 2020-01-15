@@ -27,7 +27,7 @@ class ClawhammerTune(object):
 		src = [x.strip() if x.find("//") < 0 else x[:x.find("//")].strip() for x in src]
 														# Do keys.
 		MusicException.NUMBER = 0														
-		self.keys = { "beats":"4","step":"4","tempo":"60","tuning":"gdgbd" }
+		self.keys = { "beats":"4","tempo":"60","tuning":"gdgbd" }
 		for s in [x for x in src if x.find(":=") >= 0]:
 			parts = [x.strip() for x in s.split(":=") if x.strip() != ""]
 			if len(parts) != 2 or parts[0] == "":
