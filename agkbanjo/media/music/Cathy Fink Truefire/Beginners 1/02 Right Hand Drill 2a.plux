@@ -1,0 +1,18 @@
+.beats:=4
+.tempo:=60
+.tuning:=gdgbd
+.step:=4
+.b5:=xxxx0
+.x1:=0000 {b5} 0 {b5}
+.x2:=0000 {b5} x0 {b5}
+.x3:=0000 {b5} xx0 {b5}
+.x4:=0000 {b5} xxx0 {b5}
+|.......
+|1a2a3a4a..5a..1a..5a.
+|1a2a3a4a..5a..1a..5a.
+|1a2a3a4a..5a..4a..5a.
+|1a2a3a4a..5a..4a..5a.
+|1a2a3a4a..5a..2a..5a.
+|1a2a3a4a..5a..2a..5a.
+|1a2a3a4a..5a..3a..5a.
+|1a2a3a4a..5a..3a..5a.

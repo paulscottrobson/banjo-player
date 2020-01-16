@@ -1,0 +1,21 @@
+//
+// ../agkbanjo/media/music/Cathy Fink Truefire/Beginners 1
+//
+01 Right Hand Drill 1.plux
+01 Right Hand Drill 1
+02 Right Hand Drill 2a.plux
+02 Right Hand Drill 2a
+03 Right Hand Drill 2b.plux
+03 Right Hand Drill 2b
+04 Right Hand Drill 3a.plux
+04 Right Hand Drill 3a
+05 Right Hand Drill 3b.plux
+05 Right Hand Drill 3b
+06 Right Hand Drill 3c.plux
+06 Right Hand Drill 3c
+07 Right Hand Drill 4a.plux
+07 Right Hand Drill 4a
+08 Right Hand Drill 4b.plux
+08 Right Hand Drill 4b
+09 Skip to My Lou.plux
+09 Skip To My Lou
