@@ -1,0 +1,21 @@
+//
+// ../agkbanjo/media/music/Practice
+//
+01 Hammer Strum.plux
+01 Hammer Strum
+02 Double Thumb.plux
+02 Double Thumb
+03 String Switch.plux
+03 String Switch
+04 Fret String 1.plux
+04 Fret String 1
+05 Fret String 2.plux
+05 Fret String 2
+06 Fret String 3.plux
+06 Fret String 3
+07 Fret String 4.plux
+07 Fret String 4
+08 All Change.plux
+08 All Change
+09 All Change 4 notes.plux
+09 All Change 4 Notes

@@ -9,7 +9,7 @@
 # ***************************************************************************************************
 # ***************************************************************************************************
 
-import re
+import re,random
 from musicex import *
 
 # ***************************************************************************************************
@@ -84,6 +84,9 @@ class Bar(Exception):
 	#		Process one element
 	#
 	def processDefinition(self,d):
+		#
+		while d.find("@") >= 0:
+			d = self.processRandoms(d)
 		# 
 		if d.startswith("&"):												# & rest
 			self.pos += 2
@@ -125,6 +128,13 @@ class Bar(Exception):
 			return m.group(3)
 		#
 		raise MusicException("Do not understand '{0}'".format(d))
+	#
+	#		Process random operation
+	#
+	def processRandoms(self,s):
+		s = s.replace("@s","xxxx"[0:random.randint(0,3)],1)
+		s = s.replace("@f",str(random.randint(0,5)),1)
+		return s
 	#
 	#		Write Notes
 	#
