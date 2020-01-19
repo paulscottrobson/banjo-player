@@ -1,5 +1,5 @@
 beats := 2
-tempo := 40
+tempo := 30
 tuning := gdgbd
 
 bar := @s@f @s@f @s@f @s@f
